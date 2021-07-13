@@ -1,0 +1,148 @@
+\begin{thebibliography}{10}
+
+\bibitem{cohen2007stability}
+D.~Cohen-Steiner, H.~Edelsbrunner, and J.~Harer, ``Stability of persistence
+  diagrams,'' {\em Discrete \& computational geometry}, vol.~37, no.~1,
+  pp.~103--120, 2007.
+
+\bibitem{cohen2006vines}
+D.~Cohen-Steiner, H.~Edelsbrunner, and D.~Morozov, ``Vines and vineyards by
+  updating persistence in linear time,'' in {\em Proceedings of the
+  twenty-second annual symposium on Computational geometry}, pp.~119--126,
+  2006.
+
+\bibitem{kim2020spatiotemporal}
+W.~Kim and F.~M{\'e}moli, ``Spatiotemporal persistent homology for dynamic
+  metric spaces,'' {\em Discrete \& Computational Geometry}, pp.~1--45, 2020.
+
+\bibitem{polanco2019adaptive}
+L.~Polanco and J.~A. Perea, ``Adaptive template systems: Data-driven feature
+  selection for learning with persistence diagrams,'' in {\em 2019 18th IEEE
+  International Conference On Machine Learning And Applications (ICMLA)},
+  pp.~1115--1121, IEEE, 2019.
+
+\bibitem{adams2017persistence}
+H.~Adams, T.~Emerson, M.~Kirby, R.~Neville, C.~Peterson, P.~Shipman,
+  S.~Chepushtanova, E.~Hanson, F.~Motta, and L.~Ziegelmeier, ``Persistence
+  images: A stable vector representation of persistent homology,'' {\em Journal
+  of Machine Learning Research}, vol.~18, 2017.
+
+\bibitem{ulmer2019topological}
+M.~Ulmer, L.~Ziegelmeier, and C.~M. Topaz, ``A topological approach to
+  selecting models of biological experiments,'' {\em PloS one}, vol.~14, no.~3,
+  p.~e0213679, 2019.
+
+\bibitem{zomorodian2005computing}
+A.~Zomorodian and G.~Carlsson, ``Computing persistent homology,'' {\em Discrete
+  \& Computational Geometry}, vol.~33, no.~2, pp.~249--274, 2005.
+
+\bibitem{lesnick2015interactive}
+M.~Lesnick and M.~Wright, ``Interactive visualization of 2-d persistence
+  modules,'' {\em arXiv preprint arXiv:1512.00180}, 2015.
+
+\bibitem{busaryev2010tracking}
+O.~Busaryev, T.~K. Dey, and Y.~Wang, ``Tracking a generator by persistence,''
+  {\em Discrete Mathematics, Algorithms and Applications}, vol.~2, no.~04,
+  pp.~539--552, 2010.
+
+\bibitem{chen2011persistent}
+C.~Chen and M.~Kerber, ``Persistent homology computation with a twist,'' in
+  {\em Proceedings 27th European Workshop on Computational Geometry}, vol.~11,
+  pp.~197--200, 2011.
+
+\bibitem{topaz2015topological}
+C.~M. Topaz, L.~Ziegelmeier, and T.~Halverson, ``Topological data analysis of
+  biological aggregation models,'' {\em PloS one}, vol.~10, no.~5, p.~e0126383,
+  2015.
+
+\bibitem{xian2020capturing}
+L.~Xian, H.~Adams, C.~M. Topaz, and L.~Ziegelmeier, ``Capturing dynamics of
+  time-varying data via topology,'' {\em arXiv preprint arXiv:2010.05780},
+  2020.
+
+\bibitem{de2011dualities}
+V.~De~Silva, D.~Morozov, and M.~Vejdemo-Johansson, ``Dualities in persistent
+  (co) homology,'' {\em Inverse Problems}, vol.~27, no.~12, p.~124003, 2011.
+
+\bibitem{bauer2019ripser}
+U.~Bauer, ``Ripser: efficient computation of vietoris-rips persistence
+  barcodes,'' {\em arXiv preprint arXiv:1908.02518}, 2019.
+
+\bibitem{bauer2017phat}
+U.~Bauer, M.~Kerber, J.~Reininghaus, and H.~Wagner, ``Phat--persistent homology
+  algorithms toolbox,'' {\em Journal of symbolic computation}, vol.~78,
+  pp.~76--90, 2017.
+
+\bibitem{attali2009persistence}
+D.~Attali, M.~Glisse, S.~Hornus, F.~Lazarus, and D.~Morozov,
+  ``Persistence-sensitive simplication of functions on surfaces in linear
+  time,'' in {\em TopoInVis' 09}, 2009.
+
+\bibitem{edelsbrunner2000topological}
+H.~Edelsbrunner, D.~Letscher, and A.~Zomorodian, ``Topological persistence and
+  simplification,'' in {\em Proceedings 41st annual symposium on foundations of
+  computer science}, pp.~454--463, IEEE, 2000.
+
+\bibitem{delfinado1995incremental}
+C.~J.~A. Delfinado and H.~Edelsbrunner, ``An incremental algorithm for betti
+  numbers of simplicial complexes on the 3-sphere,'' {\em Computer Aided
+  Geometric Design}, vol.~12, no.~7, pp.~771--784, 1995.
+
+\bibitem{chen2013output}
+C.~Chen and M.~Kerber, ``An output-sensitive algorithm for persistent
+  homology,'' {\em Computational Geometry}, vol.~46, no.~4, pp.~435--447, 2013.
+
+\bibitem{oesterling2015computing}
+P.~Oesterling, C.~Heine, G.~H. Weber, D.~Morozov, and G.~Scheuermann,
+  ``Computing and visualizing time-varying merge trees for high-dimensional
+  data,'' in {\em Topological Methods in Data Analysis and Visualization},
+  pp.~87--101, Springer, 2015.
+
+\bibitem{kapron2013dynamic}
+B.~M. Kapron, V.~King, and B.~Mountjoy, ``Dynamic graph connectivity in
+  polylogarithmic worst case time,'' in {\em Proceedings of the twenty-fourth
+  annual ACM-SIAM symposium on Discrete algorithms}, pp.~1131--1142, SIAM,
+  2013.
+
+\bibitem{morozov2005persistence}
+D.~Morozov, ``Persistence algorithm takes cubic time in worst case,'' {\em
+  BioGeometry News, Dept. Comput. Sci., Duke Univ}, vol.~2, 2005.
+
+\bibitem{boissonnat2000efficient}
+J.-D. Boissonnat and J.~Snoeyink, ``Efficient algorithms for line and curve
+  segment intersection using restricted predicates,'' {\em Computational
+  Geometry}, vol.~16, no.~1, pp.~35--52, 2000.
+
+\bibitem{labarre2013lower}
+A.~Labarre, ``Lower bounding edit distances between permutations,'' {\em SIAM
+  Journal on Discrete Mathematics}, vol.~27, no.~3, pp.~1410--1428, 2013.
+
+\bibitem{bar2004approximating}
+Z.~Bar-Yossef, T.~Jayram, R.~Krauthgamer, and R.~Kumar, ``Approximating edit
+  distance efficiently,'' in {\em 45th Annual IEEE Symposium on Foundations of
+  Computer Science}, pp.~550--559, IEEE, 2004.
+
+\bibitem{bespamyatnikh2000enumerating}
+S.~Bespamyatnikh and M.~Segal, ``Enumerating longest increasing subsequences
+  and patience sorting,'' {\em Information Processing Letters}, vol.~76,
+  no.~1-2, pp.~7--11, 2000.
+
+\bibitem{romik2015surprising}
+D.~Romik, {\em The surprising mathematics of longest increasing subsequences}.
+\newblock No.~4, Cambridge University Press, 2015.
+
+\bibitem{diaconis1977spearman}
+P.~Diaconis and R.~L. Graham, ``Spearman's footrule as a measure of disarray,''
+  {\em Journal of the Royal Statistical Society: Series B (Methodological)},
+  vol.~39, no.~2, pp.~262--268, 1977.
+
+\bibitem{biedl2009complexity}
+T.~Biedl, F.~J. Brandenburg, and X.~Deng, ``On the complexity of crossings in
+  permutations,'' {\em Discrete Mathematics}, vol.~309, no.~7, pp.~1813--1823,
+  2009.
+
+\bibitem{de1997computational}
+M.~De~Berg, M.~Van~Kreveld, M.~Overmars, and O.~Schwarzkopf, ``Computational
+  geometry,'' in {\em Computational geometry}, pp.~1--17, Springer, 1997.
+
+\end{thebibliography}

@@ -1,0 +1,21 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Overview}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{A Motivating Example and Contributions}{section.1}% 3
+\BOOKMARK [2][-]{subsection.1.3}{Related Work}{section.1}% 4
+\BOOKMARK [2][-]{subsection.1.4}{Outline}{section.1}% 5
+\BOOKMARK [1][-]{section.2}{Background}{}% 6
+\BOOKMARK [2][-]{subsection.2.1}{Notation}{section.2}% 7
+\BOOKMARK [2][-]{subsection.2.2}{The Reduction Algorithm}{section.2}% 8
+\BOOKMARK [2][-]{subsection.2.3}{Vineyards}{section.2}% 9
+\BOOKMARK [2][-]{subsection.2.4}{Moves}{section.2}% 10
+\BOOKMARK [1][-]{section.3}{Our contribution: Move Schedules}{}% 11
+\BOOKMARK [2][-]{subsection.3.1}{Proposed approach}{section.3}% 12
+\BOOKMARK [2][-]{subsection.3.2}{Minimizing schedule size}{section.3}% 13
+\BOOKMARK [3][-]{subsubsection.3.2.1}{The continuous setting}{subsection.3.2}% 14
+\BOOKMARK [3][-]{subsubsection.3.2.2}{The Discrete Setting}{subsection.3.2}% 15
+\BOOKMARK [2][-]{subsection.3.3}{Minimizing schedule cost}{section.3}% 16
+\BOOKMARK [3][-]{subsubsection.3.3.1}{Motivation}{subsection.3.3}% 17
+\BOOKMARK [3][-]{subsubsection.3.3.2}{Greedy approach}{subsection.3.3}% 18
+\BOOKMARK [3][-]{subsubsection.3.3.3}{Proxy objective}{subsection.3.3}% 19
+\BOOKMARK [1][-]{section.4}{Empirical results}{}% 20
+\BOOKMARK [1][-]{section.5}{Conclusion and Future Work}{}% 21
