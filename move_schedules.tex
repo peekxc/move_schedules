@@ -1179,9 +1179,8 @@ Acknowledging this, Xian et al.~\cite{xian2020capturing} showed that crocker plo
 \begin{definition}[crocker stack]
 	A crocker stack is a family of $\alpha$-smoothed crock plots which summarizes the topological information of a time-varying persistence module $M$ via the function $f_M : [0, T] \times [0, \infty) \times [0, \infty) \to \mathbb{N}$, where:
 	$$ f_M(t,\epsilon, \alpha) = \mathrm{rank}(M_t(\epsilon - \alpha) \to M_t(\epsilon + \alpha)) $$
-	Thus, a crocker stack is a sequence of $\alpha$-smoothed crocker plots that vary over $\alpha \geq 0$, satisfying $f_M(t,\epsilon,\alpha) \leq f_M(t,\epsilon, \alpha)$ for all $\alpha \geq \alpha'$. 
 \end{definition}
-\noindent Note that, unlike crocker plots, applying this $\alpha$ smoothing efficiently \emph{requires} the persistence pairing. Indeed, it has been shown that crocker stacks and stacked persistence diagrams (i.e. vineyards) are equivalent to each other in the sense that either one contains the information needed to reconstruct the other~\cite{xian2020capturing}.  Thus, computing crocker stacks reduces to computing the persistence of a (time-varying) family of filtrations.
+\noindent A crocker stack is a sequence of $\alpha$-smoothed crocker plots that vary over $\alpha \geq 0$, satisfying $f_M(t,\epsilon,\alpha) \leq f_M(t,\epsilon, \alpha)$ for all $\alpha \geq \alpha'$. Note that, unlike crocker plots, applying this $\alpha$ smoothing efficiently \emph{requires} the persistence pairing. Indeed, it has been shown that crocker stacks and stacked persistence diagrams (i.e. vineyards) are equivalent to each other in the sense that either one contains the information needed to reconstruct the other~\cite{xian2020capturing}. Thus, computing crocker stacks reduces to computing the persistence of a (time-varying) family of filtrations.
 
 %To describe this formally, let $K_\tau^\epsilon$ denote a simplicial filtration with simplices $\sigma \in K_\tau^\epsilon$ whose function value $f_\tau(\sigma) \leq \epsilon$. The $\alpha$
 
@@ -1244,9 +1243,12 @@ The multigraded Betti numbers constitute a natural and important class of invari
 	The fibered barcode $\mathcal{B}(M)$ of a bipersistence module $M$ is the map which sends each line $L$ with non-negative slope to the barcode $\mathcal{B}_L(M)$: 
 %	$$ L \mapsto \mathcal{B}_L(M) $$
 $$ \mathcal{B}(M) = \{ \; B_L(M) : L \in \mathbb{R} \times \mathbb{R}^{+} \; \}$$
-	Thus, for a bipersistence modules $M$, the fibered barcode is simply a 2-parameter family of barcodes given by restricting $M$ to a set affine lines in $\mathbb{R}^2$. 
 \end{definition} 
-\noindent Each line $L$ induces a 1-parameter restriction on $M$. The fibered barcode enjoys a number of stability properties readily expressed using interleaving distances~\cite{landi2014rank}. 
+\noindent Thus, given a bipersistence module $M$, the fibered barcode of $M$ is the 2-parameter family of barcodes given by restricting $M$ to the of set affine lines with non-negative slope in $\mathbb{R}^2$. 
+
+Although the fiber barcode is a very intuitive invariant, it is not clear how one might go about computing it efficiently. One could compute the 1-D persistence associated to some fixed linear combination of two given filter functions; each linear combination parameterizes a line $L \in \mathbb{R} \times \mathbb{R}^{+}$ which $M$ restricts too. However, this an $O(m^3)$ time computation, which is prohibitive for exploratory data analysis purposes. In what follows, we describe the reparameterization introduced by~\cite{lesnick2015interactive} that fully characterizes $\mathcal{B}(M)$. 
+
+%The fibered barcode enjoys a number of stability properties readily expressed using interleaving distances~\cite{landi2014rank}. 
 % More important to this work, the fibered barcode $\mathcal{B}(M)$ and the rank invariant $\mathrm{rank}(M)$ determine each other~\cite{lesnick2015interactive}. 
 
 \subsubsection*{Reparameterization using point-line duality}\label{sec:fibered_barcode_reparam}
@@ -1274,7 +1276,7 @@ The push map satisfies a number of useful properties. Namely:
 	\item For each $a \in \mathbb{R}^2$, $\mathrm{push}_L(a)$ is continuous on $\mathcal{L}^\circ$
 	\item For $L \in \mathcal{L}^\circ$ and $S \subset \mathbb{R}^2$, $\mathrm{push}_L$ induces a totally ordered partition $S_L$ on $S$ 
 \end{enumerate}
-Property (1) asserts that for any $L \in \overline{\mathcal{L}}$, the partial order on $\mathbb{R}^2$ restricts to a total order on $L$. Properties (2) and (3) qualify the following definition:
+Property (1) asserts that for any $L \in \overline{\mathcal{L}}$, the standard partial order on $\mathbb{R}^2$ restricts to a total order on $L$. Properties (2) and (3) qualify the following definition:
 \begin{definition}[Critical Lines]
 	For some fixed $S \subset \mathbb{R}^2$, a line $L \in L^\circ$ is defined to be \emph{regular} if there is an open ball $B \in L^\circ$ containing $L$ such that $S_L = S_{L'}$ for all $L' \in B$. Otherwise, the line $L$ is defined as \emph{critical}. 
 \end{definition}
@@ -1294,7 +1296,7 @@ The main mathematical result from~\cite{lesnick2015interactive} is a characteriz
  \mathcal{B}_L(M) = \{ [\,\mathrm{push}_L(a), \, \mathrm{push}_L(b)\,) \mid (a,b) \in \mathcal{T}^e, \mathrm{push}_L(a) < \mathrm{push}_L(b)  \} 
 \end{equation}
 Minor additional conditions are needed for handling completely horizontal and vertical lines. 
-The importance of this theorem for this effort lies in the fact that the fibered barcodes are completely defined from the precomputed barcode templates $\mathcal{T}$: once $\mathcal{T}$ has been computed and augmented onto $\mathcal{A}(M)$, $\mathcal{B}(M)$ is completely characterized, and the barcodes $\mathcal{B}_L(M)$ of any $L$-induced 1-D filtration can be efficiently computed via a point-location query on $\mathcal{A}(M)$ and a $O(\lvert \mathcal{B}_L(M) \rvert)$ application of the push map.
+The importance of this theorem for this effort lies in the fact that the fibered barcodes are completely defined from the precomputed barcode templates $\mathcal{T}$---once every barcode template $\mathcal{T}^e$ has been computed and augmented onto $\mathcal{A}(M)$, $\mathcal{B}(M)$ is completely characterized, and the barcodes $\mathcal{B}_L(M)$ associated to a 1-D filtration induced by \emph{any} choice of $L$ can be efficiently computed via a point-location query on $\mathcal{A}(M)$ and a $O(\lvert \mathcal{B}_L(M) \rvert)$ application of the push map.
 
 %For some fixed set $S \subset \mathbb{R}^2$ and any pair $u, v \in S$ of points which are incomparable with respect to the partial order on $\mathbb{R}^2$
 % The definition of \emph{critical} lines provides an analogue to the 
@@ -1319,15 +1321,18 @@ This suggests the computation of the barcode templates is on the order $O(m^5)$,
 With this in mind, given a multifiltration with $m$ simplices, the entire computation for approximating the fibered barcode invariant reduces to an $\approx O(m^3)$ algorithm. 
 
 There are several approaches one can use to compute $\mathcal{T}$, the simplest being to run Algorithm~\ref{alg:reduce} independently on the 1-D filtration induced by the duals of some set of points (e.g. the barycenters) lying in the interior of the 2-cells of $\mathcal{A}(M)$.  
-The approach taken by~\cite{lesnick2015interactive} is to use the $R = DV$ decomposition computed at some adjacent 2-cell $e \in \mathcal{A}(M)$ to speed up the computation of an adjacent cell $e' \in \mathcal{A}(M)$. More explicitly, define the \emph{dual graph} of $\mathcal{A}(M)$ to be the undirected graph $G$ which has a vertex for every 2-cell $e \in \mathcal{A}(M)$ and an edge for each pair of cells $e, e' \in \mathcal{A}(M)$ which are adjacent in $\mathcal{A}(M)$. 
-Each vertex in $G$ is associated with a barcode template $\mathcal{T}^e$, and the computation of $\mathcal{T}$ now reduces to computing a path $\Gamma$ on $G$ which visits each vertex at least once. To minimize the computation time, assume the $n$ edges of $G$ are endowed with a weights $w_1, w_2, \dots, w_n$ whose values represent some notion of distance between barcode templates.  The optimal path $\Gamma^\ast$ would be one of minimal length which visits every vertex of $G$ at least once. A $\frac{3}{2}$-approximation for computing an approximately minimal path is known, which reduces the problem to the traveling salesman problem on a metric graph~\cite{christofides1976worst}. 
+The approach taken by~\cite{lesnick2015interactive} is to use the $R = DV$ decomposition computed at some adjacent 2-cell $e \in \mathcal{A}(M)$ to speed up the computation of an adjacent cell $e' \in \mathcal{A}(M)$. More explicitly, define the \emph{dual graph} of $\mathcal{A}(M)$ to be the undirected graph $G$ which has a vertex for every 2-cell $e \in \mathcal{A}(M)$ and an edge for each adjacent pair of cells $e, e' \in \mathcal{A}(M)$.
+Each vertex in $G$ is associated with a barcode template $\mathcal{T}^e$, and the computation of $\mathcal{T}$ now reduces to computing a path $\Gamma$ on $G$ which visits each vertex at least once. To minimize the computation time, assume the $n$ edges of $G$ are endowed with non-negative weights $W = w_1, w_2, \dots, w_n$ whose values $w_i \in \mathbb{R}_{+}$ represent some notion of distance. The optimal path $\Gamma^\ast$ is the one of minimal length with respect to $W$ which visits every vertex of $G$ at least once. There is a known $\frac{3}{2}$-approximation that can be computed efficiently which reduces the problem to the traveling salesman problem on a metric graph~\cite{christofides1976worst}. In the next paragraph, we include a small example to illustrate many of the concepts and definitions discussed so far below. 
 \\
 \\
 \textbf{Noisy circle example}
-\begin{figure}[h]
+Consider a small set of points distributed noisily around $S^1$ that contains a few strong outliers, shown on the left side of Figure~\ref{fig:bifiltration_ex2}. Filtering this data set with respect to the Rips parameter and the complement of a kernel density estimate yields a bifiltration whose dimension function and bigraded Betti numbers are shown in the middle figure. The gray areas indicate the region where the dimension function is constant. On the right side, the space dual to the space in the middle is shown. The black lines represent the lines of $\mathcal{A}(M)$, the blue dashed-lines the edges of the dual graph $\mathcal{G}$, and the barycenters of the 2-cells in $\mathcal{A}(M)$ depicting where the barcodes templates $\mathcal{T}^e$ are computed are drawn as orange points. 
+\begin{figure}[t]
 	\includegraphics[width=0.98\textwidth]{bifiltration_ex2}
-	\caption{Bipersistence example on an $8 \times 8$ coarsened grid. On left, the input data, colored by density. In the middle, the bigraded Betti numbers $\beta_0(M)$ and $\beta_1(M)$ (green and red, respectively), the Hilbert function (gray), and a line $L$ emphasizing the persistence of features with high density. On the right, the line arrangement $\mathcal{A}(M)$ lying in the dual space $D_p(\alpha)$ derived from the $\beta(M)$. The barycenters of the 2-cells in $\mathcal{A}(M)$ depicting where the barcodes templates $\mathcal{T}$ are computed are drawn as orange points, and the dual graph $G$ of $\mathcal{A}(M)$ is drawn using dotted blue lines. The shortest path $\Gamma^\ast$ spanning the vertices of $G$ is shown by the solid colored lines. }
+	\caption{Bipersistence example on an $8 \times 8$ coarsened grid. On left, the input data, colored by density. In the middle, the bigraded Betti numbers $\beta_0(M)$ and $\beta_1(M)$ (green and red, respectively), the Hilbert function (gray), and a line $L$ emphasizing the persistence of features with high density. On the right, the line arrangement $\mathcal{A}(M)$ lying in the dual space $D_p(\alpha)$ derived from the $\beta(M)$. }
+	\label{fig:bifiltration_ex2}
 \end{figure}
+The shortest path $\Gamma^\ast$ spanning the vertices of $G$ is shown by the solid rainbow colored lines, with the traversal beginning in the top-left cell (at the red edge) and ending at the bottom-right cell (the indigo edge). Traversing $\Gamma^\ast$ can be done via a simple depth-first search, though note that a $R=DV$ decomposition needs to be stored at each degree-3 or higher vertex in $\Gamma^\ast$ to avoid redundant computations as the traversal recurses. 
 \\
 
 %To an along an Eulerian path spanning the dual graph $G$ of the arrangement $\mathcal{A}(M)$. The
