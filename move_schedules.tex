@@ -1,6 +1,7 @@
-\documentclass[10pt]{article}
-\usepackage[margin=0.75in]{geometry}
-\usepackage{amsmath, amsthm, amssymb}
+\documentclass{siamart190516}
+
+%\usepackage[margin=0.75in]{geometry}
+\usepackage{amsmath, amssymb}
 \usepackage{mathtools}
 \usepackage{url}
 \usepackage{enumitem}
@@ -36,13 +37,17 @@
 }
 \makeatother
 
+\newcommand\undermat[2]{%
+  	\makebox[0pt][l]{$\smash{\underbrace{\phantom{%
+    \begin{matrix}#2\end{matrix}}}_{\text{$#1$}}}$}#2}
+
 \usepackage{hyperref} % load hyperref last
 
-\newtheorem{theorem}{Theorem}
-\newtheorem{definition}{Definition}
-\newtheorem{proposition}{Proposition}
-\newtheorem{lemma}{Lemma}
-\newtheorem{corollary}{Corollary}
+%\newtheorem{theorem}{Theorem}
+%\newtheorem{definition}{Definition}
+%\newtheorem{proposition}{Proposition}
+%\newtheorem{lemma}{Lemma}
+%\newtheorem{corollary}{Corollary}
 % \newcommand{\CommentX}[1]{\unskip~\%~#1~\%}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
@@ -57,18 +62,57 @@
 \setenumerate[3]{label*=.\arabic*}
 \setenumerate[4]{label*=.\arabic*}
 
-%Unraveling
-\title{\vspace{-2.0em} Move Schedules: \\ Fast persistence computations in sparse dynamic settings\thanks{This work was partially supported by the National Science Foundation through grants CCF-2006661
-and CAREER award  DMS-1943758.}\vspace{-0.5em}}
-\author{Matt Piekenbrock\thanks{Department of Computational Mathematics, Science \& Engineering, Michigan State University}\;\; and Jose A. Perea$^\dagger$\thanks{Department of Mathematics, Michigan State University}}
-\date{}
+% Sets running headers as well as PDF title and authors
+\headers{An Example Article}{D. Doe, P. T. Frank, and J. E. Smith}
 
-\begin{document} \vspace{-4em} \maketitle
+% Title. If the supplement option is on, then "Supplementary Material"
+% is automatically inserted before the title.
+\title{Move Schedules: Fast persistence computations in sparse dynamic settings
+	\thanks{Submitted to the editors DATE.
+		\funding{This work was partially supported by the National Science Foundation through grants CCF-2006661 and CAREER award DMS-1943758.}
+	}
+}
+
+% Authors: full names plus addresses.
+\author{
+	Matt Piekenbrock\thanks{Department of Computational Mathematics, Science \& Engineering, Michigan State University.}
+	\and Jose A. Perea\thanks{Department of Mathematics, Michigan State University.}
+}
+
+%\title{\vspace{-2.0em} Move Schedules: \\ Fast persistence computations in sparse dynamic settings\thanks{This work was partially supported by the National Science Foundation through grants CCF-2006661 and CAREER award DMS-1943758.}\vspace{-0.5em}}
+%\author{Matt Piekenbrock\thanks{Department of Computational Mathematics, Science \& Engineering, Michigan State University}\;\; and Jose A. Perea$^\dagger$\thanks{Department of Mathematics, Michigan State University}}
+%\date{}
+
+% Optional PDF information
+\ifpdf
+\hypersetup{
+  pdftitle={An Example Article},
+  pdfauthor={Matt Piekenbrock, P. T. Frank, and J. E. Smith}
+}
+\fi
+
+% ------  Begin document ------- 
+\begin{document} 
+
+\maketitle
+
+% REQUIRED - "Abstracts must be able to stand alone and so cannot contain citations to the paper's references, equations, etc. 
 \begin{abstract}
 	The standard procedure for computing the persistent homology of a filtered simplicial complex is the matrix reduction algorithm. Its output is a particular decomposition of the total boundary matrix, from which the persistence diagrams and generating cycles can be derived. 
 	Persistence diagrams are known to vary continuously with respect to their input; this motivates the algorithmic study of persistence computations for time-varying filtered complexes. Computationally, simulating persistence dynamically can be reduced to maintaining a valid decomposition under adjacent transpositions in the filtration order. In practice, the quadratic scaling in the number of  transpositions often makes this maintenance procedure slower than simply computing the decomposition from scratch, effectively limiting the application of dynamic persistence to relatively small data sets. In this work, we propose a coarser strategy for maintaining the decomposition over a discrete 1-parameter family of filtrations. Our first result is an analysis of a simple linear-time strategy which reduces the number of column operations needed to simulate persistence across a fixed homotopy by at most a factor of 2. We then show a modification of this technique which maintains only a sublinear number of valid states, as opposed to a quadratic number of states, and we provide tight lower bounds for this technique.
 	Finally, we provide empirical results suggesting that the decrease in operations needed to compute diagrams across a family of filtrations is proportional to the difference between the expected quadratic number of states, and the proposed sublinear coarsening.
 \end{abstract}
+
+
+% REQUIRED
+\begin{keywords}
+  example, \LaTeX
+\end{keywords}
+
+% REQUIRED
+\begin{AMS}
+  68Q25, 68R10, 68U05
+\end{AMS}
 
 \section{Introduction} 
 \subsection{Overview}\label{sec:overview} 
@@ -104,9 +148,9 @@ As a motivating example, we describe a simple experiment illustrating why the vi
 Consider a series of grayscale images (i.e. a video) depicting a fixed-width annulus expanding about the center of a $9 \times 9$ grid, where scale of the annulus is parameterized by a single parameter $\tau$. Thus, the data set is a 1-parameter family of images. Each image contains the same number of pixels whose intensities---these are determined by the parameter---vary with time. For each image, we build a filtered simplicial complex using the \emph{Freudenthal} triangulation, with the ordering of inclusions obtained by lower stars.  
  \begin{figure*}[t]
  	\centering
- 	\includegraphics[width=0.36\textwidth, height = 1.65in]{circle_vineyards.png}
- 	\includegraphics[width=0.63\textwidth]{circle_complex.png}
- 	\caption{Grayscale image data set depicting an expanding annulus (top right), each image's corresponding lower star filtration (bottom right), and the cumulative number of column operations required to compute persistence for this time-varying filtration (left). The persistent Betti numbers for each filtration from left to right are: $\beta_1 = (1,0,0), \beta_2 = (1,1,0), \beta_3 = (1,1,0), \beta_4 = (1,1,0), \beta_5 = (4,0,0)$. Observe computing $10$ diagrams independently at evenly spaced time points (the green line) both captures these major topological changes and is the most computationally efficient approach shown.}
+ 	\includegraphics[width=0.36\textwidth, height = 1.45in]{circle_vineyards.png}
+ 	\includegraphics[width=0.63\textwidth, height = 1.45in]{circle_complex.png}
+ 	\caption{On the right, the grayscale image data set and corresponding lower star filtrations. On the left, the cumulative number of column operations required to compute persistence for this time-varying filtration. The persistent Betti numbers for each filtration from left to right are: $\beta_1 = (1,0,0), \beta_2 = (1,1,0), \beta_3 = (1,1,0), \beta_4 = (1,1,0), \beta_5 = (4,0,0)$. Observe computing $10$ diagrams independently at evenly spaced time points (the green line) both captures these major topological changes and is the most computationally efficient approach shown.}
  	\label{fig:vineyards}
  \end{figure*}
 Snapshots of the image data and its corresponding time-varying filtration is depicted in Figure~\ref{fig:vineyards} (top right and bottom right, respectively), which we use as a baseline for comparing the standard algorithm $\texttt{pHcol}$ with vineyards. Note the size of the filtration is fixed--no simplices are ever added or removed over time. 
@@ -126,7 +170,7 @@ This reduction yields an efficient algorithm for generating sequences of moves $
 We investigate the feasibility of optimizing the cost 
 (i.e., number of column operations) of these schedules directly, including the existence of a greedy-type approach, which we show can lead to arbitrarily bad behavior. 
 In light of these results, we give an alternative proxy-objective to minimize, provide bounds justifying its relevance to the original objective, and give an efficient $O(d \log d)$ algorithm for approximately solving this proxy minimization. 
-A performance comparison with other reduction-based persistent homology computations is given, wherein our approach is demonstrated to be an order of magnitude more efficient than existing approaches in a few common sparse dynamic settings, such as flock simulation and 2D persistence computation. We conclude with a discussion of situations where our strategy is most applicable and future directions for research.  
+A performance comparison with other reduction-based persistent homology computations is given, wherein our approach is demonstrated to be an order of magnitude more efficient than existing approaches in applications such as flock simulation and 2D persistence computation. We conclude with a discussion of situations where our strategy is most applicable and future directions for research.  
    
 \subsection{Related Work}\label{sec:related_work} 
 To the authors knowledge, work focused on ways of updating a  decomposition $R = DV$, for all homological dimensions, is limited---there is the vineyards algorithm~\cite{cohen2006vines} and the moves algorithm~\cite{busaryev2010tracking}, both of which are discussed extensively in section~\ref{sec:background}. 
@@ -249,64 +293,66 @@ If the $i$-th column of $R$ is nonzero, then $\mathrm{low}_R(i)$
 is the row index of its lowest nonzero entry.
 Using $\mathbb{Z}_2$ coefficients and homology in dimension 1 to simplify the presentation, the steps look at follows:
 \begin{displaymath}
+	\def\rowsp{0.4em}
 	\def\arraystretch{0.95}
-	\makeatletter\setlength\BA@colsep{2.8pt}\makeatother
+	\makeatletter\setlength\BA@colsep{1.2pt}\makeatother
 	%
 	\begin{blockarray}{cccc}{R_1}
 	 \kern-0.2em & a & b & c  \\
 		\begin{block}{c[ccc]}
-  		u \kern-0.1em  & \; 1 &    &  1 \; \topstrut \\
-  		v \kern-0.1em & \;     &  1 & 1 \; \\
-  		w \kern-0.1em & \; 1 &  1 &    \; \botstrut \\
+  		u \kern\rowsp  & \; 1 &    &  1 \; \topstrut \\
+  		v \kern\rowsp & \;     &  1 & 1 \; \\
+  		w \kern\rowsp & \; 1 &  1 &    \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	\; , \;
 	\begin{blockarray}{cccc}{V_1}
 	\kern-0.2em & a & b & c  \\
 		\begin{block}{c[ccc]}
-        a \kern-0.1em  & \; 1 &  &  \; \topstrut \\
-  		b \kern-0.1em & \;  & 1 & \; \\
-  		c \kern-0.1em & \;  &  & 1 \; \botstrut \\
+        a \kern\rowsp  & \; 1 &  &  \; \topstrut \\
+  		b \kern\rowsp & \;  & 1 & \; \\
+  		c \kern\rowsp & \;  &  & 1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	\quad \xrightarrow{} \,
 	\begin{blockarray}{cccc}{R_1}
 	\kern-0.2em & a & b & c  \\
 		\begin{block}{c[ccc]}
-  		u \kern-0.1em  & \; 1 & 1 & 1 \; \topstrut \\
-  		v \kern-0.1em & \;     & 1 & 1 \; \\
-  		w \kern-0.1em & \; 1 &    &    \; \botstrut \\
+  		u \kern\rowsp  & \; 1 & 1 & 1 \; \topstrut \\
+  		v \kern\rowsp & \;     & 1 & 1 \; \\
+  		w \kern\rowsp & \; 1 &    &    \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	\; , \;
 	\begin{blockarray}{cccc}{V_1}
 	\kern-0.2em & a & b & c  \\
 		\begin{block}{c[ccc]}
-  		a \kern-0.1em  & \; 1 & 1 &    \; \topstrut \\
-  		b \kern-0.1em & \;     & 1 &    \; \\
-  		c \kern-0.1em & \;     &    & 1 \; \botstrut \\
+  		a \kern\rowsp  & \; 1 & 1 &    \; \topstrut \\
+  		b \kern\rowsp & \;     & 1 &    \; \\
+  		c \kern\rowsp & \;     &    & 1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	\quad \xrightarrow{} \,
 	\begin{blockarray}{cccc}{R_1}
 	\kern-0.2em & b & a & c  \\
 		\begin{block}{c[ccc]}
-  		u \kern-0.1em  & \;     & 1  &  \; \topstrut \\
-  		v \kern-0.1em &  \; 1  & 1  &  \; \\
-  		w \kern-0.1em & \; 1  &     &  \; \botstrut \\
+  		u \kern\rowsp  & \;     & 1  &  \; \topstrut \\
+  		v \kern\rowsp &  \; 1  & 1  &  \; \\
+  		w \kern\rowsp & \; 1  &     &  \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	\; , \;
 	\begin{blockarray}{cccc}{V_1}
 	\kern-0.2em & b & a & c  \\
 		\begin{block}{c[ccc]}
-  		b \kern-0.1em  & \; 1 & 1 & 1 \; \topstrut \\
-  		a \kern-0.1em & \;     & 1 & 1 \; \\
-  		c \kern-0.1em & \;     &    & 1 \; \botstrut \\
+  		b \kern\rowsp  & \; 1 & 1 & 1 \; \topstrut \\
+  		a \kern\rowsp & \;     & 1 & 1 \; \\
+  		c \kern\rowsp & \;     &    & 1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	\vspace*{-1em}
 \end{displaymath}
+
 The column $c$ in $R$ indicates that dimension $1$ homology is born, which in this filtration is never killed since the dimension of the complex is $2$. Similarly, the columns at $u, v, w$ in $R_0$ (not shown) are all zero, indicating three $0$-dimensional homology classes  are born, which are then killed by the pivot entries in columns $a$ and $b$ in $R_1$.
 \\
 \\
@@ -321,9 +367,9 @@ There are actually many variations and optimizations proposed over the past deca
  	\end{enumerate} 
  \vspace*{1em}
  If these two invariants are maintained, then we call the decomposition \emph{valid}. Given any $R = D V$ decomposition, it was shown in~\cite{zomorodian2005computing} that the following proposition is true:
-\begin{proposition}[Persistent Pairing~\cite{zomorodian2005computing}]
-	Let $R = D V$, where $R$ is in reduced form and $V$ is full-rank upper triangular (invariants (1) and (2)  hold). Then the pairing $(\sigma_i, \sigma_j)$ defined by $i = \mathrm{low}_R(j)$ is a \emph{creator/destroyer (persistent) pair}. While the matrices $R,V$ satisfying (1) and (2) are not unique in general,  the persistent pairs $(i,j)$ are unique and define the persistence diagrams of $K$.
-\end{proposition}
+%\begin{proposition}[Persistent Pairing~\cite{zomorodian2005computing}]
+%	Let $R = D V$, where $R$ is in reduced form and $V$ is full-rank upper triangular (invariants (1) and (2)  hold). Then the pairing $(\sigma_i, \sigma_j)$ defined by $i = \mathrm{low}_R(j)$ is a \emph{creator/destroyer (persistent) pair}. While the matrices $R,V$ satisfying (1) and (2) are not unique in general,  the persistent pairs $(i,j)$ are unique and define the persistence diagrams of $K$.
+%\end{proposition}
 \noindent
 Amongst other important corollaries, one immediate consequence of this proposition is that the persistent pairing is independent of the particular entries in $R$ and $V$. When reducing the boundary matrix, we can therefore perform column operations in any order, as long as columns are added from left to right, and so long as every column operation performed in $R$ is also performed on $V$. Once $R$ is reduced, if both of the invariants are respected, then the low entries in $R$ yield the correct pairing encoding the persistence diagram of the corresponding filtration $K$.
 % Important corollaries of the persistence pairing lemma is that the 
@@ -361,90 +407,82 @@ The explicit pseudocode describing these rules is given in the appendix by Algor
 \noindent 
 \textbf{Example 2.2} To illustrate the basic principles on which vineyards works, we re-use the running example introduced in the previous section. Below, we illustrate the case of exchanging simplices $a$ and $b$ in the filtration order. 
 \begin{displaymath}
+	\def\rowsp{0.4em}
 	\def\arraystretch{0.95}
-	\makeatletter\setlength\BA@colsep{2.8pt}\makeatother
+	\makeatletter\setlength\BA@colsep{1.2pt}\makeatother
 	%
 	\begin{blockarray}{cccc}{R_1}
 	 \kern-0.2em & a & b & c  \\
 		\begin{block}{c[ccc]}
-  		u \kern-0.1em  & \; 1 & 1 &  \; \topstrut \\
-  		v \kern-0.1em & \;  & 1 &  \; \\
-  		w \kern-0.1em & \; 1 &  &  \; \botstrut \\
+  		u \kern\rowsp  & \; 1 & 1 &  \; \topstrut \\
+  		v \kern\rowsp & \;  & 1 &  \; \\
+  		w \kern\rowsp & \; 1 &  &  \; \botstrut \\
 		\end{block}
 	\end{blockarray}
-	\, , 
+	\,\,, 
 	\begin{blockarray}{cccc}{V_1}
 	\kern-0.2em & a & b & c  \\
 		\begin{block}{c[ccc]}
-        a \kern-0.1em  & \; 1 & \tikz[baseline]{
-            \node[fill=orange!20,anchor=base] (t1)
-            {$ 1 $};
-        } & 1 \; \topstrut \\
-  		b \kern-0.1em & \;  & 1 & 1 \; \\
-  		c \kern-0.1em & \;  &  & 1 \; \botstrut \\
+        a \kern\rowsp  & \; 1 & 1 & 1 \; \topstrut \\
+  		b \kern\rowsp & \;  & 1 & 1 \; \\
+  		c \kern\rowsp & \;  &  & 1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	\xrightarrow{S_{1}^2} 
-	\hspace{-0.5em}
-	\begin{blockarray}{cccc}{R_1}
+	\hspace{-0.1em}
+	\begin{blockarray}{cccc}{}
 	\kern-0.2em & a & b & c  \\
 		\begin{block}{c[ccc]}
-  		u \kern-0.1em  & \; 1 &  &  \; \topstrut \\
-  		v \kern-0.1em & \;  & 1 &  \; \\
-  		w \kern-0.1em & \; 1 & \tikz[baseline]{
-            \node[fill=red!20,anchor=base] (t1)
-            {$ 1 $};
-        } &  \; \botstrut \\
+  		 & \; 1 &  &  \; \topstrut \\
+  		 & \;  & 1 &  \; \\
+  		 & \; 1 & 1 & \; \botstrut \\
 		\end{block}
 	\end{blockarray}
-	\, , 
-	\begin{blockarray}{cccc}{V_1}
+	\,\,, 
+	\begin{blockarray}{cccc}{}
 	\kern-0.2em & a & b & c  \\
 		\begin{block}{c[ccc]}
-  		a \kern-0.1em  & \; 1 &  & 1 \; \topstrut \\
-  		b \kern-0.1em & \;  & 1 & 1 \; \\
-  		c \kern-0.1em & \;  &  & 1 \; \botstrut \\
+  		 & \; 1 &  & 1 \; \topstrut \\
+  		 & \;  & 1 & 1 \; \\
+  		 & \;  &  & 1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	\xrightarrow{P}
-	\hspace{-0.5em}
-	\begin{blockarray}{cccc}{R_1}
+	\hspace{-0.2em}
+	\begin{blockarray}{cccc}{}
 	\kern-0.2em & b & a & c  \\
 		\begin{block}{c[ccc]}
-  		u \kern-0.1em  & \;  & 1 &  \; \topstrut \\
-  		v \kern-0.1em & \; 1 &  &  \; \\
-  		w \kern-0.1em & \; 1 & \tikz[baseline]{
-            \node[fill=red!20,anchor=base] (t1)
-            {$ 1 $};
-        } &  \; \botstrut \\
+  		& \;  & 1 &  \; \topstrut \\
+  		& \; 1 &  &  \; \\
+  		& \; 1 & 1 &  \; \botstrut \\
 		\end{block}
 	\end{blockarray}
-	\, , 
-	\begin{blockarray}{cccc}{V_1}
+	\,\,, 
+	\begin{blockarray}{cccc}{}
 	\kern-0.2em & b & a & c  \\
 		\begin{block}{c[ccc]}
-  		b \kern-0.1em  & \; 1 &  & 1 \; \topstrut \\
-  		a \kern-0.1em & \;  & 1 & 1 \; \\
-  		c \kern-0.1em & \;  &  & 1 \; \botstrut \\
+  		& \; 1 &  & 1 \; \topstrut \\
+  		& \;  & 1 & 1 \; \\
+  		& \;  &  & 1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	\xrightarrow{S_1^2}
-	\hspace{-0.5em}
+	\hspace{-0.1em}
 	\begin{blockarray}{cccc}{R_1}
 	\kern-0.2em & b & a & c  \\
 		\begin{block}{c[ccc]}
-  		u \kern-0.1em  & \;  & 1 &  \; \topstrut \\
-  		v \kern-0.1em & \; 1 & 1 &  \; \\
-  		w \kern-0.1em & \; 1 &  &  \; \botstrut \\
+  		u \kern\rowsp  & \;  & 1 &  \; \topstrut \\
+  		v \kern\rowsp & \; 1 & 1 &  \; \\
+  		w \kern\rowsp & \; 1 &  &  \; \botstrut \\
 		\end{block}
 	\end{blockarray}
-	\, ,
+	\,\,,
 	\begin{blockarray}{cccc}{V_1}
 	\kern-0.2em & b & a & c  \\
 		\begin{block}{c[ccc]}
-  		b \kern-0.1em  & \; 1 & 1 & 1 \; \topstrut \\
-  		a \kern-0.1em & \;  & 1 & 1 \; \\
-  		c \kern-0.1em & \;  &  & 1 \; \botstrut \\
+  		b \kern\rowsp  & \; 1 & 1 & 1 \; \topstrut \\
+  		a \kern\rowsp & \;  & 1 & 1 \; \\
+  		c \kern\rowsp & \;  &  & 1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 \end{displaymath}
@@ -546,179 +584,182 @@ If one has a pair of filtrations $(K_0, K_1)$ each with $m$ simplices, and we as
 \\
 \noindent \textbf{Example:} We continue the example used in sections~\ref{sec:vineyards} and~\ref{sec:reduction} to illustrate moves. Consider moving the edge $a$ to the position taken by the edge $c$ in the filtration. The donor columns introduced in~\cite{busaryev2010tracking} are shown on the left side of each matrix. Note that using vineyards, the equivalent permutation to the decomposition would require $4$ column operations on both $R_1$ and $V_1$, respectively, whereas a single move operation accomplishes this permutation using only $2$ column operations per matrix. 
 \begin{displaymath}
+	\def\rowsp{0.4em}
 	\def\arraystretch{0.95}
-	\makeatletter\setlength\BA@colsep{2.8pt}\makeatother
+	\makeatletter\setlength\BA@colsep{1.2pt}\makeatother
 	%
 	\begin{blockarray}{cc}{d_R}
 	\kern-0.2em & a \\
 		\begin{block}{c[c]}
-  		u \kern-0.1em  & \; 1 \; \topstrut \\
-  		v \kern-0.1em & \;  \; \\
-  		w \kern-0.1em & \; 1 \; \botstrut \\
+  		u \kern \rowsp & \; 1 \; \topstrut \\
+  		v \kern \rowsp & \;  \; \\
+  		w \kern \rowsp & \; 1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	\; \;
 	\begin{blockarray}{cccc}{R_1}
 	 \kern-0.2em & a & b & c  \\
 		\begin{block}{c[ccc]}
-  		u \kern-0.1em  & \; 1 & 1 &  \; \topstrut \\
-  		v \kern-0.1em & \;  & 1 &  \; \\
-  		w \kern-0.1em & \; 1 &  &  \; \botstrut \\
+  		u \kern \rowsp & \; 1 & 1 &  \; \topstrut \\
+  		v \kern \rowsp & \;  & 1 &  \; \\
+  		w \kern \rowsp & \; 1 &  &  \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	%
 \; \to
 	%
-\begin{blockarray}{cc}{d_R}
+\begin{blockarray}{cc}{}
 	\kern-0.2em & b \\
 		\begin{block}{c[c]}
-  		u \kern-0.1em  & \; 1 \; \topstrut \\
-  		v \kern-0.1em & \;  1 \; \\
-  		w \kern-0.1em & \; \; \botstrut \\
+  		  & \; 1 \; \topstrut \\
+  		 & \;  1 \; \\
+  		 & \; \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	\; \;
-\begin{blockarray}{cccc}{R_1}
+\begin{blockarray}{cccc}{}
 	\kern-0.2em & a & b & c  \\
 		\begin{block}{c[ccc]}
-  		u \kern-0.1em  & \; 1 &    &  \; \topstrut \\
-  		v \kern-0.1em  & \;    & 1 &  \; \\
-  		w \kern-0.1em & \; 1 & 1 &  \; \botstrut \\
+  		  & \; 1 &    &  \; \topstrut \\
+  		  & \;    & 1 &  \; \\
+  		 & \; 1 & 1 &  \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	%
 \; \to
 	%
-	\begin{blockarray}{cc}{d_R}
+	\begin{blockarray}{cc}{}
 	\kern-0.2em & c \\
 		\begin{block}{c[c]}
-  		u \kern-0.1em  & \; \hphantom{1} \; \topstrut \\
-  		v \kern-0.1em & \;  \hphantom{1} \; \\
-  		w \kern-0.1em & \; \hphantom{1} \; \botstrut \\
+  		  & \; \hphantom{1} \; \topstrut \\
+  		 & \;  \hphantom{1} \; \\
+  		 & \; \hphantom{1} \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	\; \; 
-	\begin{blockarray}{cccc}{R_1}
+	\begin{blockarray}{cccc}{}
 	\kern-0.2em & a & b &  c \\
 		\begin{block}{c[ccc]}
-  		u \kern-0.1em  & \; 1   &    &   1  \; \topstrut \\
-  		v \kern-0.1em & \;       &  1  &  1  \; \\
-  		w \kern-0.1em & \; 1   &   1   &     \; \botstrut \\
+  		  & \; 1   &    &   1  \; \topstrut \\
+  		 & \;       &  1  &  1  \; \\
+  		 & \; 1   &   1   &     \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 %
-\; \xrightarrow{P}
-% 
-\begin{blockarray}{cc}{d_R}
+\; \xrightarrow{P} 
+\begin{blockarray}{cc}{}
 	\kern-0.2em & c \\
 		\begin{block}{c[c]}
-  		u \kern-0.1em  & \; \hphantom{1} \; \topstrut \\
-  		v \kern-0.1em & \; \hphantom{1} \; \\
-  		w \kern-0.1em & \; \hphantom{1} \; \botstrut \\
+  		  & \; \hphantom{1} \; \topstrut \\
+  		 & \; \hphantom{1} \; \\
+  		 & \; \hphantom{1} \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 \; \;
-\begin{blockarray}{cccc}{R_1}
+\begin{blockarray}{cccc}{}
 	\kern-0.2em & b & c & a  \\
 		\begin{block}{c[ccc]}
-  		u \kern-0.1em  & \;  & 1 &  1\; \topstrut \\
-  		v \kern-0.1em & \; 1 & 1 &  \; \\
-  		w \kern-0.1em & \; 1 &  & 1 \; \botstrut \\
+  		  & \;  & 1 &  1\; \topstrut \\
+  		 & \; 1 & 1 &  \; \\
+  		 & \; 1 &  & 1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 %
-\; \xrightarrow{d_R}
-% 
-	\begin{blockarray}{cccc}{R_1}
-	\kern-0.2em & b & c & a  \\
-		\begin{block}{c[ccc]}
-  		u \kern-0.1em  & \;  & 1 &  \; \topstrut \\
-  		v \kern-0.1em & \; 1 & 1 &  \; \\
-  		w \kern-0.1em & \; 1 &  &  \; \botstrut \\
-		\end{block}
-	\end{blockarray}
+\; \xrightarrow{d_R} 
+\begin{blockarray}{cccc}{R_1}
+\kern-0.2em & b & c & a  \\
+	\begin{block}{c[ccc]}
+		u \kern \rowsp & \;  & 1 &  \; \topstrut \\
+		v \kern \rowsp & \; 1 & 1 &  \; \\
+		w \kern \rowsp & \; 1 &  &  \; \botstrut \\
+	\end{block}
+	% \undermat{B}{ & & }  
+\end{blockarray}
 \end{displaymath}
+
 \vspace{-1.0em}
+
 % Start V example 
 \begin{displaymath}
+	\def\rowsp{0.4em}
 	\def\arraystretch{0.95}
-	\makeatletter\setlength\BA@colsep{2.8pt}\makeatother
+	\makeatletter\setlength\BA@colsep{1.2pt}\makeatother
 	%
 	\begin{blockarray}{cc}{d_V}
 	\kern-0.2em & a \\
 		\begin{block}{c[c]}
-  		a \kern-0.1em  & \; 1 \; \topstrut \\
-  		b \kern-0.1em & \;  \; \\
-  		c \kern-0.1em & \;  \; \botstrut \\
+  		 & \; 1 \; \topstrut \\
+  		& \;  \; \\
+  		& \;  \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	\; \;
 	\begin{blockarray}{cccc}{V_1}
 	 \kern-0.2em & a & b & c  \\
 		\begin{block}{c[ccc]}
-  		a \kern-0.1em  & \; 1 & 1 &  1\; \topstrut \\
-  		b \kern-0.1em & \;  & 1 &  1\; \\
-  		c \kern-0.1em & \; &  & 1 \; \botstrut \\
+  		 & \; 1 & 1 &  1\; \topstrut \\
+  		& \;  & 1 &  1\; \\
+  		& \; &  & 1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	%
 \; \to
 	%
-\begin{blockarray}{cc}{d_V}
+\begin{blockarray}{cc}{}
 	\kern-0.2em & b \\
 		\begin{block}{c[c]}
-  		a \kern-0.1em  & \; 1 \; \topstrut \\
-  		b \kern-0.1em & \;  1 \; \\
-  		c \kern-0.1em & \; \; \botstrut \\
+  		 & \; 1 \; \topstrut \\
+  		& \;  1 \; \\
+  		& \; \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	\; \;
-\begin{blockarray}{cccc}{V_1}
+\begin{blockarray}{cccc}{}
 	 \kern-0.2em & a & b & c  \\
 		\begin{block}{c[ccc]}
-  		a \kern-0.1em  & \; 1 & &  1\; \topstrut \\
-  		b \kern-0.1em & \;  & 1 &  1\; \\
-  		c \kern-0.1em & \; &   & 1 \; \botstrut \\
+  		 & \; 1 & &  1\; \topstrut \\
+  		& \;  & 1 &  1\; \\
+  		& \; &   & 1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	%
 \; \to
 	%
-	\begin{blockarray}{cc}{d_V}
+	\begin{blockarray}{cc}{}
 	\kern-0.2em & c \\
 		\begin{block}{c[c]}
-  		a \kern-0.1em  & \; 1 \; \topstrut \\
-  		b \kern-0.1em & \;  1 \; \\
-  		c \kern-0.1em & \; 1 \; \botstrut \\
+  		 & \; 1 \; \topstrut \\
+  		& \;  1 \; \\
+  		& \; 1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	\; \;
-	\begin{blockarray}{cccc}{V_1}
+	\begin{blockarray}{cccc}{}
 	\kern-0.2em & a & b &  c \\
 		\begin{block}{c[ccc]}
-  		a \kern-0.1em  & \; 1 & &   \; \topstrut \\
-  		b \kern-0.1em & \;  & 1 &   \; \\
-  		c \kern-0.1em & \;  &   & 1 \; \botstrut \\
+  		 & \; 1 & &   \; \topstrut \\
+  		& \;  & 1 &   \; \\
+  		& \;  &   & 1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 %
-\; \xrightarrow{P}
+\; \xrightarrow{P} \\
 % 
-\begin{blockarray}{cc}{d_V}
+\begin{blockarray}{cc}{}
 	\kern-0.2em & c \\
 		\begin{block}{c[c]}
-  		b \kern-0.1em  & \; 1 \; \topstrut \\
-  		c \kern-0.1em & \;  1 \; \\
-  		a \kern-0.1em & \; 1 \; \botstrut \\
+  		 & \; 1 \; \topstrut \\
+  		& \;  1 \; \\
+  		& \; 1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 \; \;
-\begin{blockarray}{cccc}{V_1}
+\begin{blockarray}{cccc}{}
 	\kern-0.2em & b & c & a  \\
 		\begin{block}{c[ccc]}
-  		b \kern-0.1em  & \; 1 & &\; \topstrut \\
-  		c \kern-0.1em & \;  & 1 &  \; \\
-  		a \kern-0.1em & \; &  & 1 \; \botstrut \\
+  		 & \; 1 & &\; \topstrut \\
+  		& \;  & 1 &  \; \\
+  		& \; &  & 1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 %
@@ -727,18 +768,18 @@ If one has a pair of filtrations $(K_0, K_1)$ each with $m$ simplices, and we as
 	\begin{blockarray}{cccc}{V_1}
 	\kern-0.2em & b & c & a  \\
 		\begin{block}{c[ccc]}
-  		b \kern-0.1em  & \; 1 & & 1 \; \topstrut \\
-  		c \kern-0.1em & \; & 1 &  1 \; \\
-  		a \kern-0.1em & \; &  & 1  \; \botstrut \\
+  		b \kern \rowsp & \; 1 & & 1 \; \topstrut \\
+  		c \kern \rowsp & \; & 1 &  1 \; \\
+  		a \kern \rowsp & \; &  & 1  \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 \end{displaymath}
 \\
 \noindent
 We recall an important claim given by~\cite{busaryev2010tracking} on the effect that move operations have on the status of simplices in the pairing. Recall from section~\ref{sec:background} that simplices which create new homology classes are called \emph{creators} and simplices that destroy homology classes are called \emph{destroyers}.
-\begin{proposition}[Locality of moves~\cite{busaryev2010tracking}]
-	Other than the simplex $\sigma_i$ being moved, $\mathrm{MoveRight}(i,j)$ cannot change a destroyer to a creator, $\mathrm{MoveLeft}(i,j)$ cannot change a creator to destroyer, and neither move operation changes the status of any simplex in $K$ outside of the interval $[i,j]$.  
-\end{proposition}
+%\begin{proposition}[Locality of moves~\cite{busaryev2010tracking}]
+%	Other than the simplex $\sigma_i$ being moved, $\mathrm{MoveRight}(i,j)$ cannot change a destroyer to a creator, $\mathrm{MoveLeft}(i,j)$ cannot change a creator to destroyer, and neither move operation changes the status of any simplex in $K$ outside of the interval $[i,j]$.  
+%\end{proposition}
 \noindent The effect of the movement on intermediate simplices depends on the direction of the movement. If $i < j$ (respectively, $j < i$), all simplices at positions $k \in [i,j] \smallsetminus i$ are shifted down (respectively, up) by $1$. 
 The pseudo-code for the \emph{MoveRight} operation is given in Algorithm~\ref{alg:mr}, and the pseudo-code for the \emph{MoveLeft} is given in Algorithm~\ref{alg:ml}. 
 We note that while the pseudocode for \emph{MoveRight} is included in~\cite{busaryev2010tracking}, the one for \emph{MoveLeft} is not, and Algorithm~\ref{alg:ml} is the one we propose and leverage in this paper.
@@ -818,7 +859,7 @@ In the vineyards case, we are given a homotopy $F(x, \tau) = \mathbb{X} \times [
 We assume, without loss of generality, that the underlying complexes $K_0$ and $K_1$ have the same cardinality. 
 Since we deal exclusively with essential filtrations, we may think of $K_1$ as simply a reordering of $K_0$ (or vice versa). Let $p = [m]$ and let $q = \mathrm{Im}\,f^\ast$, where $f^\ast : [m] \to [m]$ is the one-to-one correspondence induced by the bijection $f: K_0 \to K_1$. Then $S_F$ is given by inversions between $p$ and $q$:
 $$ \mathrm{Inv}(p, q) = \{ \, (i,j) \, | \, p(i) < p(j) \land q(i) > q(j)  \, \}$$
-The associated distance, measuring $\lvert S_F \rvert$, is the well-known \emph{Kendall}-$\tau$ distance $K_\tau(p,q)$: 
+The associated distance, measuring $\lvert S_F \rvert$, is the \emph{Kendall}-$\tau$ distance $K_\tau(p,q)$: 
 \begin{equation}\label{eq:kendall_dist}
 	K_\tau(p, q) = \lvert \, \mathrm{Inv}(p, q) \, \rvert
 \end{equation}
@@ -862,6 +903,7 @@ A sequence $s_1, s_2, \dots, s_d \in S \subseteq S_n$ of operations mapping $p \
 
 Many types of edit distances can be described succinctly. Let $\beta(i,j,k,l)$ with $1 \leq i < j \leq k < l \leq n$ denote the permutation that exchanges the two closed intervals given by $i, j-1$ and $k,l-1$:
 \[
+\setlength\arraycolsep{2.3pt}
 \scalefont{1.0}{
 \setcounter{MaxMatrixCols}{20}
 \left (
@@ -1167,7 +1209,7 @@ There are many challenges to depicting topological behavior in dynamic settings.
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=0.95\textwidth]{crocker_combo_1.png}
-	\caption{An example of a crocker plot (right) depicting the evolution of dimension $p = 1$ Betti curves over time. The green $\mathrm{X}$ marks correspond chronologically to the complexes (left), in row-wise order. The large orange and purple areas depict $1$-cycles persisting in space (the y-axis) and time (x-axis). }\label{fig:crocker1}
+	\caption{An example of a crocker plot (right) depicting the evolution of dimension $p = 1$ Betti curves over time. The green $\mathrm{X}$ marks correspond chronologically to the complexes (left), in row-major order. The large orange and purple areas depict $1$-cycles persisting in both space (the y-axis) and time (x-axis). }\label{fig:crocker1}
 \end{figure}
 
 Acknowledging this, Topaz et al.~\cite{topaz2015topological} proposed the use of a 2-dimensional summary visualization, called a \emph{crocker}\footnote{\emph{crocker} stands for ``Contour Realization Of Computed k-dimensional hole Evolution in the Rips complex.'' Although the acronym includes \emph{Rips complexes} in the name, in principle a crocker plot could just as easily be created using other types of triangulations (e.g. \v{C}ech filtrations).} plot. 
@@ -1197,7 +1239,7 @@ The cumulative number of $O(m)$ column operations executed by three different ap
 
 \subsection*{Multidimensional persistence}
 A natural question is whether or not there exists a multidimensional generalization of persistence. Given a structure which filters the space in multiple dimensions simultaneously, a \emph{multifiltration}, the goal of multidimensional persistence is to identify persistent features by examining the entire multifiltration. Such a generalization has appeared naturally in many application contexts, showing potential as a tool for exploratory data analysis~\cite{lesnick2012multidimensional}. 
-For example, one of the often noted drawbacks of persistence is its instability with respect to strong outliers. Although persistence diagrams are stable with respect to their input and thus are robust to noise, the presence of strong outliers can artificially modify the connectivity of the underlying filtration, obscuring the detection of what wogiuld otherwise be significant topological structures~\cite{buchet2015topological}. Indeed, since inferring the homology of some underlying topological space around which data are distributed was one of the original purposes of persistence\footnote{One of the first uses of persistence was to infer the topology of attractors in dynamical systems from experimental data\cite{perea2018brief}.}, strong outliers pose a significant barrier to the widespread adoption of persistent homology. By filtering the space according to e.g. some notion of density, multidimensional persistence enables the practitioner to handle outliers directly, without resorting to sophisticated data preprocessing techniques which may or may not preserve the underlying topology of the data. 
+For example, one of the often noted drawbacks of persistence is its instability with respect to strong outliers. Although persistence diagrams are stable with respect to their input and thus are robust to noise, the presence of strong outliers can artificially modify the connectivity of the underlying filtration, obscuring the detection of what would otherwise be significant topological structures~\cite{buchet2015topological}. Indeed, since inferring the homology of some underlying topological space around which data are distributed was one of the original purposes of persistence\footnote{One of the first uses of persistence was to infer the topology of attractors in dynamical systems from experimental data\cite{perea2018brief}.}, strong outliers pose a significant barrier to the widespread adoption of persistent homology. By filtering the space according to e.g. some notion of density, multidimensional persistence enables the practitioner to handle outliers directly, without resorting to sophisticated data preprocessing techniques which may or may not preserve the underlying topology of the data. 
 
 Unfortunately, multidimensional persistent homology comes with its own set of computational and theoretical challenges not necessarily inherited by the 1-D case. There is not complete discrete invariant for multidimensional persistence, and the computations associated to other incomplete invariants exhibit high algorithmic complexity. A number of computational strategies have been proposed to counter this, such as homology preserving multifiltration simplification or parallelization schemes using shared-memory computation~\cite{fugacci2019chunk}. Rather than attempting to tackle multiple dimensions simultaneously, another approach is to focus on a fixed dimension, such as 2-D persistence. Utilizing the equivalence between the rank and fibered barcode invariants, Lesnick and Wright~\cite{lesnick2015interactive} developed an elegant way of visualizing the former via a reparameterization of the latter using standard point-line duality. This clever reparameterization effectively reduces the fibered barcode computation to a sequence of 1-D barcode computations at ``template points'' lying within the 2-cells of particular planar subdivision of the half-plane $[0, \infty) \times \mathbb{R}$. Indeed, since algorithm~\ref{alg:schedule} was designed for precisely such a computation, the algorithm proposed by~\cite{lesnick2015interactive} is prototypical of the class of methods that stand to benefit from move scheduling. 
 
@@ -1233,11 +1275,11 @@ In doing so, we substantiate our claims from section~\ref{sec:motivation} that o
  %The multigraded Betti numbers constitute a natural and important class of invariants often studied in algebraic geometry commutative algebra. There are many ways of defining these, with perhaps the simplest definition stemming from minimal resolutions: for a finitely generated $n$-parameter persistence module $M$ and $i \in \{0, 1, \dots, d \}$, the $i^{\text{th}}$ graded Betti number of $M$ at grade $z$, denoted as $\beta_i^M(z)$, is defined as the number of elements at grade $z$ in a basis of the $i^{\text{th}}$ module in a free resolution for $M$. 
 
 \subsubsection*{The Fibered Barcode}
-An \emph{invariant} of $n$-parameter persistence modules is a function from the collection of persistence modules to some set $S$ with the property that $f(M) = f(M')$ when $M \cong M'$. An invariant is said to be \emph{complete} if $M \cong M'$ whenever $f(M) = f(M')$. Thus, incomplete invariants are invariants which may have the same value on two non-isomorphic modules. 
+%In the context of persistence, and \emph{invariant} is a function from the collection of persistence modules to some set $S$ with the property that $f(M) = f(M')$ when $M \cong M'$. An invariant is said to be \emph{complete} if $M \cong M'$ whenever $f(M) = f(M')$. Thus, incomplete invariants are invariants which may have the same value on two non-isomorphic modules. 
 Lesnick and Wright~\cite{lesnick2015interactive} associate three simple invariants to a 2-dimensional persistence module $M$: the \emph{dimension function}, the \emph{multigraded Betti numbers}, and the \emph{fibered barcode}. 
-
 The dimension function is simply the the function which maps every point $a \in \mathbb{R}^2$ to $\mathrm{dim}(M_a)$. It is a simple and easy to visualize invariant, but is unstable and yields no information about the persistent features of $M$. 
-The multigraded Betti numbers constitute a natural and important class of invariants often studied in algebraic geometry commutative algebra, though both their theory and computation is beyond the scope of this effort---the interested reader is referred to~\cite{lesnick2015interactive, carlsson2009theory} for more details. For our purposes, the $i^{\text{th}}$-graded Betti number of $M$ is simply a function $\beta_i(M): \mathbb{R}^n \to \mathbb{N}$ whose values $\beta_i^z(M)$ indicate the the number of elements at grade $z$ in a basis of the $i^{\text{th}}$ module in a free resolution for $M$. The fibered barcode, denoted as $\mathcal{B}(M)$, is defined as follows: 
+The multigraded Betti numbers constitute a natural and important class of invariants often studied in algebraic geometry commutative algebra, though both their theory and computation is beyond the scope of this effort---the interested reader is referred to~\cite{lesnick2015interactive, carlsson2009theory} for more details. For our purposes, the $i^{\text{th}}$-graded Betti number of $M$ is simply a function $\beta_i(M): \mathbb{R}^n \to \mathbb{N}$ whose values $\beta_i^z(M)$ indicate the the number of elements at grade $z$ in a basis of the $i^{\text{th}}$ module in a free resolution for $M$. 
+The fibered barcode, denoted as $\mathcal{B}(M)$, is defined as follows: 
 \begin{definition}[Fibered barcode]
 	%\in \overline{\mathcal{L}}
 	The fibered barcode $\mathcal{B}(M)$ of a bipersistence module $M$ is the map which sends each line $L$ with non-negative slope to the barcode $\mathcal{B}_L(M)$: 
@@ -1306,10 +1348,10 @@ The importance of this theorem lies in the fact that the fibered barcodes are co
 % Indeed, it was shown in~\cite{lesnick2015interactive} that the fibered barcodes $$ of $M$ (i.e. the collection of barcodes of 1D affine slices of $M$) and the rank invariant determine each other.     
 \subsubsection*{Computing the fibered barcode}
 %Lesnick and Wright introduced the Rank Invariant Visualization and Exploration Tool (RIVET)~\cite{lesnick2015interactive}, which is both a tool and a collection of computational and mathematical theory which enables exploratory analysis of 2D persistence modules built from arbitrary bifiltrations. From a computational perspective, the core novelty of the RIVET approach is its ability to compute the fibered barcodes efficiently from precomputed information. 
-The three dominant subcomputations needed to compute the fibered barcode using the reparameratization discussed above are the following: 
+Given bipersistence module $M$, the three dominant computations needed to compute the fibered barcode using the reparameteratization discussed above are the following: 
 \begin{enumerate}
-	\item Computing the bigraded Betti numbers $\beta(M)$ of a given bipersistence module $M$ 
-	\item Constructing a line arrangement $\mathcal{A}(M)$ induced by critical lines derived from (1) 
+	\item Computing the bigraded Betti numbers $\beta(M)$ of $M$
+	\item Constructing a line arrangement $\mathcal{A}(M)$ induced by critical lines from (1) 
 	\item Augmenting $\mathcal{A}(M)$ with a \emph{barcode template} $\mathcal{T}^e$ at every 2-cell $e \in \mathcal{A}(M)$
 	%, yielding the \emph{augmented arrangement} $\mathcal{A}^{\sbullet}(M)$ 
 \end{enumerate}
@@ -1362,18 +1404,22 @@ Supplemental experiments conducted by Carllsson et al.~\cite{carlsson2008local} 
 
 If one was not aware of the analysis done by~\cite{lee2003nonlinear, hateren_schaaf_1998, carlsson2008local, perea2014klein}, it is not immediately clear a priori that the Klein bottle model is indeed a good candidate for capturing non-linearity of image patches. Nonetheless, as we have mentioned, among the first uses of persistent homology was the so-called ``homology inference problem''~\cite{perea2018brief}; given a suitable treatment of strong outliers using by e.g. filtering both on the geometry and the density of the image patches, the homology of the Klein bottle should become apparent through a persistence computation.
  
-Consider the (coarsened) fibered barcode computed from a standard Rips/codensity bifiltration on a representative sample of the image data from~\cite{hateren_schaaf_1998} (details to follow), shown in Figure~\ref{fig:patch_data_dgm}. 
+Consider the (coarsened) fibered barcode computed from a standard Rips / codensity bifiltration on a representative sample of the image data from~\cite{hateren_schaaf_1998} (details to follow), shown in Figure~\ref{fig:patch_data_dgm}. 
 Upon inspection of the bigraded Betti number and the dimension function, one finds that a large area of dimension function is constant (highlighted as the blue portion in the middle of Figure~\ref{fig:patch_data_dgm}), wherein the first Betti number is 5. There are many spaces whose  meets this criterion, though upon further inspection, one candidate space that seems particularly plausible is the three-circle model $C_3$. The $C_3$ model consists of three circles, two of which (say, $S_v$ and $S_h$) intersect the third (say, $S_\mathrm{lin}$) in exactly two points, but themselves do not intersect. Upon performing an analysis on the density of the patches analogous to the one done by~\cite{lee2003nonlinear}, one finds that the mean-centered and contrast normalized $3 \times 3$ patches like on a 7-dimensional ellipsoid $\tilde{S}^7 \subset \mathbb{R}^9$. Contrast is typically measured using a discrete version of the Dirichlet semi-norm, or the ``$D$-norm'' $\lVert \cdot \rVert_D$ for short, which is a unique scale-invariant norm on images:
 $$ \lVert x \rVert_D = \sqrt{\sum_{i \sim j}(x_i - x_j)^2} = \sqrt{x^T D x}$$
 where $D$ is a fixed matrix which upon application to an image $x \in \mathbb{R}^9$ yields a value proportional to the sum of the differences between the 4-connected neighbors (described by the relation $i \sim j$). It is advantageous to ``whiten'' the data via a change of coordinates to Euclidean sphere. 
 This can be achieved by expressing the patch data as an expansion of a certain convenient basis of 8 non-constant eigenvectors, often called the Discrete Cosine Transform (DCT) basis~\cite{lee2003nonlinear}, which are given below: 
-\vspace{-0.2em}
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=0.60\textwidth]{dct_basis}
-\end{figure}
-\vspace{-0.5em}
-
+%\vspace{-0.2em}
+\begin{center}
+	\includegraphics[width=0.80\textwidth]{dct_basis} 
+\end{center}
+%\begin{figure}[h]
+%	\captionsetup{labelformat=empty}
+%	\centering
+%	\includegraphics[width=0.90\textwidth]{dct_basis}
+%	\caption{}
+%\end{figure}
+%\vspace{-1.5em}
 \noindent Projecting the image data onto the first two basis vectors of leads to the projection shown in the top left of Figure~\ref{fig:patch_data_dgm}. 15 landmark points are also shown. Observe the data are distributed well around three ``circles''---the outside circle capturing the rotation gradient of the image patches ($S_{\mathrm{lin}}$), and the other two circles capturing the vertical and horizontal gradients ($S_v$ and $S_h$, respectively). Since the three circle model is the 1-skeleton of the Klein bottle~\cite{carlsson2008local}, one may conclude that the Klein bottle might be a reasonable candidate upon which the image data are distributed. This can be further verified empirically by e.g. using the iterative, meanshift-like procedure described in~\cite{carlsson2008local} to fit a parameterization of the model in question to the data. 
 
 Using the same high-contrast patch data set studied in~\cite{lee2003nonlinear}, we evaluate the performance of various methods at computing the fibered barcode invariant using the parameterization from~\ref{sec:fibered_barcode_reparam}. 
@@ -1394,7 +1440,7 @@ Finally, we record the number of column reductions needed to compute the fibered
  %\hline
   \multicolumn{1}{|c|}{ $\beta(M)$ } & \multicolumn{1}{|c|}{$\mathcal{A}(M)$ } & \multicolumn{3}{c|}{ Column reductions / Permutations } \\
  \hline
- Coarsening & \# 2-cells & \texttt{phCol} & Vineyards / $d_{K}$ & Moves / $d_{\text{LCS}}$ \\
+\small{Coarsening} & \# 2-cells & \texttt{phCol} & Vineyards / $d_{K}$ & Moves / $d_{\text{LCS}}$ \\
  \hline
  8 x 8 & 39 & 94.9K & 245K / 1.53M & 38.0K / 11.6K   \\
  \hline
@@ -1452,7 +1498,7 @@ The simple and combinatorial nature of approach does pose some limitations to it
 
 From an implementation perspective, one non-trivial complication of our approach is its heavy dependence on a particular sparse matrix data structure which permits permuting both the row and columns of a given matrix in at most $O(m)$ time. Our use of this data structure is motivated by the fact that, like vineyards and unlike the standard persistence algorithm, the $R = DV$ decomposition is permuted with every $O(m)$ operation. Indeed, as shown with the natural images example in section~\ref{sec:results}, there are often more permutation operations being applied than there are column reductions. In the more standard \emph{compressed} sparse matrix representations (i.e. CSC, CSR, etc.), permuting both the rows and columns generally takes at most $O(Z)$ time, where $Z$ is the number of non-zero entries. If the particular filtration has many cycles, permuting these compressed representations can be quite expensive, bottlenecking the computation both in theory and in practice. As a result, the more complex sparse matrix representation from~\cite{cohen2006vines} is necessary to be efficient in practice. 
 
-Moving forward, our results suggest there are many aspects of computing persistence in dynamic settings yet to be explored. Do existing optimizations to the standard reduction algorithm have natural extensions to dynamic setting? Are there other edit distances that yield efficient algorithms to update $R = DV$ decompositions, beyond moves and transpositions? An ideal method would be one that allows arbitrary permutations to a previously computed decomposition that is provably more efficient than performing the reduction independently in all cases.  
+Moving forward, our results suggest there are many aspects of computing persistence in dynamic settings yet to be explored. For example, it's not immediately clear whether one could adopt, for example, the twist optimization used in the reduction algorithm to the dynamic setting. Another avenue of interest is the setting where one has knowledge a priori of the time-varying... particular spaces
 
 
 
@@ -1646,9 +1692,9 @@ Moving forward, our results suggest there are many aspects of computing persiste
 
 
 
-
+\bibliographystyle{siamplain}
 \bibliography{move_schedules}
-\bibliographystyle{ieeetr}
+
 
 \section*{Appendix}\label{sec:appendix}
 \appendix 
