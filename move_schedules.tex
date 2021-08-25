@@ -995,11 +995,12 @@ Let $\nu = \mathrm{LCS}(p,q)$ and let $\sigma \in S_d$ denote a choice of orderi
 \begin{equation}\label{eq:schedule_opt}
 	S_\sigma^\ast = \argmin_{\sigma \in S_d} \mathrm{cost}(S(\sigma) \circ p)
 \end{equation}
-where $\mathrm{cost}(S(\sigma) \circ p)$ measures the number of column operations require to execute $S(\sigma)$ on an existing decomposition. There are exponentially many ways to generate such a sorting $S$. 
+where $\mathrm{cost}(S(\sigma) \circ p)$ measures the number of column operations require to execute $S(\sigma)$ on an existing decomposition. 
+%There are exponentially many ways to generate such a sorting $S$. 
 % Dynamic programming discussion 
 One advantage of Algorithm~\ref{alg:mr} is that the cost of applying a permutation to some given $R = D V$ decomposition can be determined efficiently prior to performing any column operations. 
 Specifically, the cost of determining $\lvert \mathbb{I}\rvert + \lvert \mathbb{J}\rvert$ in lines (2) and (3) of Algorithm~\ref{alg:mr} cannot take more than $O(m)$ time. If we assume a similar complexity to determine the cost of applying a permutation with Algorithm~\ref{alg:ml} and we know to execute $d$ moves, one might expect be to use an optimization method like dynamic programming. 
-That is, suppose $O(dm)$ move costs are computed ahead of time and these costs are stored in a table providing $O(1)$ element access and modification. Using a sparse row representation for $V$, this cannot take more than $O(dm)$ time, which is relatively efficient when $d << m$. With this structure, determining the cost of the cheapest move takes just $O(d)$ time. However, moving a simplex from position $i$ to position $j$ may require updating $O(\kappa^2)$ entries in the structure, where $\kappa = \lvert i - j \rvert$. Since $\kappa \sim O(m)$ in the worst case, direct optimization may require upwards of $\approx O(dm^2)$. Since this time complexity is potentially more expensive than executing a schedule to begin with, this direct strategy does not seem viable for practical settings. 
+That is, suppose $O(dm)$ move costs are computed ahead of time and these costs are stored in a table providing $O(1)$ element access and modification. Using a sparse row representation for $V$, this cannot take more than $O(dm)$ time, which is relatively efficient when $d << m$. With this structure, determining the cost of the cheapest move takes just $O(d)$ time. However, moving a simplex from position $i$ to position $j$ may require updating $O(\kappa^2)$ entries in the structure, where $\kappa = \lvert i - j \rvert$. Since $\kappa \sim O(m)$ in the worst case, direct optimization may require upwards of $\approx O(dm^2)$, which is potentially more expensive than executing a schedule to begin with and thus not viable in practical settings. 
 
 % Specifically, if a compressed sparse row (CSR) representation is used for $V$ and a compressed sparse column (CSC) representation is used for $R$, then determining $\lvert \mathbb{I}\rvert + \lvert \mathbb{J}\rvert$ takes $O(\lvert \mathbb{I}\rvert \log m + \lvert \mathbb{J}\rvert \log m ) \approx O(m)$ time. 
 
@@ -1068,18 +1069,17 @@ A greedy strategy which always selects the cheapest move in succession would beg
 Nonetheless, greedy strategies can be effective in practice, even if they are suboptimal. In the previous example, since evaluating the cost of move is $\approx O(m)$, a greedy strategy that chooses the least expensive move would require $O(d^2 m)$ time, which is computationally viable when $d << m$. 
 
 \subsubsection{Proxy objective}\label{sec:proxy_objective}
-In light of the direct optimization being too expensive and a greedy procedure leading to suboptimal behavior, we consider whether there exists an alternative, or \emph{proxy objective} to optimize that is related to the cost of a schedule but not dependent on the entries in the decomposition. In this section, we present such an objective, showing its relation to the problem at hand as well its use in other known computational problems. 
-We show empirical results demonstrating its practical effectiveness as a heuristic in section~\ref{sec:results}.
+When $d \sim O(m)$, the quadratic nature of the aforementioned greedy minimization is too expensive. In order for Algorithm~\ref{alg:schedule} to be considered as an efficient alternative to vineyards---which requires $O(m \log m + k)$ preprocessing time to compute $k$ transpositions---a solution which is subquadratic in $m$ is desirable.  %In what follows, we present such an objective, showing its relation to the problem at hand as well its use in other known computational problems. 
+% We show empirical results demonstrating its practical effectiveness as a heuristic in section~\ref{sec:results}.
 
-
-The schedule $S_1$ shown in Table~\ref{table:move_costs} would be an example of a minimal cost schedule. Since optimizing this objective combinatorially is inefficient, we would like an alternative objective that is cheaper and performs well in practice. 
-Intuitively, one alternative objective might be the Kendall-$\tau$ distance $K_\tau$, 
-which can be computed in $O(m \log m)$ time---indeed, this is the weighting measure minimized in a certain path optimization in the RIVET software~\cite{lesnick2015interactive} to ensure adjacent filtrations are similar. Motivated by this, define $\hat{s}_i =  s_i \circ \cdots \circ s_2 \circ s_1 \circ p$ to be the result of applying the composition of the first $i$ permutations for some given schedule $S = (s_1, \dots, s_d)$, where $i < d$. 
-A possible inequality to utilize is the following: 
-\begin{equation}\label{eq:kendall_inequality}
-K_\tau(p, q) = K_{\tau}(p, S \circ p) \leq \sum\limits_{i=1}^{d-1} K_{\tau}(\hat{s}_i, \hat{s}_{i+1})
-\end{equation}
-When the set of permutations $S$ are adjacent transpositions, equality is achieved above since $K_\tau(\hat{s}_i, \hat{s}_{i+1}) = 1$ for every inversion between $p$ and $q$, though this not guaranteed if $S$ was derived using the strategy from section~\ref{sec:move_schedules}. Obtaining $S_\sigma^\ast$ via direct optimization over $S_d$ isn't practical, but experimental tests suggest that a greedy-type procedure performs well as a heuristic, which yields a $O(d^2 m \log m)$ minimization procedure, which is efficient when $d <<  m$.
+%The schedule $S_1$ shown in Table~\ref{table:move_costs} would be an example of a minimal cost schedule. Since optimizing this objective combinatorially is inefficient, we would like an alternative objective that is cheaper and performs well in practice. 
+%Intuitively, one alternative objective might be the Kendall-$\tau$ distance $K_\tau$, 
+%which can be computed in $O(m \log m)$ time---indeed, this is the weighting measure minimized in a certain path optimization in the RIVET software~\cite{lesnick2015interactive} to ensure adjacent filtrations are similar. Motivated by this, define $\hat{s}_i =  s_i \circ \cdots \circ s_2 \circ s_1 \circ p$ to be the result of applying the composition of the first $i$ permutations for some given schedule $S = (s_1, \dots, s_d)$, where $i < d$. 
+%A possible inequality to utilize is the following: 
+%\begin{equation}\label{eq:kendall_inequality}
+%K_\tau(p, q) = K_{\tau}(p, S \circ p) \leq \sum\limits_{i=1}^{d-1} K_{\tau}(\hat{s}_i, \hat{s}_{i+1})
+%\end{equation}
+%When the set of permutations $S$ are adjacent transpositions, equality is achieved above since $K_\tau(\hat{s}_i, \hat{s}_{i+1}) = 1$ for every inversion between $p$ and $q$, though this not guaranteed if $S$ was derived using the strategy from section~\ref{sec:move_schedules}. Obtaining $S_\sigma^\ast$ via direct optimization over $S_d$ isn't practical, but experimental tests suggest that a greedy-type procedure performs well as a heuristic, which yields a $O(d^2 m \log m)$ minimization procedure, which is efficient when $d <<  m$.
 %where the set and order of pairs $\hat{s}_\ast$ depend on $S(\sigma)$. 
 % In the vineyards algorithm, permutations take $O(1)$ time if a special sparse matrix structure is used~\cite{cohen2006vines}; others permutations $PRP^T = (PDP^T)(PVP^T)$ are non-trivial operations computationally. 
 % \begin{displaymath}
@@ -1087,9 +1087,13 @@ When the set of permutations $S$ are adjacent transpositions, equality is achiev
 %	%S_\sigma^\ast = \argmin_{\sigma \in S^d} \sum\limits_{i=1}^{d-1} K_{\tau}(\hat{s}_i, \hat{s}_{i+1})
 %\end{displaymath}
 %Let $p,q \in S^n$ be fixed permutations of $[n]$ and let $S = (s_1, \dots, s_d)$ denote a sorting $p \mapsto q$ such that $q = S \circ p = s_d \circ \cdots \circ s_1 \circ p$, and 
-\\
-\\
-However, when $d \sim O(m)$, the quadratic nature of this minimization is too expensive. It turns out there is a similar distance that is both cheaper to compute and also amenable to a greedy type optimization. The \emph{Spearman distance} $F$ is a common distance for measuring the disarrangement between permutations. It is defined as:
+In light of the discussion above, we consider whether there exists an alternative \emph{proxy objective} to optimize that is related to the cost of a schedule but not dependent on the entries in the decomposition. Consider again the objective: 
+\begin{equation}\label{eq:schedule_opt2}
+	S_\sigma^\ast = \argmin_{\sigma \in S_d} \mathrm{cost}(S(\sigma) \circ p)
+\end{equation}
+where now $\mathrm{cost}(\cdot)$ is to be replaced by a proxy objective function. There are exponentially many ways to choose $\sigma \in S_d$, so we opt for a greedy strategy as before, which takes $O(d \, C(m))$ time where $C(m)$ denotes the cost of evaluating $\mathrm{cost}(\cdot)$. For this minimization to be subquadratic in $m$, we need $C(m) \sim O(\log m)$ at each of the $d$ steps of the greedy optimization, and for the minimization to yield an efficient solution in practice, $\mathrm{cost}(\cdot)$ must be related to the problem of minimizing move costs.
+
+A natural upper bound on the number of column operations needed to move a simplex from position $i$ in the filtration to position $j$ is the displacement between these positions, $\lvert i - j \rvert$. In practice, due to the sparsity of both $R$ and $V$, this is a very loose upper bound---the number of column operations is generally much smaller. Nonetheless, the complexities of the move operations discussed in Section~\ref{sec:moves} are dependent on the magnitude of $\lvert i - j \rvert$, and thus it's worth considering a proxy measure. If one forms bijections between two given filtrations $p: K_0 \to [m], q: K_1 \to [m]$ to permutations of $[m]$ as before, then an upper bound on the number of column reductions needed to perform any given schedule is given the \emph{Spearman distance}, a common distance for measuring the disarrangement between permutations. It is defined as:
 \begin{equation}\label{eq:spearman_dist}
 F(p, q) = \sum\limits_{i \in [m]} \lvert p(i) - q(i) \rvert
 \end{equation}
@@ -1101,13 +1105,21 @@ K_\tau(p, q) \leq F(p, q) \leq 2 K_\tau(p, q)
 Although very similar to the Kendall-$\tau$ distance, the Spearman distance offers some convenient computational advantages: it can be computed in $O(m)$ time, the variance of its asymptotic distribution is larger than Kendalls for uniformly random permutations, and it satisfies a certain monotonicity property under LCS edit operations. 
 Specifically, given two permutations $p,q \in S_m$ with $\nu = \mathrm{LCS}(p,q)$ between them, the analysis in section~\ref{sec:move_schedules} shows we must move each symbol $x \in \mathcal{D}$ where $\mathcal{D} = p \smallsetminus \nu $ in a way that extends $\nu$ after each move. Each symbol $x \in \mathcal{D}$ induces a permutation $s_x$ such that $F(p, q) \geq F(s_x \circ p, q)$. That is, unlike the Kendall distance, the Spearman distance satisfies: 
 $$ F(p, q) \geq F(s_1 \circ p, q) \geq F( s_2 \circ s_1 \circ p, q) \geq F( s_d \circ \dots \circ s_2 \circ s_1 \circ p, q)  = F(q,q) = 0 $$
-For any sorting $S$ such that $s_{i}$ that increases the size of longest common subsequence between $s_{i-1} \circ \dots \circ s_1 \circ p$ and $q$. Since the complexity of the move operations discussed in section~\ref{sec:moves} depend on the size of the movement, it is advantageous to construct a schedule which minimizes this movement. 
+For any sorting $S$ such that $s_{i}$ that increases the size of longest common subsequence between $s_{i-1} \circ \dots \circ s_1 \circ p$ and $q$. Given $p, q$ and some schedule $S = (s_1, \dots, s_d)$, let $\hat{s}_i =  s_i \circ \cdots \circ s_2 \circ s_1 \circ p$ denote the composition of the first $i$ permutations in $S$, where $i < d$. An upper bound on the Spearman distance can be decomposed into a sum of $d-1$ local distances with the following inequality:
+%A possible inequality to utilize is the following: 
+\begin{equation}\label{eq:kendall_inequality}
+F(p, q) = F(p, S(\sigma) \circ p) \leq \sum\limits_{i=1}^{d-1} F_\sigma(\hat{s}_i, \hat{s}_{i+1})
+\end{equation}
+where equality is only achieved with schedules $S$ for which each symbols displacement between its initial position in $p$ and its final position in $q$ is non-increasing with every application of $s_i$. Note this not guaranteed if $S$ was derived using the strategy from section~\ref{sec:move_schedules}.
+%Since the complexity of the move operations discussed in section~\ref{sec:moves} depend on the size of the movement, it is advantageous to construct a schedule which minimizes this movement. 
 %Since $\lvert \mathcal{D} \rvert$ is fixed, we would like to choose $x \in \mathcal{D}$ such that the corresponding permutation $s_x$ reduces the total displacement of every symbol $x \in \mathcal{D}$ relative to  $q$. 
-We consider the following objective modified from equation~\ref{eq:schedule_opt}: 
+Substituting objective~\ref{eq:kendall_inequality} for $\mathrm{cost}(\cdot)$ in equation~\ref{eq:schedule_opt2} yields the following global optimization problem over $S_d$: 
 \begin{equation}\label{eq:schedule_opt_succ}
 S_{\sigma}^\ast = \argmin_{\sigma \in S_d} \frac{1}{2} \sum\limits_{i = 1}^{d - 1} F(\hat{s}_i, \hat{s}_{i+1})
 \end{equation}
-The minimizer of this optimization can be interpreted as a sorting which minimizes the net displacement amongst all possible sortings, in the $\ell_1$ sense. This minimization problem is related to a constrained version of the bipartite crossing minimization problem for $k$ sets of permutations, which is NP-hard for $k \geq 4$~\cite{biedl2009complexity}. As a result, we instead consider a greedy approach. A greedy strategy requires $O((d+(d-1)+(d-2)+\dots+1)m) \approx O(d^2 m)$ time to complete, since there are $O(d)$ symbols to choose from and minimizing $F(\hat{s}_i, \hat{s}_{i+1})$ at each step takes $O(md)$. Since $\mathcal{D}$ is fixed, a greedy strategy thus depends on our ability to quickly compute $F(\hat{s}_i, \hat{s}_{i+1})$.  
+The minimizer of this optimization can be interpreted as a sorting which minimizes the net displacement amongst all possible sortings $p \mapsto q$, in the $\ell_1$ sense. It is related to a constrained version of the crossing minimization problem for $k$ sets of permutations, which is NP-hard for $k \geq 4$~\cite{biedl2009complexity}, see below for an example. As a result, we do not expect a greedy solution to yield the optimal solution exactly, but simply a fast approximation.  
+%A greedy strategy requires $O((d+(d-1)+(d-2)+\dots+1)m) \approx O(d^2 m)$ time to complete, since there are $O(d)$ symbols to choose from and minimizing $F(\hat{s}_i, \hat{s}_{i+1})$ at each step takes $O(md)$. 
+Since $\mathcal{D}$ is fixed, the complexity of a greedy strategy depends entirely on the complexity of minimizing $F(\hat{s}_i, \hat{s}_{i+1})$ at each greedy step.  
 %\\
 %\\
 %\noindent
