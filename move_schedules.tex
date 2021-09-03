@@ -1,5 +1,6 @@
 \documentclass{siamart190516}
 
+% Journal name: SICOMP
 %\usepackage[margin=0.75in]{geometry}
 \usepackage{amsmath, amssymb}
 \usepackage{mathtools}
@@ -387,7 +388,7 @@ Similarly, let $P$ denote the permutation matrix so that multiplication from the
 The inverse of any permutation is also its transpose, i.e. $P^{-1} = P^T$, and thus one would write $P A P^T$ to denote the application of the permutation $P$ to both the columns and rows of $A$. In the special case where $P$ represents a transposition, we have $P = P^T$ and may instead simply write $P A P$. 
 The goal of the vineyards algorithm can now be described explicitly: to prescribe a set of rules, written as matrices $S_{i}^{j}$, such that if $R = D V$ is a valid decomposition, then $(\ast P \ast R \ast P \ast) = (PDP)(\ast P\ast V \ast P \ast)$ is also a valid decomposition, where $\ast$ is some number (possibly zero) of matrices encoding elementary column or row operations. 
 %We refer to the algorithm that maintains the $R = \partial V$ decomposition under adjacent permutations $P$ as the \emph{transposition framework}. 
-The explicit pseudocode describing these rules is given in the appendix by Algorithm~\ref{alg:tr}. 
+% The explicit pseudocode describing these rules is given in the appendix by Algorithm~\ref{alg:tr}. 
 %	\; = 
 %	\begin{blockarray}{cccc}
 %	\tiny{D_1} \kern-0.2em & a & b & c  \\
@@ -402,7 +403,7 @@ The explicit pseudocode describing these rules is given in the appendix by Algor
 \\
 \\
 \noindent 
-\textbf{Example 2.2} To illustrate the basic principles on which vineyards works, we re-use the running example introduced in the previous section. Below, we illustrate the case of exchanging simplices $a$ and $b$ in the filtration order. 
+\textbf{Example 2.2} Below, we illustrate using vineyards to exchange simplices $a$ and $b$ in the filtration order using the running example introduced in the previous section. 
 \begin{displaymath}
 	\def\rowsp{0.4em}
 	\def\arraystretch{0.95}
@@ -420,7 +421,7 @@ The explicit pseudocode describing these rules is given in the appendix by Algor
 	\begin{blockarray}{cccc}{V_1}
 	\kern-0.2em & a & b & c  \\
 		\begin{block}{c[ccc]}
-        a \kern\rowsp  & \; 1 & 1 & 1 \; \topstrut \\
+        a \kern\rowsp  & \; 1 & \textbf{1} & 1 \; \topstrut \\
   		b \kern\rowsp & \;  & 1 & 1 \; \\
   		c \kern\rowsp & \;  &  & 1 \; \botstrut \\
 		\end{block}
@@ -432,7 +433,7 @@ The explicit pseudocode describing these rules is given in the appendix by Algor
 		\begin{block}{c[ccc]}
   		 & \; 1 &  &  \; \topstrut \\
   		 & \;  & 1 &  \; \\
-  		 & \; 1 & 1 & \; \botstrut \\
+  		 & \; 1 & \textbf{1} & \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	\,\,, 
@@ -451,7 +452,7 @@ The explicit pseudocode describing these rules is given in the appendix by Algor
 		\begin{block}{c[ccc]}
   		& \;  & 1 &  \; \topstrut \\
   		& \; 1 &  &  \; \\
-  		& \; 1 & 1 &  \; \botstrut \\
+  		& \; 1 & \textbf{1} &  \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	\,\,, 
@@ -483,12 +484,12 @@ The explicit pseudocode describing these rules is given in the appendix by Algor
 		\end{block}
 	\end{blockarray}
 \end{displaymath}
-Prior to performing the exchange, observe that that the highlighted entry in $V_1$ would render $V_1$ non-upper triangular after the exchange. This entry is removed by a left-to-right column operation, given by applying the $S_1^{2}$ on the right to $R_1$ and $V_1$. After this operation, the permutation may be safely applied to $V_1$. In this case, both before and after the permutation, $R_1$ is rendered non-reduced, requiring another column operation to restore the decomposition to a valid state.
+Prior to performing the exchange, observe that that the bold entry in $V_1$ would render $V_1$ non-upper triangular after the exchange. This entry is removed by a left-to-right column operation, given by applying the $S_1^{2}$ on the right to $R_1$ and $V_1$. After this operation, the permutation may be safely applied to $V_1$. In this case, both before and after the permutation, $R_1$ is rendered non-reduced, requiring another column operation to restore the decomposition to a valid state.
 
  The time complexity of vineyards is determined entirely by the complexity of performing a single adjacent transposition, and its complexity is often stated in this way. Informally, since column operations are the largest complexity operations needed and each column can have potentially $m$ entries, the complexity of vineyards is $O(m)$ per transposition. 
  However, there are a number of subtleties involved in this statement. 
  The first subtlety is that both the $V$ and $R$ matrices tend to be quite sparse, and thus column and row operations rarely require $m$ operations---in fact, as a rule of thumb, most transpositions require no column operations~\cite{edelsbrunner2000topological}. A second subtlety, due to the necessity of sparse matrix data structures, is that querying the non-zero status of any particular entry typically takes $O(\log m)$ time. This hidden cost may seem minor, however, the quadratic scaling of the number of transpositions vineyards typically requires makes this cost non-trivial.   
-In fact, achieving $O(m)$ complexity per transposition requires a special sparse matrix representation that allows swapping any two rows and columns in $O(1)$---see the appendix for more details and discussion. Finally, note the constant factor associated with the stated complexity: inspection of the individual cases of Algorithm~\ref{alg:tr} shows that there are at most two $O(m)$ operations, on both $R$ and $V$, that may be needed for any single transposition.
+In fact, achieving $O(m)$ complexity per transposition requires a special sparse matrix representation that allows swapping any two rows and columns in $O(1)$---see the appendix for more details and discussion. Finally, note the constant factor associated with the stated complexity: inspection of the individual cases of the algorihtm from~\cite{cohen2006vines} shows that there are at most two $O(m)$ operations, on both $R$ and $V$, that may be needed for any single transposition.
  
  % As a rule of thumb, due to the sparsity of both $R$ and $V$, most transpositions actually require no $O(m)$ operations. For example, exchanging two simplices of differing dimensions never requires column operations. A simple analysis given by Chen et al.~\cite{chen2013output} quantifies the order of magnitude we can expect the sparsity of these matrices to be.  
 
@@ -497,17 +498,17 @@ In fact, achieving $O(m)$ complexity per transposition requires a special sparse
 Though they are similar, move operations confer a few computational advantages compared to vineyards. Informally, a move operation has two convenient properties:
 \\	
  \begin{enumerate}[leftmargin=2\parindent, align=left, labelsep=-5pt, topsep=0pt,itemsep=-0.25ex,parsep=1.2ex]
- 	\item Querying the non-zero status of entries in any matrix representation occurs once per move.
- 	\item The decomposition $R = D V$ is not maintained during the movement of $\sigma_i \mapsto \sigma_j$.
+ 	\item Checking whether an entry is non-zero occurs once per move.
+ 	\item $R = D V$ is not maintained during the movement of $\sigma_i \mapsto \sigma_j$.
  \end{enumerate} 
  \vspace*{1em}
 First, consider property (1). Prior to applying any permutation $P$ to the decomposition, it is necessary to remove non-zero entries in $V$ which render $PVP^T$ non-upper triangular, to maintain invariant (2). 
-If one uses the (augmented) sparse matrix representation described in the original vineyards publication~\cite{cohen2006vines}, checking whether these entries are non-zero takes $O(\log m)$ per column. Since moving a simplex from $i$ to $j$ using vineyards performs $\lvert i - j \rvert - 1$ transpositions, this query operation is required at most $O(\lvert i - j \rvert)$ times, which is excessive. If a row-oriented sparse matrix implementation is used, a move operation can perform these non-zero entry checks in just one $O(m)$ pass, prior to performing any column operations. 
+If one uses the (augmented) sparse matrix representation described in the original vineyards publication~\cite{cohen2006vines}, checking whether these entries are non-zero takes $O(\log m)$ per column. Since moving a simplex from $i$ to $j$ using vineyards performs $\lvert i - j \rvert - 1$ transpositions, this query operation is required at most $O(\lvert i - j \rvert)$ times, which is excessive. If a row-oriented sparse matrix implementation is used, a move operation can perform these non-zero checks in just one $O(\lvert i - j \rvert)$ pass, prior to performing any column operations. 
  
 Property (2) indicates move operations only guarantee the decomposition is valid after the operation completes, implying that the decomposition is not fully maintained during the execution of \textit{Restore}$\ast$. 
 This is a significant difference compared to the vineyards algorithm, which was designed specifically to maintain a valid decomposition after each transposition. 
-Thus, move operations can be thought of as making a tradeoff in granularity: whereas a sequence of adjacent transpositions $(i, i{+}1), (i{+}1, i{+}2), \dots, (j{-}1, j)$ generates $\lvert i - j \rvert $ valid decompositions in vineyards, a move operation $\mathrm{Move}(i,j)$ generates only one.
-
+In this way, we interpret move operations as making a tradeoff in granularity: whereas a sequence of adjacent transpositions $(i, i{+}1), (i{+}1, i{+}2), \dots, (j{-}1, j)$ generates $\lvert i - j \rvert $ valid decompositions in vineyards, a move operation $\mathrm{Move}(i,j)$ generates only one.
+Indeed, if one has a pair of filtrations $(K_0, K_1)$ each with $m$ simplices, and we assume that each simplex $\sigma_i$ switches its relative ordering with another simplex $\sigma_j$ at most once in some ordered schedule of transpositions, then the number of intermediate persistence diagrams is bounded above by $O(m^2)$ using transpositions, whereas with move operations this bound clearly is at most $O(m)$.  
 \begin{algorithm}
 	\caption{Move Right Algorithm}\label{alg:mr}
 	\setstretch{1.15}
@@ -575,11 +576,7 @@ Thus, move operations can be thought of as making a tradeoff in granularity: whe
     \end{algorithmic}
 
 \end{algorithm}
-
-If one has a pair of filtrations $(K_0, K_1)$ each with $m$ simplices, and we assume that each simplex $\sigma_i$ switches its relative ordering with another simplex $\sigma_j$ at most once in some ordered schedule of transpositions, then the number of intermediate persistence diagrams is bounded above by $O(m^2)$ using transpositions, whereas with move operations this bound clearly is at most $O(m)$.  
-\\
-\\
-\noindent \textbf{Example:} We continue the example used in sections~\ref{sec:vineyards} and~\ref{sec:reduction} to illustrate moves. Consider moving the edge $a$ to the position taken by the edge $c$ in the filtration. The donor columns introduced in~\cite{busaryev2010tracking} are shown on the left side of each matrix. Note that using vineyards, the equivalent permutation to the decomposition would require $4$ column operations on both $R_1$ and $V_1$, respectively, whereas a single move operation accomplishes this permutation using only $2$ column operations per matrix. 
+\noindent \textbf{Example:} We continue the example used in sections~\ref{sec:reduction} and~\ref{sec:vineyards} to illustrate moves. Consider moving the edge $a$ to the position taken by the edge $c$ in the filtration. The donor columns introduced in~\cite{busaryev2010tracking} are shown on the left side of each matrix. A single move operation is able to apply this permutation using only $2$ column operations per matrix, assuming donor columns may be assigned in $O(1)$\footnote{The assumption that donor columns can be assigned in $O(1)$ is easily achieved under the wordRAM model of computation using any representation that allows swapping word-sized pointers each pointing to columns of field entries, e.g. the sparse matrix representation from~\cite{cohen2006vines}.}. Note that using vineyards, the equivalent permutation to the decomposition would require $4$ column operations on both $R_1$ and $V_1$, respectively.
 \begin{displaymath}
 	\def\rowsp{0.4em}
 	\def\arraystretch{0.95}
@@ -851,7 +848,7 @@ what is the minimal number of times the decomposition needs to be restored to a 
 In the vineyards case, we are given a homotopy $F(x, \tau) = \mathbb{X} \times [0,1] \to \mathbb{R}$ and a pair of filtrations $(K_0, K_1)$ whose simplices are ordered according to $f_0(x) = F(x, 0)$ and $f_1(x) = F(x, 1)$, respectively. The choice of homotopy $F$ completely determines the number of adjacent transpositions, so to get a meaningful bound we must know something about $F$. If we assume the curves traced by the homotopy are in general position and we assume each pair of curves cross each other at most once, then the set of adjacent transpositions $S_F$ that $F$ decomposes into is given by the pairs of simplices which change in their relative ordering:
 \begin{align}\label{eq:sf_schedule}
 	S_F &= \{ (i,j) \, | \, f_0(\sigma_i) < f_0(\sigma_j) \land  f_1(\sigma_i) > f_1(\sigma_j) \quad \forall \; i,j \in [m] \} \\
-	&= ( s_1, s_2, \dots, s_k )
+	\nonumber &= ( s_1, s_2, \dots, s_k )
 \end{align}
 We assume, without loss of generality, that the underlying complexes $K_0$ and $K_1$ have the same cardinality. 
 Since we deal exclusively with essential filtrations, we may think of $K_1$ as simply a reordering of $K_0$ (or vice versa). Let $p = [m]$ and let $q = \mathrm{Im}\,f^\ast$, where $f^\ast : [m] \to [m]$ is the one-to-one correspondence induced by the bijection $f: K_0 \to K_1$. Then $S_F$ is given by inversions between $p$ and $q$:
@@ -860,7 +857,7 @@ The associated distance, measuring $\lvert S_F \rvert$, is the \emph{Kendall}-$\
 \begin{equation}\label{eq:kendall_dist}
 	K_\tau(p, q) = \lvert \, \mathrm{Inv}(p, q) \, \rvert
 \end{equation}
-Geometrically, our assumptions on $F$ defines a class of $x$-monotone curves called \emph{pseudo-segments}, i.e. parameterized curves whose behavior with respect to a certain restricted set of geometric predicates is invariant. This family includes e.g. the straight-line homotopy $f_\tau(\sigma) = (1 - \tau) f_0(\sigma) + \tau f_1(\sigma)$, which was studied in the original vineyards paper~\cite{cohen2006vines}. Detecting all $k$ intersections of $m$ pseudo-segments is a well-studied problem in computational geometry that can be optimally solved in output-sensitive $O(m \log m + k)$ time by several algorithms~\cite{boissonnat2000efficient}, where $k$ is the output-sensitive term. 
+Geometrically, our assumptions on $F$ defines a class of $x$-monotone curves called \emph{pseudo-segments}, i.e. parameterized curves whose behavior with respect to a certain restricted set of geometric predicates is invariant. This family includes e.g. straight-line homotopies $f_\tau(\sigma) = (1 - \tau) f_0(\sigma) + \tau f_1(\sigma)$, as used in the original vineyards implementation~\cite{cohen2006vines}. Detecting all $k$ intersections of $m$ pseudo-segments is a well-studied problem in computational geometry that can be optimally solved in output-sensitive $O(m \log m + k)$ time by several algorithms~\cite{boissonnat2000efficient}, where $k$ is the output-sensitive term. 
 Since $k \sim O(m^2)$ in the worst case, achieved when $f_1 = - f_0$, we have the following upper bound on $\lvert S_F \rvert$
 \begin{equation}\label{eq:sf_m2}
 	\lvert S_F \rvert \approx O(m^2)
@@ -896,7 +893,7 @@ In contrast, if we allow move operations in any order, we have $O(m)$ as a trivi
 	\item Find a sequence satisfying (1) of minimal length ($d$)
 	\item Find the minimal length $d$, referred to as the \emph{distance} between $p$ and $q$ with respect to $S$. 
 \end{enumerate}
-A sequence $s_1, s_2, \dots, s_d \in S \subseteq S_n$ of operations mapping $p \mapsto q$ is sometimes called a \emph{sorting of $p$} in the literature. In the context of performing updates to the $R = D V$ decomposition, we call such sequences \emph{schedules} . There are typically many ways to solve (1), and any solution to (2) necessarily solves (1) and (3). When $p, q$ are interpreted as strings, distances defined with respect to a fixed $S \subseteq S_n$ are commonly referred to as \emph{edit distances}~\cite{labarre2013lower}, which are denoted as $d_S(\cdot, \cdot)$. Note that here we describe distances between permutations (e.g. $p,q \in S_n$) using operations that can themselves be expressed as permutations (e.g. $s \in S \subseteq S_n$), and that the choice of $S$ defines the universe of operations and thus the type of edit distance being measured---otherwise if $S = S_n$, then $d_S(p, q) = 1$ for any $p, q \in S_n$ and the problem is trivial!
+A sequence $s_1, s_2, \dots, s_d \in S \subseteq S_n$ of operations mapping $p \mapsto q$ is sometimes called a \emph{sorting of $p$} in the literature. In the context of performing updates to the $R = D V$ decomposition, we call such ordered sequences \emph{schedules}. There are typically many ways to solve (1), and any solution to (2) necessarily solves (1) and (3). When $p, q$ are interpreted as strings, distances defined with respect to a fixed $S \subseteq S_n$ are commonly referred to as \emph{edit distances}~\cite{labarre2013lower}, which are denoted as $d_S(\cdot, \cdot)$. Note that here we describe distances between permutations (e.g. $p,q \in S_n$) using operations that can themselves be expressed as permutations (e.g. $s \in S \subseteq S_n$), and that the choice of $S$ defines the universe of operations and thus the type of edit distance being measured---otherwise if $S = S_n$, then $d_S(p, q) = 1$ for any $p, q \in S_n$ and the problem is trivial!
 
 Many types of edit distances can be described succinctly. Let $\beta(i,j,k,l)$ with $1 \leq i < j \leq k < l \leq n$ denote the permutation that exchanges the two closed intervals given by $i, j-1$ and $k,l-1$:
 \[
@@ -1332,13 +1329,16 @@ Property (1) asserts that for any $L \in \overline{\mathcal{L}}$, the standard p
 \begin{definition}[Critical Lines]
 	For some fixed $S \subset \mathbb{R}^2$, a line $L \in L^\circ$ is defined to be \emph{regular} if there is an open ball $B \in L^\circ$ containing $L$ such that $S_L = S_{L'}$ for all $L' \in B$. Otherwise, the line $L$ is defined as \emph{critical}. 
 \end{definition}
-\noindent The set of critical lines $\mathrm{crit}(M)$ with respect to some fixed set $S \subset \mathbb{R}^2$ fully characterizes a certain planar subdivision of the half plane $[0, \infty) \times \mathbb{R}$. Explicitly, define $\mathcal{A}^1(M)$ to the 1-skeleton of the line arrangement defined by: 
+\noindent The set of critical lines $\mathrm{crit}(M)$ with respect to some fixed set $S \subset \mathbb{R}^2$ fully characterizes a certain planar subdivision of the half plane $[0, \infty) \times \mathbb{R}$. 
+This planar subdivision, denoted by $\mathcal{A}(M)$, is thus entirely determined by $S$ under point line duality.
+%It has been shown~\cite{lesnick2015interactive} that the 1-skeleton $\mathcal{A}^1(M)$ of the line arrangement $\mathcal{A}(M)$ can be characterized b
+%Explicitly, define $\mathcal{A}^1(M)$ to the 1-skeleton of the line arrangement defined by: 
 % \{ \mathcal{D}_p(\alpha) \text{ for } \alpha = \mathrm{LUB}(u,v), u,v \in S \} 
-\begin{equation}\label{eq:arrangement_crit}
-	\mathcal{A}^1(M) = \{ \mathcal{D}_{\ell}(\mathrm{crit}(M)) \cup (\{0\} \times \mathbb{R}) \}
-\end{equation}
-Expanding the 1-skeleton to a 2-D cell complex $\mathcal{A}(M)$ fully partitions the upper half plane.  
-A consequence of equation~\ref{eq:arrangement_crit} that if the duals of two lines $L, L' \in \mathcal{L}$ are contained in the same $2$-cell in $\mathcal{A}(M)$, then $S_L = S_{L'}$, i.e. the partitions induced by $\mathrm{push}_L$ are equivalent. Indeed, the total order on $S_L$ is the pullback of the total order on $L$ with respect to the push map.
+%\begin{equation}\label{eq:arrangement_crit}
+%	\mathcal{A}^1(M) = \{ \mathcal{D}_{\ell}(\mathrm{crit}(M)) \cup (\{0\} \times \mathbb{R}) \}
+%\end{equation}
+%Expanding the 1-skeleton to a 2-D cell complex $\mathcal{A}(M)$ fully partitions the upper half plane.  
+A corollary from~\cite{lesnick2015interactive} shows that if the duals of two lines $L, L' \in \mathcal{L}$ are contained in the same $2$-cell in $\mathcal{A}(M)$, then $S_L = S_{L'}$, i.e. the partitions induced by $\mathrm{push}_L$ are equivalent. Indeed, the total order on $S_L$ is simply the pullback of the total order on $L$ with respect to the push map.
 Since $\mathcal{A}(M)$ partitions the entire half-plane, the dual to every line $L \in \mathcal{L}$ is contained within $\mathcal{A}(M)$---the desired reparameterization. 
 
 Let $S = \mathrm{supp}\,\beta_0(M) \, \cup \, \mathrm{supp}\,\beta_1(M)$, where the functions $\beta_0(M), \beta_1(M)$ are $0^{\text{th}}$ and $1^{\text{st}}$ bigraded Betti numbers of $M$, respectively. 
@@ -1706,54 +1706,54 @@ Moving forward, our results suggest there are many aspects of computing persiste
 \bibliography{move_schedules}
 
 
-\section*{Appendix}\label{sec:appendix}
-\appendix 
-
-\subsection*{Vineyard Algorithm}
-\begin{algorithm}[ht]
-	\caption{Vineyards: Tranposition Framework}\label{alg:tr}
-	\setstretch{1.15}
-	\begin{algorithmic}[1]
-		\Require Matrices $R, V$ satisfying $R = D V$, $1 \leq i \leq m - 1$
-		\Ensure Output $(R, V)$ maintains the decomposition invariants
-        \Function{Transpose}{$R$, $V$, $i$}
-            \State $\mathrm{pos} \gets $ columns satisfying $\mathrm{col}_R = 0$
-            \If {$\mathrm{pos}[i]$ \textbf{and} $\mathrm{pos}[i+1]$}
-	            \If{$V[i,i+1] \neq 0$}
-            		\State $\mathrm{col}_V(i+1)  \mathrel{+}= \mathrm{col}_V(i)$	
-            	\EndIf
-            	\If {$\exists \; k, l$ satisfying $\mathrm{low}_R(k) = i, \mathrm{low}_R(l) = i+1$ and $R[i,l] \neq 0$} \Comment{O(m)}
-            		\If {$k < l$}
-            			\State \Return $(\, R, \, V \,) \gets (\, PRPS_k^l, \, PVP S_k^l \,)$
-            		\Else
-            			\State \Return $(\, R, \, V \,) \gets  (\, PRPS_l^k, \, PVP S_l^k\,) $
-            		\EndIf
-            	\EndIf 
-            \ElsIf{$!\mathrm{pos}[i]$ \textbf{and} $!\mathrm{pos}[i+1]$}
-            	\If{$V[i,i+1] \neq 0$}\Comment{O(m)}
-            		\If{$\mathrm{low}_R(i) < \mathrm{low}_R(i+1)$}
-            			\State \Return  $(\, R, V \,) \gets (P R S^{i+1}_i P, \, P V S^{i+1}_i  P) $
-            		\Else 
-            			\State \Return  $(\, R, V \,) \gets (P R S^{i+1}_i P S^{i+1}_i, \, P V S^{i+1}_i P S^{i+1}_i ) $
-            		\EndIf 
-            	\EndIf
-           	\ElsIf{$!\mathrm{pos}[i]$ \textbf{and} $\mathrm{pos}[i+1]$} 
-            	\If{$V[i,i+1] \neq 0$}\Comment{O(m)}
-            		\State \Return  $(\, R, V \,) \gets (P R S^{i+1}_i P S^{i+1}_i, \, P V S^{i+1}_i P S^{i+1}_i ) $
-            	\EndIf
-            \ElsIf{$\mathrm{pos}[i]$ \textbf{and} $!\mathrm{pos}[i+1]$}
-            	\If{$V[i,i+1] \neq 0$}\Comment{O(m)}
-            		\State $\mathrm{col}_V(i+1) \mathrel{+}= \mathrm{col}_V(i)$
-            	\EndIf 
-            \EndIf
-            \State \Return $(\, R , V \,) \gets (\, P R P , P V P \,)$
-        \EndFunction
-    \end{algorithmic}
-\end{algorithm}
-
-
-\subsection*{Transposition complexity details}
-Consider Algorithm~\ref{alg:tr}. The matrices $R, V$ are both $(m \times m)$, where $m$ is the number of simplices in the underlying filtration. Each transposition $\mathrm{Tr}(i, i+1)$ requires at most 2 column operations (denoted with $S_{i}^{j}$ in the algorithm) in both $R$ and $V$, a constant number of queries to the matrix representation, and exactly 1 row and column exchange. Column operations take $O(m)$ time. Querying to determine whether an entry at position $(i,i+1)$ is non-zero depends on the sparse matrix implementation, but is generally either $O(\log m)$ or $O(m)$. In compressed sparse matrix representation, column and row exchanges take upwards of $O(z)$ time, where $z$ is the number of non-zero entries in the matrix, however this can be made $O(1)$ time by using the data structure described in~\cite{cohen2006vines}. This data structure requires storing an index using at most $O(m \log m)$ bits with each non-zero entry, as well as several $O(m)$-sized auxiliary arrays to protect the matrices from row exchanges. 
+%
+%\appendix 
+%\section{}\label{sec:appendix}
+%\subsection*{Vineyard Algorithm}
+%\begin{algorithm}[ht]
+%	\caption{Vineyards: Tranposition Framework}\label{alg:tr}
+%	\setstretch{1.15}
+%	\begin{algorithmic}[1]
+%		\Require Matrices $R, V$ satisfying $R = D V$, $1 \leq i \leq m - 1$
+%		\Ensure Output $(R, V)$ maintains the decomposition invariants
+%        \Function{Transpose}{$R$, $V$, $i$}
+%            \State $\mathrm{pos} \gets $ columns satisfying $\mathrm{col}_R = 0$
+%            \If {$\mathrm{pos}[i]$ \textbf{and} $\mathrm{pos}[i+1]$}
+%	            \If{$V[i,i+1] \neq 0$}
+%            		\State $\mathrm{col}_V(i+1)  \mathrel{+}= \mathrm{col}_V(i)$	
+%            	\EndIf
+%            	\If {$\exists \; k, l$ satisfying $\mathrm{low}_R(k) = i, \mathrm{low}_R(l) = i+1$ and $R[i,l] \neq 0$} \Comment{O(m)}
+%            		\If {$k < l$}
+%            			\State \Return $(\, R, \, V \,) \gets (\, PRPS_k^l, \, PVP S_k^l \,)$
+%            		\Else
+%            			\State \Return $(\, R, \, V \,) \gets  (\, PRPS_l^k, \, PVP S_l^k\,) $
+%            		\EndIf
+%            	\EndIf 
+%            \ElsIf{$!\mathrm{pos}[i]$ \textbf{and} $!\mathrm{pos}[i+1]$}
+%            	\If{$V[i,i+1] \neq 0$}\Comment{O(m)}
+%            		\If{$\mathrm{low}_R(i) < \mathrm{low}_R(i+1)$}
+%            			\State \Return  $(\, R, V \,) \gets (P R S^{i+1}_i P, \, P V S^{i+1}_i  P) $
+%            		\Else 
+%            			\State \Return  $(\, R, V \,) \gets (P R S^{i+1}_i P S^{i+1}_i, \, P V S^{i+1}_i P S^{i+1}_i ) $
+%            		\EndIf 
+%            	\EndIf
+%           	\ElsIf{$!\mathrm{pos}[i]$ \textbf{and} $\mathrm{pos}[i+1]$} 
+%            	\If{$V[i,i+1] \neq 0$}\Comment{O(m)}
+%            		\State \Return  $(\, R, V \,) \gets (P R S^{i+1}_i P S^{i+1}_i, \, P V S^{i+1}_i P S^{i+1}_i ) $
+%            	\EndIf
+%            \ElsIf{$\mathrm{pos}[i]$ \textbf{and} $!\mathrm{pos}[i+1]$}
+%            	\If{$V[i,i+1] \neq 0$}\Comment{O(m)}
+%            		\State $\mathrm{col}_V(i+1) \mathrel{+}= \mathrm{col}_V(i)$
+%            	\EndIf 
+%            \EndIf
+%            \State \Return $(\, R , V \,) \gets (\, P R P , P V P \,)$
+%        \EndFunction
+%    \end{algorithmic}
+%\end{algorithm}
+%
+%
+%\subsection*{Transposition complexity details}
+%Consider Algorithm~\ref{alg:tr}. The matrices $R, V$ are both $(m \times m)$, where $m$ is the number of simplices in the underlying filtration. Each transposition $\mathrm{Tr}(i, i+1)$ requires at most 2 column operations (denoted with $S_{i}^{j}$ in the algorithm) in both $R$ and $V$, a constant number of queries to the matrix representation, and exactly 1 row and column exchange. Column operations take $O(m)$ time. Querying to determine whether an entry at position $(i,i+1)$ is non-zero depends on the sparse matrix implementation, but is generally either $O(\log m)$ or $O(m)$. In compressed sparse matrix representation, column and row exchanges take upwards of $O(z)$ time, where $z$ is the number of non-zero entries in the matrix, however this can be made $O(1)$ time by using the data structure described in~\cite{cohen2006vines}. This data structure requires storing an index using at most $O(m \log m)$ bits with each non-zero entry, as well as several $O(m)$-sized auxiliary arrays to protect the matrices from row exchanges. 
 
 %The principle motivation  
 %Upon moving $s$ 
