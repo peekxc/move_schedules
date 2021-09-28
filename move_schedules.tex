@@ -168,7 +168,7 @@ There are two events which dramatically alter the persistence diagrams extracted
   Since it is unknown a priori at which times  the persistent homology will change, one solution is to discretize the time domain at $n$ evenly spaced points and compute the persistence diagrams at each one of them  independently. An alternative approach is to construct a homotopy between two contiguous time-points, and then decompose this homotopy into adjacent transpositions--the vineyards approach. The former is often used in practice, but it is only an approximation; the latter is guaranteed to capture all homological changes in persistence that occur in simulating the 1-parameter family. 
   The graph in Figure~\ref{fig:vineyards} depicts two different size approximations (purple, $n=100$ and green, $n=10$), wherein the reduction algorithm (\texttt{pHcol}) was applied at $n$ time points, and two exact strategies (black and blue), which compute all $\approx 7 \times 10^{4}$ diagrams given by the homotopy. 
   As one can see from the figure, if one needs to simulate the homotopy exactly, then the vineyards approach is indeed far more efficient than naively applying the reduction algorithm independently at all time points.
-  However, when the discretization of the time domain is sparse enough, the naive approach actually performs less column operations than the vineyards strategy, while still capturing the main events. 
+  However, when the discretization of the time domain is coarse enough, the naive approach actually performs less column operations than the vineyards strategy, while still capturing the main events. 
   
   The existence of a time discretization that is more efficient to compute than continually updating the decomposition, indicates that the vineyards algorithm must incur some amount of overhead (in terms of column operations) to perform transpositions, even if the persistence diagrams remain unchanged. 
   Even in situations where one is updating a decomposition to a filtration that is  relatively ``close'', e.g. any two adjacent filtrations in the bottom right of Figure~\ref{fig:vineyards}, it is still more efficient to apply \texttt{pHcol} directly than  to iteratively update the decomposition (see the case where $n = 10$). 
@@ -946,10 +946,9 @@ In terms of bounds, we have $\lvert \widetilde{S}_F \rvert \leq \lvert S_F \rver
 However, the coarsening depends entirely on the choice of $F$ and the upper bound from~\ref{eq:sf_m2} remains, as its always possible that there are no contiguous subsequences to collapse. If a straight line homotopy is used, the number of collapsible subsequences may depend on the simplices categorization as critical points; transpositions between pairs of simplices which trigger  changes in homology tend to be more expensive. Cohen-Steiner~\cite{cohen2006vines} referred to these as \emph{switches}, see~\cite{edelsbrunner2000topological} for more details. 
 
 \subsubsection{The Discrete Setting} 
-Since moves do not maintain a valid decomposition during intermediate steps, it is worth asking if  the vineyard bounds can be improved by 
-relaxing the goal of simulating persistence across  $F : K \times [0,1] \to \mathbb{R}$. 
+At the finest scale, using move operations simulate persistence across $F : K \times [0,1] \to \mathbb{R}$ reduces to vineyards (i.e. when the moves themselves are adjacent transpositions).
+The benefit of move operations is that one need not maintain a valid decomposition during the movement; thus, it is worth investigating whether the vineyard bounds can be improved by relaxing the assumption that one wants to simulate persistence across $F$ continuously. 
 In the case of vineyards, the bound is clear: 
-%whether assuming a homotopy between a pair of filtrations $(K_0, K_1)$ or not, 
 if $\kappa = K_\tau(K_0, K_1)$, then $\Omega(\kappa)$ adjacent transpositions are required to transform $K_0 \mapsto K_1$. 
 In contrast, if we allow move operations in any order, we have $O(m)$ as a trivial upper bound: simply move each simplex in $K_0$ into its position in the filtration given by $K_1$ in the order given by the latter. However, it's not immediately clear whether this bound is tight. To establish this formally, we require a few definitions.
 
@@ -967,7 +966,7 @@ are common problems in the literature:
 \end{enumerate}
 A sequence $S = \{s_1, s_2, \dots, s_d\} \subseteq \Sigma \subseteq S_m$ of operations mapping $p \mapsto q$ is sometimes called a \emph{sorting of $p$}.
 In the context of performing updates to the $R = D V$ decomposition using moves,  such sequences will form schedules. 
-There are typically many ways to solve (1), and any solution to (2) necessarily solves (1) and (3). When $p, q$ are interpreted as strings, distances defined with respect to a fixed $\Sigma \subseteq S_m$ are commonly referred to as \emph{edit distances}~\cite{labarre2013lower}, which are denoted as $d_\Sigma(\cdot, \cdot)$. 
+There are typically many ways to solve (1), and any solution to (2) necessarily solves (1) and (3). When $p, q$ are interpreted as strings, distances defined with respect to a fixed $\Sigma \subseteq S_m$ are commonly referred to as \emph{edit distances}~\cite{labarre2013lower}, which are denoted as $d_\Sigma(\cdot, \cdot)$, and the subsequent elementary operations on the strings are called \emph{edit operations}. 
 %Note that here we describe distances between permutations (e.g. $p,q \in S_n$) using operations that can themselves be expressed as permutations (e.g. $s \in S \subseteq S_n$), and that 
 The choice of $\Sigma$ defines the universe of operations and thus the type of edit distance being measured---otherwise if $\Sigma = S_m$, then $d_\Sigma(p, q) = 1$ for any $p\neq  q \in S_m$.
 
@@ -998,11 +997,7 @@ Common edit distances found in the literature expressed as specializations of $\
 Both the difficulty of obtaining a minimal sorting and the size of $d_\Sigma(p,q)$ vary dramatically with the choice of $\Sigma$. 
 For example, while sorting by transpositions and reversals is NP-hard, and sorting by prefix  transpositions (i.e., when $i=1$ always) is unknown, there are polynomial time algorithms for sorting by block interchanges, exchanges, and prefix exchanges~\cite{labarre2013lower}. Sorting by adjacent transpositions can be achieved in many ways: any sorting algorithm that exchanges two adjacent elements during its execution (e.g. bubble sort, insertion sort, merge sort) yields a sorting of size $K_\tau(p, q)$.  
 
-Here we consider sorting by moves.
-In terms of permutations, 
-moving  $i$ to $j$ in 
-$[m]$, for $i < j$,
-corresponds to 
+Here we consider sorting by moves. In terms of permutations, a permutation $m_{ij}$ that moves $i$ to $j$ in $[m]$, for $i < j$, corresponds to: 
 \[
 \scalefont{1.0}{
 \setcounter{MaxMatrixCols}{20}
@@ -1018,18 +1013,23 @@ corresponds to
 \right ) 
 }
 \]
-while moving $j$ to $i$ is the inverse permutation.
+In the context of edit operations, observe that a move operation can be interpreted the composition of deletion operation followed by an insertion operation: 
+$$ m_{ij} = (\mathrm{ins}_j \circ \mathrm{del}_i) $$
+where $\mathrm{del}_i$ denotes the edit operation that deletes the character at position $i$ in some string $p$ and $\mathrm{ins}_j$ similarly inserts the same character at position $j$. Thus, sorting by move operations can be interpreted as finding a minimal sequence of edits where the only operations allowed are insertions and deletions, where each insertion/deletion operation is coupled.
+This is exactly the LCS (Longest Common Subsequence) distance. It is well known~\cite{bergroth2000survey} that the LCS distance between two strings $p, q$ of sizes $m$ and $n$, respectively, is: 
+\begin{equation}
+	\mathrm{d}_{\mathrm{lcs}}(p,q) = m + n - 2\lvert LCS(p, q)\rvert
+\end{equation}
+Intuitively, in the context of strings, given $\mathcal{L} = \mathrm{LCS}(p,q)$ one may transform $p \mapsto q$ by simply deleting the symbols from $p \setminus \mathcal{L}$ and then inserting symbols from $q \setminus \mathcal{L}$.
+In the context of permutations, these operations are coupled, thus to ensure only $2d$ such edit operations are used to transform $p \mapsto q$, each move operations must increase the size of $\mathcal{L}$ monotonically. 
+% while moving $j$ to $i$ is the inverse permutation.
 %The complexity of sorting by moves %is related to the well-known \emph{Levenshtein distance}~\cite{bar2004approximating}, which is the minimum number of character insertions, deletions, and substitutions needed to transform one string into another. 
 %Through a dynamic programming type approach, the Wagner-Fischer algorithm can compute the Levenstein distance in $O(m^2)$, and there are several sub-quadratic approximations~\cite{bar2004approximating}. 
 %is related to the \emph{LCS} distance, which is the minimum number of character insertions or deletions needed to transform one string into another. 
 %In terms of hardness, there is evidence to suggest that the lower bound on computing Levenshtein distance in full generality is near quadratic time. 
 %
 %Like the \emph{LCS} distance, 
-Sorting by move operations 
-can be interpreted as finding a minimal sequence of edits where the only operations allowed are insertions and deletions, where each insertion/deletion operation is coupled. 
-This is exactly the LCS (Longest Common Subsequence) distance. 
-If these operations each take uniform cost and the universe of strings is restricted to $S_m$, the corresponding edit distance has a special name: the \emph{permutation edit distance}. We obtain the following lower bound size of a sorting (i.e., a schedule) using moves. 
-
+Thus, by reducing the problem to the \emph{permutation edit distance}, we obtain the following lower bound on the minimum size of a sorting (i.e., a schedule) using moves. 
 \begin{proposition}[Schedule size]
 Given filtrations $K_0$ and $ K_1$ of size $m$, and an order preserving bijection $f: K_0 \to K_1$, 
 then the smallest move schedule $S^\ast$ is of size $\Omega(d)$, where:
@@ -1111,10 +1111,8 @@ For example, the average size of the LCS across the 10 filtrations from Section~
  $$ q = s_d \circ \dots s_1 \circ p $$
 By definition, a subsequence $\mathcal{L}$ of symbols common to both $p$ and $q$ satisfies:
  $$ p^{-1}(\sigma) < p^{-1}(\tau) \implies q^{-1}(\sigma) < q^{-1}(\tau) \quad \forall \sigma, \tau \in \mathcal{L} $$
- where $p^{-1}(\sigma)$ (resp. $q^{-1}(\sigma)$) denotes the position of $\sigma$ in $p$ (resp. $q$). Thus, obtaining a sorting $p \mapsto q$ of size $d = m - \lvert \mathcal{L} \rvert$ reduces to applying a sequence of edit operations to symbols in the complement of $\mathcal{L}$. To ensure only $2d$ such operations are required, insertion operations must increase the size of $\mathcal{L}$ monotonically. 
- Suppose further we require these edit operations be coupled in the sense that for every deletion operation $\mathrm{del}_i$ of the symbol at position $i$, we compose with an insertion operation $\mathrm{ins}_j$ at position $j$. In this sense, we call the permutation a \emph{move} permutation if it a composition of insertion and deletion operations: 
-$$ m_{ij} = (\mathrm{ins}_j \circ \mathrm{del}_i) $$
- Similarly, we define a move permutation $s \in S_m$ as a \emph{valid} operation with respect to a fixed pair $p, q \in S_m$ if:
+ where $p^{-1}(\sigma)$ (resp. $q^{-1}(\sigma)$) denotes the position of $\sigma$ in $p$ (resp. $q$). Thus, obtaining a sorting $p \mapsto q$ of size $d = m - \lvert \mathcal{L} \rvert$ reduces to applying a sequence of move operations to symbols in the complement of $\mathcal{L}$. 
+ Formally, we define a move permutation $s \in S_m$ as a \emph{valid} operation with respect to a fixed pair $p, q \in S_m$ if:
  \begin{equation}\label{eq:valid_move}
  	\lvert \mathrm{LCS}(s \circ p, q) \rvert = \lvert \mathrm{LCS}(p,q) \rvert + 1
  \end{equation}
@@ -1223,7 +1221,9 @@ A greedy strategy which always selects the cheapest move in succession would beg
 Nonetheless, greedy strategies can be effective in practice, even if they are suboptimal. For example, in the previous section choosing the lowest-cost move takes $\approx O(dm)$---implying a greedy strategy would require $O(d^2 m)$ time---which is computationally viable as a heuristic when $d << m$. 
 
 \subsubsection{Proxy objective}\label{sec:proxy_objective}
-When $d \sim O(m)$, the quadratic nature of the aforementioned greedy minimization is too expensive. In order for Algorithm~\ref{alg:schedule} to be considered as an efficient alternative to vineyards---which requires $O(m \log m + k)$ preprocessing time to compute $k \sim O(m^2)$ transpositions---a solution which is subquadratic in $m$ is desirable.  %In what follows, we present such an objective, showing its relation to the problem at hand as well its use in other known computational problems. 
+When $d \sim O(m)$, the quadratic nature of the aforementioned greedy minimization can be computationally expensive. 
+In order for Algorithm~\ref{alg:schedule} to be considered as an efficient alternative to vineyards---which requires $O(m \log m + k)$ preprocessing time to compute $k \sim O(m^2)$ transpositions---a solution which is subquadratic in $m$ is desirable. 
+%In what follows, we present such an objective, showing its relation to the problem at hand as well its use in other known computational problems. 
 % We show empirical results demonstrating its practical effectiveness as a heuristic in section~\ref{sec:results}.
 
 %The schedule $S_1$ shown in Table~\ref{table:move_costs} would be an example of a minimal cost schedule. Since optimizing this objective combinatorially is inefficient, we would like an alternative objective that is cheaper and performs well in practice. 
@@ -1651,7 +1651,7 @@ As shown on the table, we're able to achieve a significant reduction in the numb
 
 
 \section{Conclusion and Future Work}\label{sec:conclusion}
-In conclusion, we presented a scheduling algorithm for efficiently updating a decomposition in sparse dynamic settings. Our approach is simple, easy to implement, and fully general: it does not depend on the geometry of underlying space nor the choice of triangulation. Moreover, we supplied efficient algorithms for our scheduling strategy, provided tight bounds where applicable, and demonstrated our algorithms performance with several real world use cases.
+In conclusion, we presented a scheduling algorithm for efficiently updating a decomposition in coarse dynamic settings. Our approach is simple, easy to implement, and fully general: it does not depend on the geometry of underlying space nor the choice of triangulation. Moreover, we supplied efficient algorithms for our scheduling strategy, provided tight bounds where applicable, and demonstrated our algorithms performance with several real world use cases.
 
 There are many possible applications of our work beyond the example application of generating crocker stacks and simulating multidimensional persistence. As discussed in sections~\ref{sec:related_work}, examples include: 
 \begin{enumerate}
