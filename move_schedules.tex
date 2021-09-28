@@ -341,7 +341,7 @@ Using $\mathbb{Z}_2$ coefficients and homology in dimension 1 to simplify the pr
 		\begin{block}{c[ccc]}
   		u \kern\rowsp  & \; 1 &    &  1 \; \topstrut \\
   		v \kern\rowsp & \;     &  1 & 1 \; \\
-  		w \kern\rowsp & \; 1 &  1 &    \; \botstrut \\
+  		w \kern\rowsp & \; 1 &  \fbox{1} &    \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	\; , \;
@@ -358,7 +358,7 @@ Using $\mathbb{Z}_2$ coefficients and homology in dimension 1 to simplify the pr
 	\kern-0.2em & a & b & c  \\
 		\begin{block}{c[ccc]}
   		u \kern\rowsp  & \; 1 & 1 & 1 \; \topstrut \\
-  		v \kern\rowsp & \;     & 1 & 1 \; \\
+  		v \kern\rowsp & \;     & 1 & \fbox{1} \; \\
   		w \kern\rowsp & \; 1 &    &    \; \botstrut \\
 		\end{block}
 	\end{blockarray}
@@ -417,9 +417,9 @@ Once $R$ is reduced, then the low entries in $R$ yield the correct pairings enco
 %\subsection*{A General Matrix Framework} Perhaps the most frequently used approach to computing the persistence diagram of a given filtration $K$ is with the \emph{reduction} algorithm. There have been many advancements in the past decade in improving the reduction algorithm---a comprehensive overview is beyond the scope of this effort. The majority of these computational improvements were developed to improve the efficiency of performing the \emph{initial} reduction. A concise summary of these advancements can be found in~\cite{bauer2019ripser}. In contrast, we focus here on improving the efficiency of maintaining a \emph{given} decomposition under an arbitrary reordering.  
 \subsection{Vineyards}\label{sec:vineyards}
 The original purpose of the vineyards algorithm, as described in~\cite{cohen2006vines}, was to compute a continuous 1-parameter family of persistence diagrams over a time-varying filtration, and to detect homological critical events during the construction.
-Notice that homological critical events can only occur when the filtration order changes, though not all filtration changes result in homological critical events.
-It follows that detecting these homological events reduces to computing matrix decompositions at a finite set of time points interleaved between filtration changes. 
-At the finest scale, changes to the filtration order manifest as adjacent transpositions. 
+Notice that homological critical events can only occur when the filtration order changes, though the converse isn't true.
+Thus, detecting these all such events reduces to computing matrix decompositions at a finite set of time points interleaved between changes in the filtration order. 
+At the finest scale, these changes manifest as adjacent transpositions. 
 As a result, a fixed set of rules for maintaining a valid $R = D V$ decomposition under the transposition of adjacent simplices in the filtration is enough to simulate persistence dynamically. 
 These rules prescribe certain column and row operations which must be applied to the matrix decomposition either before, during, or after the transposition, in order to ensure decomposition invariants I1 and I2 are respected.   
 
@@ -475,7 +475,7 @@ The goal of the vineyards algorithm can now be described explicitly: to prescrib
 		\begin{block}{c[ccc]}
   		 & \; 1 &  &  \; \topstrut \\
   		 & \;  & 1 &  \; \\
-  		 & \; 1 & \textbf{1} & \; \botstrut \\
+  		 & \; 1 & 1 & \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	\,\,, 
@@ -494,7 +494,7 @@ The goal of the vineyards algorithm can now be described explicitly: to prescrib
 		\begin{block}{c[ccc]}
   		& \;  & 1 &  \; \topstrut \\
   		& \; 1 &  &  \; \\
-  		& \; 1 & \textbf{1} &  \; \botstrut \\
+  		& \; 1 & \fbox{1} &  \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	\,\,, 
@@ -508,7 +508,7 @@ The goal of the vineyards algorithm can now be described explicitly: to prescrib
 	\end{blockarray}
 	\xrightarrow{S_1^2}
 	\hspace{-0.1em}
-	\begin{blockarray}{cccc}{R_1}
+	\begin{blockarray}{cccc}{}
 	\kern-0.2em & b & a & c  \\
 		\begin{block}{c[ccc]}
   		u \kern\rowsp  & \;  & 1 &  \; \topstrut \\
@@ -517,12 +517,12 @@ The goal of the vineyards algorithm can now be described explicitly: to prescrib
 		\end{block}
 	\end{blockarray}
 	\,\,,
-	\begin{blockarray}{cccc}{V_1}
+	\begin{blockarray}{cccc}{}
 	\kern-0.2em & b & a & c  \\
 		\begin{block}{c[ccc]}
-  		b \kern\rowsp  & \; 1 & 1 & 1 \; \topstrut \\
-  		a \kern\rowsp & \;  & 1 & 1 \; \\
-  		c \kern\rowsp & \;  &  & 1 \; \botstrut \\
+  		  & \; 1 & 1 & 1 \; \topstrut \\
+  		 & \; & 1 & 1 \; \\
+  		 & \;  &  & 1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 \end{displaymath}
@@ -662,7 +662,7 @@ If one has a pair of filtrations $(K_0, K_1)$ each with $m$ simplices, and we as
 		\begin{block}{c[ccc]}
   		  & \; 1 &    &  \; \topstrut \\
   		  & \;    & 1 &  \; \\
-  		 & \; 1 & 1 &  \; \botstrut \\
+  		 & \; 1 & \fbox{1} &  \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	%
@@ -682,7 +682,7 @@ If one has a pair of filtrations $(K_0, K_1)$ each with $m$ simplices, and we as
 		\begin{block}{c[ccc]}
   		  & \; 1   &    &   1  \; \topstrut \\
   		 & \;       &  1  &  1  \; \\
-  		 & \; 1   &   1   &     \; \botstrut \\
+  		 & \; 1   &   \fbox{1}   &     \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 %
@@ -701,7 +701,7 @@ If one has a pair of filtrations $(K_0, K_1)$ each with $m$ simplices, and we as
 		\begin{block}{c[ccc]}
   		  & \;  & 1 &  1\; \topstrut \\
   		 & \; 1 & 1 &  \; \\
-  		 & \; 1 &  & 1 \; \botstrut \\
+  		 & \; 1 &  & \fbox{1} \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 %
@@ -737,7 +737,7 @@ If one has a pair of filtrations $(K_0, K_1)$ each with $m$ simplices, and we as
 	\begin{blockarray}{cccc}{V_1}
 	 \kern-0.2em & a & b & c  \\
 		\begin{block}{c[ccc]}
-  		 & \; 1 & 1 &  1\; \topstrut \\
+  		 & \; 1 & \fbox{1} &  \fbox{1}\; \topstrut \\
   		& \;  & 1 &  1\; \\
   		& \; &  & 1 \; \botstrut \\
 		\end{block}
@@ -757,7 +757,7 @@ If one has a pair of filtrations $(K_0, K_1)$ each with $m$ simplices, and we as
 \begin{blockarray}{cccc}{}
 	 \kern-0.2em & a & b & c  \\
 		\begin{block}{c[ccc]}
-  		 & \; 1 & &  1\; \topstrut \\
+  		 & \; 1 & &  \fbox{1}\; \topstrut \\
   		& \;  & 1 &  1\; \\
   		& \; &   & 1 \; \botstrut \\
 		\end{block}
@@ -786,7 +786,7 @@ If one has a pair of filtrations $(K_0, K_1)$ each with $m$ simplices, and we as
 \; \xrightarrow{P} \\
 % 
 \begin{blockarray}{cc}{}
-	\kern-0.2em & c \\
+	\kern-0.2em & a \\
 		\begin{block}{c[c]}
   		 & \; 1 \; \topstrut \\
   		& \;  1 \; \\
@@ -937,12 +937,12 @@ Consider executing the vineyards algorithm on a given schedule $S$.
 	The dominant subcomputation for the vineyards algorithm are the column operations---which take $O(m)$ time---since the permutations can be made to the matrix in $O(1)$ time and all other computations take at most $O(\log m)$ time. In the vineyards algorithm, there are at most $2$ column operations for a given adjacent transposition per matrix. 
 	Thus, for any contiguous sequence of transpositions $(t_i, t_{i{+}1}, \dots, t_j)$ we require at most $2(\lvert i - j \rvert)$ column operations in both $R$ and $V$, giving a total of $4(\lvert i - j \rvert)$ column operations.
 	
-	Now consider using the Move($i$,$j$) in Algorithm~\ref{alg:mr} for a single move operation, as a replacement for the sequence of transpositions above. Here again, the dominant cost again are the column operations (line 5), since although permutations take $O(\lvert i - j\rvert)$ time we require only $1$ such permutation per movement. 
-	If we allocate an extra $O(m)$ memory space during the movement, notice that lines (7) and (7) in both Restore* and Move* can be completed $O(1)$ via a pointer swapping argument. 
+	Now consider using the MoveRight($i$,$j$) for a single move operation, as a replacement for the sequence of transpositions above. Here again, the dominant cost again are the column operations (line 5), since although permutations take $O(\lvert i - j\rvert)$ time we require only $1$ such permutation per movement. 
+	If we allocate an extra $O(m)$ memory space during the movement, notice that lines (4), and (7) of Restore* (but not line (2)) and line (7) of Move* in Algorithm~\ref{alg:mr} can be completed $O(1)$ via a pointer swapping argument. 
 	Since a move operation requires at most $1$ column operation for each index in $[i: j]$, moving a column from $i$ to $j$ where $i < j$ requires at most $2(\lvert i - j \rvert)$ column operations. The claimed inequality follows. 
 	%Identifying non-zero entries in the matrix occurs once, which takes $O(\lvert i - j \rvert \log(m))$ time.
 \end{proof}
-In terms of bounds, we  have $\lvert \widetilde{S}_F \rvert \leq \lvert S_F \rvert$, and the associated coarsened schedule $\widetilde{S}_F$ can be computed in $O(m)$ time. 
+In terms of bounds, we have $\lvert \widetilde{S}_F \rvert \leq \lvert S_F \rvert$, and the associated coarsened schedule $\widetilde{S}_F$ can be computed in $O(m)$ time. 
 However, the coarsening depends entirely on the choice of $F$ and the upper bound from~\ref{eq:sf_m2} remains, as its always possible that there are no contiguous subsequences to collapse. If a straight line homotopy is used, the number of collapsible subsequences may depend on the simplices categorization as critical points; transpositions between pairs of simplices which trigger  changes in homology tend to be more expensive. Cohen-Steiner~\cite{cohen2006vines} referred to these as \emph{switches}, see~\cite{edelsbrunner2000topological} for more details. 
 
 \subsubsection{The Discrete Setting} 
@@ -1069,6 +1069,44 @@ For example, the average size of the LCS across the 10 filtrations from Section~
  \subsection*{Constructing a sorting}
  In the previous section, we showed how computing the LCS between two permutations $p, q \in S_m$ reduces to computing the LIS of a single permutation $p'$, and we outlined how to do this in $O(m \log \log m)$ time. It is not clear, however, that given $\mathcal{L} = \mathrm{LIS}(p')$, one can obtain a sorting $p \mapsto q$ in an efficient way. We outline below a simple procedure which constructs such a sorting $\mathcal{S} = (s_1, \dots, s_d)$ in $O(dm\log m)$ time.
  
+ \algnewcommand{\IfThenElse}[3]{% \IfThenElse{<if>}{<then>}{<else>}
+  \State \algorithmicif\ #1\ \algorithmicthen\ #2\ \algorithmicelse\ #3}
+  
+  \begin{algorithm}[h]
+	\caption{Sorting algorithm}\label{alg:sorting}
+	\setstretch{1.05}
+    \begin{algorithmic}[1]
+    	% \Require Fixed $p' \in S_m$, $\mathcal{L} = \mathrm{LIS}(p')$ 
+    	\Function{LCS-Sort}{$p$, $q$}
+    		\State $\bar{p} \gets q' \circ p$
+    		\State $\mathcal{L} \gets \mathrm{LCS}(p,q) = \mathrm{LIS}(\bar{p})$ \Comment{$O(\log \log m)$}
+    		\State $(\, \mathcal{S}, \, \mathcal{D}, \, \mathcal{T} \, )\gets (\, \emptyset, \, \bar{p} \setminus \mathcal{L}, \, \mathcal{L} \,)$
+    		\While{$\mathcal{D}$\text{ is not empty }}
+    		    \State $\sigma \gets \text{arbitrary element in }\mathcal{D}$
+    		    %\State $\tau, \rho \gets \mathcal{T}_p(\sigma), \mathcal{T}_n(\sigma)$
+    		    %\State $i, i_p, i_n \gets \mathcal{I}_p(\sigma), \, \mathcal{I}_p(T_{\mathrm{pred}}(\sigma)), \, \mathcal{I}_p(T_{\mathrm{succ}}(\sigma))$
+    		    \State $(\,i, \,i_p, \, i_n \,) \gets ( \, \bar{p}^{-1}(\sigma), \, \bar{p}^{-1}(T_{\mathrm{pred}}(\sigma)), \, \bar{p}^{-1}(T_{\mathrm{succ}}(\sigma)) \, )$%\Comment{$O(\log \log m)$}
+%    		    \If{ $p_{\sigma} < p_{\tau}$ }
+%	    		    \State $j \gets \text{arbitrary element in } [\, p_{\tau}, \, p_{\rho})$
+%    		    \Else{ $p_{\rho} < p_{\sigma}$}
+%    		    	\State $j \gets \text{arbitrary element in } (\, p_{\tau}, \, p_{\rho}]$
+%    		    \EndIf
+				% \IfThenElse{$i < i_p$}{$[\, i_p, \, i_n)$}{$(\, i_p, \, i_n]$}
+				% $\text{Pick } j \in [\, i_p, \, i_n)$ \If{ $i < i_p$ } \Else $(\, i_p, \, i_n]$ \EndIf
+    		    \If{ $i < i_p$ } 
+    		    	\State $j \gets \text{arbitrary element in } [\, i_p, \, i_n)$
+    		    \Else{ $i_n < i$ }
+	    		    \State $j \gets \text{arbitrary element in } (\, i_p, \, i_n]$ 
+    		    \EndIf
+    		    \State $(\, \mathcal{S}, \mathcal{D}, \mathcal{T} \,) \gets (\, \mathcal{S} \cup (i, \, j), \, \mathcal{D} \setminus \sigma, \, \mathcal{T} \cup \sigma \, )$%\Comment{$O(\log \log m)$}
+    		    % \State $p, p^{-1} \gets m_{ij} \circ p, p^{-1} \circ m_{ij}^{-1}$
+    		    \State $\bar{p}^{-1} \gets \bar{p}^{-1} \circ m_{ij}^{-1}$ %\Comment{$O(m)$}
+    		 \EndWhile
+    		 \State \Return{$\mathcal{S}$}
+    	\EndFunction
+	\end{algorithmic}
+\end{algorithm}
+
  Before introducing the algorithm, we require a few definitions. Recall that a \emph{sorting} $\mathcal{S}$ with respect to two permutations $p, q \in S_m$ is an ordered sequence of permutations $(s_1, s_2, \dots, s_d)$ whose product under composition with $p$ yields $q$, i.e.
  $$ q = s_d \circ \dots s_1 \circ p $$
 By definition, a subsequence $\mathcal{L}$ of symbols common to both $p$ and $q$ satisfies:
@@ -1100,39 +1138,6 @@ $$ m_{ij} = (\mathrm{ins}_j \circ \mathrm{del}_i) $$
  %under certain insertion and deletion operations. 
  
  %We know that 
- 
- \begin{algorithm}[h]
-	\caption{Sorting algorithm}\label{alg:sorting}
-	\setstretch{1.05}
-    \begin{algorithmic}[1]
-    	% \Require Fixed $p' \in S_m$, $\mathcal{L} = \mathrm{LIS}(p')$ 
-    	\Function{LCS-Sort}{$p$, $q$}
-    		\State $\bar{p} \gets q' \circ p$
-    		\State $\mathcal{L} \gets \mathrm{LCS}(p,q) = \mathrm{LIS}(\bar{p})$ \Comment{$O(\log \log m)$}
-    		\State $\mathcal{D}, \mathcal{S} \gets \bar{p} \setminus \mathcal{L}, \emptyset$
-    		\While{$\mathcal{D}$\text{ is not empty }}
-    		    \State $\sigma \gets \text{arbitrary element in }\mathcal{D}$
-    		    %\State $\tau, \rho \gets \mathcal{T}_p(\sigma), \mathcal{T}_n(\sigma)$
-    		    %\State $i, i_p, i_n \gets \mathcal{I}_p(\sigma), \, \mathcal{I}_p(T_{\mathrm{pred}}(\sigma)), \, \mathcal{I}_p(T_{\mathrm{succ}}(\sigma))$
-    		    \State $i, i_p, i_n \gets \bar{p}^{-1}(\sigma), \bar{p}^{-1}(T_{\mathrm{pred}}(\sigma)), \bar{p}^{-1}(T_{\mathrm{succ}}(\sigma))$%\Comment{$O(\log \log m)$}
-%    		    \If{ $p_{\sigma} < p_{\tau}$ }
-%	    		    \State $j \gets \text{arbitrary element in } [\, p_{\tau}, \, p_{\rho})$
-%    		    \Else{ $p_{\rho} < p_{\sigma}$}
-%    		    	\State $j \gets \text{arbitrary element in } (\, p_{\tau}, \, p_{\rho}]$
-%    		    \EndIf
-    		    \If{ $i < i_p$ } 
-    		    	\State $j \gets \text{arbitrary element in } [\, i_p, \, i_n)$
-    		    \Else{ $i_n < i$ }
-	    		    \State $j \gets \text{arbitrary element in } (\, i_p, \, i_n]$ 
-    		    \EndIf
-    		    \State $\mathcal{S}, \mathcal{D}, \mathcal{T} \gets \mathcal{S} \cup (i, \, j), \mathcal{D} \setminus \sigma, \mathcal{T} \cup \sigma$%\Comment{$O(\log \log m)$}
-    		    % \State $p, p^{-1} \gets m_{ij} \circ p, p^{-1} \circ m_{ij}^{-1}$
-    		    \State $\bar{p}^{-1} \gets \bar{p}^{-1} \circ m_{ij}^{-1}$ %\Comment{$O(m)$}
-    		 \EndWhile
-    		 \State \Return{$\mathcal{S}$}
-    	\EndFunction
-	\end{algorithmic}
-\end{algorithm}
  
  
 \subsection{Minimizing schedule cost}\label{sec:schedule_cost}
