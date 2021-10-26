@@ -95,6 +95,7 @@
 \fi
 
 % ------  Begin document ------- 
+% https://github.com/peekxc/dart
 \begin{document} 
 
 \maketitle
@@ -1018,7 +1019,7 @@ $$ m_{ij} = (\mathrm{ins}_j \circ \mathrm{del}_i) $$
 where $\mathrm{del}_i$ denotes the edit operation that deletes the character at position $i$ in some string $p$ and $\mathrm{ins}_j$ similarly inserts the same character at position $j$. Thus, sorting by move operations can be interpreted as finding a minimal sequence of edits where the only operations allowed are insertions and deletions, where each insertion/deletion operation is coupled.
 This is exactly the LCS (Longest Common Subsequence) distance. It is well known~\cite{bergroth2000survey} that the LCS distance between two strings $p, q$ of sizes $m$ and $n$, respectively, is: 
 \begin{equation}
-	\mathrm{d}_{\mathrm{lcs}}(p,q) = m + n - 2\lvert LCS(p, q)\rvert
+	\mathrm{d}_{\mathrm{lcs}}(p,q) = m + n - 2\lvert \mathrm{LCS}(p, q)\rvert
 \end{equation}
 Intuitively, in the context of strings, given $\mathcal{L} = \mathrm{LCS}(p,q)$ one may transform $p \mapsto q$ by simply deleting the symbols from $p \setminus \mathcal{L}$ and then inserting symbols from $q \setminus \mathcal{L}$.
 In the context of permutations, these operations are coupled, thus to ensure only $2d$ such edit operations are used to transform $p \mapsto q$, each move operations must increase the size of $\mathcal{L}$ monotonically. 
