@@ -95,7 +95,6 @@
 
 % ------  Begin document ------- 
 \begin{document} 
-
 \maketitle
 
 % REQUIRED - "Abstracts must be able to stand alone and so cannot contain citations to the paper's references, equations, etc. 
@@ -103,19 +102,20 @@
 	The standard procedure for computing the persistent homology of a filtered simplicial complex is the matrix reduction algorithm. Its output is a particular decomposition of the total boundary matrix, from which the persistence diagrams and generating cycles can be derived. 
 	Persistence diagrams are known to vary continuously with respect to their input, which motivates the algorithmic study of persistence computations for time-varying filtered complexes. Computationally, simulating persistence dynamically can be reduced to maintaining a valid decomposition under adjacent transpositions in the filtration order. 
 	In practice, the quadratic scaling in the number of  such transpositions often makes this maintenance procedure slower than simply computing the decomposition from scratch,  limiting the application of dynamic persistence to relatively small data sets. In this work, we propose a coarser strategy for maintaining the decomposition over a discrete 1-parameter family of filtrations. Our first result is an analysis of a simple linear-time strategy which reduces the number of column operations needed to simulate persistence across a fixed homotopy by at most a factor of 2. We then show a modification of this technique which maintains only a sublinear number of valid states, as opposed to a quadratic number of states, and we provide tight lower bounds for this technique.
-	Finally, we present empirical results suggesting that the decrease in operations needed to compute diagrams across a family of filtrations is proportional to the difference between the expected quadratic number of states, and the proposed sublinear coarsening.
-	Applications to multi-dimenisonal persistence and crocker stacks are also presented. 
+	Finally, we present empirical results showing that the decrease in operations needed by our method to compute diagrams across a family of filtrations is proportional to the difference between the expected quadratic number of states, and the proposed sublinear coarsening.
+	Applications to multi-dimensional persistence and crocker stacks are also presented. 
 \end{abstract}
 
 
 % REQUIRED
 \begin{keywords}
-  example, \LaTeX
+  Algorithms, 
 \end{keywords}
 
 % REQUIRED
+% See: https://mathscinet.ams.org/mathscinet/msc/msc2020.html?t=68T09&btn=Current
 \begin{AMS}
-  68Q25, 68R10, 68U05
+  68T09, 55N31, 62R40
 \end{AMS}
 
 \section{Introduction} 
@@ -124,7 +124,7 @@ Given a triangulable topological space equipped with a  tame continuous function
 This motivates the  application of persistence to time-varying  settings, like that of dynamic metric spaces~\cite{kim2020spatiotemporal}. 
 As persistence-related computations tend to exhibit high algorithmic complexity---essentially cubic\footnote{For finite fields, it is known that the persistence computation reduces to the PLU factorization problem, which takes $O(m^\omega)$ where $\omega \approx 2.373$ is the matrix multiplication constant.} in the size of the underlying filtration~\cite{morozov2005persistence}---their adoption to dynamic settings poses a challenging computational problem.
 With the current state of the art tools, there is no recourse to the problem of computing persistence from a time-varying filtration containing millions of simplices at thousands of snapshots in time.
-Efficiently  updating the persistence of a time-varying filtration has far-reaching consequences: methods that vectorize persistence diagrams for machine learning purposes, like adaptive template functions~\cite{polanco2019adaptive} and persistence images~\cite{adams2017persistence}, or summary statistics like $\alpha$-smoothed Betti curves~\cite{ulmer2019topological}, all immediately become computationally viable tools in dynamic  settings. 
+Nonetheless, having the capability of efficiently updating the persistence of a time-varying filtration has far-reaching consequences: methods that vectorize persistence diagrams for machine learning purposes, like adaptive template functions~\cite{polanco2019adaptive} and persistence images~\cite{adams2017persistence}, or summary statistics like $\alpha$-smoothed Betti curves~\cite{ulmer2019topological}, all immediately become computationally viable tools in dynamic settings. 
 %This analogy provides a strong interpretation at gaining insight on the subtle topological changes that may occur in studying a continuous process. 
   
 Cohen-Steiner et al. refer to a continuous 1-parameter family of persistence diagrams as a \emph{vineyard}, and they give in \cite{cohen2006vines} an efficient algorithm for their computation given a time-varying filtration. 
@@ -135,15 +135,14 @@ The vineyards algorithm transforms a time-varying filtration into an ordered set
 This algorithm is also efficient  asymptotically: if there are $d$ time-points where the filtration order changes, then   vineyards   takes $O(m^3 + md)$ time; one $O(m^3)$-time reduction upfront for the filtration at time $t_0$ followed by one $O(m)$ operation to update the decomposition for the remaining time points $(t_1, t_2, \dots, t_d)$. When $d >> m$, this $O(md)$ approach is far more efficient than the $O(dm^3)$  ``naive'' strategy of computing the diagrams independently at every time point.
 
 Despite its theoretical efficiency, vineyards is often not the method of choice in practical settings. 
-Indeed, while there is an increasingly rich ecosystem of software packages offering variations of the standard reduction algorithm (e.g. Ripser, PHAT, Dionysus, etc. See~\cite{otter2017roadmap} for an overview), implementations of the vineyards algorithm are relatively uncommon.\footnote{Dionysus 1 has an implementation of vineyards, but the algorithm was never ported to the 2nd version.} 
-The reason for this disparity is perhaps explained by Lesnick and Wright~\cite{lesnick2015interactive}: ``While an update to an $RU$ decomposition involving few transpositions is very fast in practice... many transpositions can be quite slow... it is sometimes much faster to simply recompute the $RU$-decomposition from scratch using the standard persistence algorithm.'' 
-Whether performing the reductions naively or updating the decomposition dynamically using vineyards, they observe that this is the most computationally demanding aspect of  RIVET \cite{rivet}.
+While there is an increasingly rich ecosystem of software packages offering variations of the standard reduction algorithm (e.g. Ripser, PHAT, Dionysus, etc. See~\cite{otter2017roadmap} for an overview), implementations of the vineyards algorithm are relatively uncommon.\footnote{Dionysus 1 has an implementation of vineyards, but the algorithm was never ported to the 2nd version.} 
+The reason for this disparity is perhaps explained by Lesnick and Wright~\cite{lesnick2015interactive}: ``While an update to an $RU$ decomposition involving few transpositions is very fast in practice... many transpositions can be quite slow... it is sometimes much faster to simply recompute the $RU$-decomposition from scratch using the standard persistence algorithm.'' Indeed, whether performing the reductions naively or updating the decomposition dynamically using vineyards, they observed maintaining the decomposition is the most computationally demanding aspect of RIVET \cite{rivet}.
 
 This work seeks to further understand and remedy this discrepancy: building on the work presented in~\cite{busaryev2010tracking}, we introduce a coarser approach to the vineyards algorithm.
 While vineyards is  designed  for handling   \emph{continuous} time families of diagrams, it is not necessarily efficient when the time parameter is coarsely discretized.
 Our methodology is based on the observation that practitioners often don't need (or want!) all $d$ persistence diagrams generated by a continuous 1-parameter of filtrations; usually just $n << d$ of them  suffice.   
 % in many time varying settings, a valid decomposition is often only sought after at a relatively sparse number of time points relative to the size of the (finite) set needed to generated by the family. 
-By exploiting the ``donor'' concept introduced in in~\cite{busaryev2010tracking}, we are able to make a tradeoff in the number of times the decomposition is restored to a valid state, dramatically reducing the total number of column operations needed to apply an arbitrary permutation to the filtration. This trade off, paired with a fast greedy heuristic explained in section~\ref{sec:proxy_objective}, yields an algorithm that can update a $R = DV$ decomposition more efficiently than vineyards in coarse contexts, making dynamic persistence more computationally tractable for a wider class of use-cases. 
+By exploiting the ``donor'' concept introduced in in~\cite{busaryev2010tracking}, we are able to make a tradeoff between the number of times the decomposition is restored to a valid state and the granularity of the decomposition repair step, dramatically reducing the total number of column operations needed to apply an arbitrary permutation to the filtration. This trade off, paired with a fast greedy heuristic explained in section~\ref{sec:proxy_objective}, yields an algorithm that can update a $R = DV$ decomposition more efficiently than vineyards in coarse time-varying contexts, making dynamic persistence more computationally tractable for a wider class of use-cases. 
 
  %TODO fill in section reference above. 
 
@@ -1527,7 +1526,7 @@ The multigraded Betti numbers constitute a natural and important class of invari
 The fibered barcode, denoted as $\mathcal{B}(M)$, is defined as follows: 
 \begin{definition}[Fibered barcode]
 	%\in \overline{\mathcal{L}}
-	The fibered barcode $\mathcal{B}(M)$ of a 2D persistence module $M$ is the map which sends each   line  $L \subset \mathbb{R}^https://www.overleaf.com/project/60edd57f71696a2859f4cf602$ with non-negative slope to the barcode $\mathcal{B}_L(M)$: 
+	The fibered barcode $\mathcal{B}(M)$ of a 2D persistence module $M$ is the map which sends each line  $L \subset \mathbb{R}^2$ with non-negative slope to the barcode $\mathcal{B}_L(M)$: 
 %	$$ L \mapsto \mathcal{B}_L(M) $$
 $$ \mathcal{B}(M) = \{ \; B_L(M) : L \in \mathbb{R} \times \mathbb{R}^{+} \; \}$$
 \end{definition} 
