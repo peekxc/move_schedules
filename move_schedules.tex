@@ -1,6 +1,7 @@
-\documentclass[review]{siamart190516}
+% \documentclass[review]{siamart190516} % for SICOMP 
+\documentclass{article} % for arxiv 
+\usepackage{arxiv}
 
-% Journal name: SICOMP
 %\usepackage[margin=0.75in]{geometry}
 \usepackage{amsmath, amssymb}
 \usepackage{mathtools}
@@ -17,6 +18,7 @@
 \usepackage{bbm}
 \usepackage{graphicx}
 
+\pagestyle{plain} % arxiv only 
 
 \newcommand\sbullet[1][.5]{\mathbin{\vcenter{\hbox{\scalebox{#1}{$\bullet$}}}}}
 \usepackage{blkarray, bigstrut}
@@ -45,14 +47,16 @@
 
 \usepackage{hyperref} % load hyperref last
 
-%\newtheorem{theorem}{Theorem}
-%\newtheorem{definition}{Definition}
-%\newtheorem{proposition}{Proposition}
-%\newtheorem{lemma}{Lemma}
-%\newtheorem{corollary}{Corollary}
+% For arxiv; comment out for SICOMP
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{proof}{Proof}
 % \newcommand{\CommentX}[1]{\unskip~\%~#1~\%}
 
-\newsiamremark{remark}{Remark}
+%\newsiamremark{remark}{Remark}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
@@ -67,12 +71,17 @@
 \setenumerate[4]{label*=.\arabic*}
 
 % Sets running headers as well as PDF title and authors
-\headers{Fast Persistence Computations}{M. Piekenbrock and J. Perea}
+% \headers{Fast Persistence Computations}{M. Piekenbrock and J. Perea}
 
 % Title. If the supplement option is on, then "Supplementary Material"
 % is automatically inserted before the title.
-\title{Move Schedules: Fast persistence computations in coarse dynamic settings\thanks{\textbf{Funding:} This work was partially supported by the National Science Foundation through grants CCF-2006661 and CAREER award DMS-1943758.}
+\title{
+	Move Schedules: Fast persistence computations in coarse dynamic settings
+	\thanks{
+	\textbf{Funding:} This work was partially supported by the National Science Foundation through grants CCF-2006661 and CAREER award DMS-1943758.
+	}
 }
+
 
 % Authors: full names plus addresses.
 \author{
@@ -88,7 +97,7 @@
 % Optional PDF information
 \ifpdf
 \hypersetup{
-  pdftitle={Fast Persistence Computations},
+  pdftitle={Move Schedules},
   pdfauthor={Matt Piekenbrock and Jose A. Perea}
 }
 \fi
@@ -96,6 +105,7 @@
 % ------  Begin document ------- 
 % https://github.com/peekxc/dart
 \begin{document} 
+
 \maketitle
 
 % REQUIRED - "Abstracts must be able to stand alone and so cannot contain citations to the paper's references, equations, etc. .... not exceeding 250 words"
@@ -104,20 +114,20 @@
 	Persistence diagrams are known to vary continuously with respect to their input, which motivates the algorithmic study of persistence computations for time-varying filtered complexes. Computationally, simulating persistence dynamically can be reduced to maintaining a valid decomposition under adjacent transpositions in the filtration order. 
 	In practice, the quadratic scaling in the number of  such transpositions often makes this maintenance procedure slower than simply computing the decomposition from scratch,  limiting the application of dynamic persistence to relatively small data sets. In this work, we propose a coarser strategy for maintaining the decomposition over a 1-parameter family of filtrations. Our first result is an analysis of a simple linear-time strategy which reduces the number of column operations needed to simulate persistence across a fixed homotopy by at most a factor of 2. We show a modification of this technique which maintains only a sublinear number of valid states, as opposed to a quadratic number of states, and we provide tight lower bounds for this technique.
 	Finally, we present results showing that the decrease in operations to compute diagrams across a family of filtrations is proportional to the difference between the expected quadratic number of states, and the proposed sublinear coarsening.
-	Applications to multi-dimensional persistence and crocker stacks are also presented. 
+	Applications to multi-dimensional persistence and crocker stacks are also presented.
 \end{abstract}
 
 % Keywords and MSC codes must accompany all articles. A list of the subject classifications can be accessed or searched online in the Annual Index of Mathematical Reviews.
 % REQUIRED
 \begin{keywords}
-  Computational topology, Persistent homology, Topological data analysis
+  {Computational topology, Persistent homology, Topological data analysis}
 \end{keywords}
 
 % REQUIRED
 % See: https://mathscinet.ams.org/mathscinet/msc/msc2020.html?t=68T09&btn=Current
-\begin{AMS}
-  68T09, 55N31, 62R40
-\end{AMS}
+%\begin{AMS}
+%  68T09, 55N31, 62R40
+%\end{AMS}
 
 \section{Introduction} 
 \subsection{Overview}\label{sec:overview} 
@@ -404,10 +414,11 @@ Using $\mathbb{Z}_2$ coefficients and homology in dimension 1 to simplify the pr
 It is clear from Algorithm~\ref{alg:reduce} that a loose upper bound for this reduction is $O(m^3)$, where $m$ is the number of simplices of the filtration; it turns out that this bound is in fact tight, see~\cite{morozov2005persistence} for more details. 
 There are actually many variations and optimizations proposed over the past decade to Algorithm~\ref{alg:reduce}; for example, one can   reverse the order of the filtration and compute cohomology~\cite{de2011dualities} instead. Despite these variations in computation, regardless of how the decomposition is obtained, it must obey the following invariants:
   \vspace*{0.8em}
- \begin{enumerate}[leftmargin=2\parindent, align=left, labelsep=-5pt, topsep=0pt,itemsep=-0.25ex,parsep=1.2ex]
-	\item[\hspace{-1.5em}\textbf{ Decomposition Invariants:}]
+  \\
+  \textbf{ Decomposition Invariants:}
+ \begin{enumerate}[labelsep=2pt, topsep=0pt,itemsep=-0.25ex,parsep=1.2ex]
  	\item[I1] $R = D V$ where $D$ is the boundary matrix of the filtration $K$
- 	\item[I2] $V$ is full-rank upper-triangular, and $R$ is \emph{reduced}: if its $i$-th and $j$-th columns are nonzero, then $\mathrm{low}_R(i) \neq \mathrm{low}_R(j)$ 
+ 	\item[I2] $V$ is full-rank upper-triangular, and $R$ is \emph{reduced}: if its $i$-th and $j$-th columns are nonzero, \\ then $\mathrm{low}_R(i) \neq \mathrm{low}_R(j)$ 
  	\end{enumerate} 
  \vspace*{1em}
  If these two invariants are satisfied, then we call the decomposition \emph{valid}. Given any valid $R = D V$ decomposition, then~\cite{zomorodian2005computing}:
@@ -547,7 +558,7 @@ In fact, achieving $O(m)$ complexity per transposition requires a special sparse
 
 Though they are similar, move operations confer a few computational advantages compared to vineyards. Informally, a move operation has two convenient properties:
 \\	
- \begin{enumerate}[leftmargin=2\parindent, align=left, labelsep=-5pt, topsep=0pt,itemsep=-0.25ex,parsep=1.2ex]
+ \begin{enumerate}[labelsep=5pt, topsep=0pt,itemsep=-0.25ex,parsep=1.2ex]
  	\item[M1:] Querying the non-zero status of entries in either $R$ or $V$ occurs once per move.
  	\item[M2:] $R = D V$ is \underline{not} guaranteed to be valid  during the movement of $\sigma_i $ to $ \sigma_j$.
  \end{enumerate} 
@@ -830,9 +841,9 @@ We recall an important claim given in~\cite{busaryev2010tracking} on the effect 
 \noindent The effect of the movement on intermediate simplices depends on the direction of the movement. If $i < j$ (respectively, $j < i$), all simplices at positions $k \in [i+1\;:\;j] $ are shifted down (respectively, up) by $1$. 
 The pseudo-code for the \emph{MoveRight} operation is given in Algorithm~\ref{alg:mr}, and the pseudo-code for the \emph{MoveLeft} is given in Algorithm~\ref{alg:ml}. 
 
-\begin{remark}
-We note that while the pseudocode for \emph{MoveRight} is included in~\cite{busaryev2010tracking}, the one for \emph{MoveLeft} is not, and Algorithm~\ref{alg:ml} is the one we propose and leverage in this paper.
-\end{remark}
+%\begin{remark}
+%We note that while the pseudocode for \emph{MoveRight} is included in~\cite{busaryev2010tracking}, the one for \emph{MoveLeft} is not, and Algorithm~\ref{alg:ml} is the one we propose and leverage in this paper.
+%\end{remark}
 
 
 Although conceptually similar, there is an asymmetry between \emph{MoveRight} and \emph{MoveLeft}. Moving a simplex upwards in the filtration requires removing non-zero entries along several columns of a particular row in $V$ so that the corresponding permutation does not render $V$ non-upper triangular. The key insight of the algorithm presented in~\cite{busaryev2010tracking} is that $R$ can actually be maintained in all but one column during this procedure (by employing the \emph{donor} column). In contrast, moving a simplex to an earlier time in the filtration requires removing non-zero entries along several rows of a particular column of $V$. As before, $R$ stays reduced during this cancellation procedure in all but one column, however the subsequent permutation to $R$ requires reducing a pair of columns which may cascade into a larger chain of column operations to keep $R$ reduced. Since these operations always occur in a left-to-right fashion, its not immediately clear how to apply a donor column kind of concept. Fortunately, we can still separate  these two stages. 
