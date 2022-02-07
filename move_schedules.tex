@@ -1,7 +1,10 @@
-\pdfoutput=1
 % \documentclass[review]{siamart190516} % for SICOMP 
-\documentclass{article} % for arxiv 
-\usepackage{arxiv}
+%\documentclass{article} % for arxiv 
+% \usepackage{arxiv}
+%\pagestyle{plain} % arxiv only 
+\documentclass[sn-mathphys]{sn-jnl}
+
+
 
 %\usepackage[margin=0.75in]{geometry}
 \usepackage{amsmath, amssymb}
@@ -13,27 +16,20 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage{algorithm}
+
+\usepackage{array}
 %\usepackage{algorithm2e}
-%\usepackage{algorithmicx}
-\usepackage[noend]{algpseudocode}
-\usepackage{bbm}
+%%\usepackage{algorithmicx}
+%\usepackage[noend]{algpseudocode}
+%\usepackage{bbm}
 \usepackage{graphicx}
 
-\pagestyle{plain} % arxiv only 
-
-\newcommand\sbullet[1][.5]{\mathbin{\vcenter{\hbox{\scalebox{#1}{$\bullet$}}}}}
 \usepackage{blkarray, bigstrut}
-\usepackage{tikz}
-\usetikzlibrary{arrows.meta, calc, quotes, tikzmark,shapes}
+\newcommand\topstrut[1][1.2ex]{\setlength\bigstrutjot{#1}{\bigstrut[t]}}
+\newcommand\botstrut[1][0.9ex]{\setlength\bigstrutjot{#1}{\bigstrut[b]}}
 
 \usepackage{caption} 
 \captionsetup[table]{skip=4pt, position=above}
-
-\usepackage{array}
-\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
-
-\newcommand\topstrut[1][1.1ex]{\setlength\bigstrutjot{#1}{\bigstrut[t]}}
-\newcommand\botstrut[1][0.95ex]{\setlength\bigstrutjot{#1}{\bigstrut[b]}}
 
 \makeatletter
 \newcommand{\customlabel}[2]{%
@@ -54,7 +50,6 @@
 \newtheorem{proposition}{Proposition}
 \newtheorem{lemma}{Lemma}
 \newtheorem{corollary}{Corollary}
-\newtheorem{proof}{Proof}
 % \newcommand{\CommentX}[1]{\unskip~\%~#1~\%}
 
 %\newsiamremark{remark}{Remark}
@@ -87,7 +82,7 @@
 % Authors: full names plus addresses.
 \author{
 	Matthew Piekenbrock\thanks{Khoury College of Computer Sciences, Northeastern University.}
-	\and Jose A. Perea\thanks{
+	\& Jose A. Perea\thanks{
 	Department of Mathematics and Khoury College of Computer Sciences, Northeastern University.}
 }
 
@@ -105,18 +100,18 @@
 
 % ------  Begin document ------- 
 % https://github.com/peekxc/dart
-\begin{document} 
-
-\maketitle
+\begin{document}
 
 % REQUIRED - "Abstracts must be able to stand alone and so cannot contain citations to the paper's references, equations, etc. .... not exceeding 250 words"
-\begin{abstract}
+%\begin{abstract}
+\abstract{
 	The standard procedure for computing the persistent homology of a filtered simplicial complex is the matrix reduction algorithm. Its output is a particular decomposition of the total boundary matrix, from which the persistence diagrams and generating cycles can be derived. 
 	Persistence diagrams are known to vary continuously with respect to their input, which motivates the algorithmic study of persistence computations for time-varying filtered complexes. Computationally, simulating persistence dynamically can be reduced to maintaining a valid decomposition under adjacent transpositions in the filtration order. 
 	In practice, the quadratic scaling in the number of  such transpositions often makes this maintenance procedure slower than simply computing the decomposition from scratch,  limiting the application of dynamic persistence to relatively small data sets. In this work, we propose a coarser strategy for maintaining the decomposition over a 1-parameter family of filtrations. Our first result is an analysis of a simple linear-time strategy which reduces the number of column operations needed to simulate persistence across a fixed homotopy by at most a factor of 2. We show a modification of this technique which maintains only a sublinear number of valid states, as opposed to a quadratic number of states, and we provide tight lower bounds for this technique.
 	Finally, we present results showing that the decrease in operations to compute diagrams across a family of filtrations is proportional to the difference between the expected quadratic number of states, and the proposed sublinear coarsening.
 	Applications to multi-dimensional persistence and crocker stacks are also presented.
-\end{abstract}
+}
+%\end{abstract}
 
 % Keywords and MSC codes must accompany all articles. A list of the subject classifications can be accessed or searched online in the Annual Index of Mathematical Reviews.
 % REQUIRED
@@ -129,6 +124,9 @@
 %\begin{AMS}
 %  68T09, 55N31, 62R40
 %\end{AMS}
+\pacs[MSC Classification]{68T09, 55N31, 62R40}
+
+\maketitle
 
 \section{Introduction} 
 \subsection{Overview}\label{sec:overview} 
@@ -222,8 +220,6 @@ In Section \ref{sec:move_schedules} we introduce our move schedules  and provide
 In Section \ref{sec:results} we present applications of the proposed method. 
 In particular, to the computation of crocker stacks from flock simulations, and to 2-dimensional persistence on the Mumford data set of image patches from natural images. 
 In Section \ref{sec:conclusion} we conclude the paper by discussing other possible applications and future work. 
-We also include an appendix which introduces certain topics in more detail, such as the vineyards algorithm itself, for readers who may be unfamiliar but would like a more in-depth understanding.
-
 
 %\section*{Outline}
 %\begin{outline}[enumerate]
@@ -286,7 +282,7 @@ In practice, filtrations often arise from triangulations parameterized by geomet
 	\mathrm{Rips_\epsilon}(X) = \{ S \subseteq X : S \neq \emptyset \;\mbox{ and }\;\mathrm{diam}(S) \leq \epsilon \}
 \end{equation} 
 The corresponding filtration is called the \emph{Vietoris-Rips} (VR) filtration, indexed by $I = \mathbb{R}$. 
-A VR filtration indexed over $\mathbb{R}$  can be condensed to an essential filtration indexed over the set of pairwise distances $\{\, d(x,x') \; | \; x,x' \in X \, \}$, 
+A VR filtration indexed over $\mathbb{R}$  can be condensed to an essential filtration indexed over the set of pairwise distances $\{\, d(x,x') \; \mid \; x,x' \in X \, \}$, 
 which can then be further reindexed to an essential simplexwise filtration by extending a total order of $X$ to its power set---e.g., 
 using the lexicographical ordering. 
 %This is often necessary in the computational setting, where it is easier to work with a filtration with $m$ simplices indexed over $[m]$ instead of $\mathbb{R}$. 
@@ -358,7 +354,7 @@ Using $\mathbb{Z}_2$ coefficients and homology in dimension 1 to simplify the pr
 		\begin{block}{c[ccc]}
   		u \kern\rowsp  & \; 1 &    &  1 \; \topstrut \\
   		v \kern\rowsp & \;     &  1 & 1 \; \\
-  		w \kern\rowsp & \; 1 &  \fbox{1} &    \; \botstrut \\
+  		w \kern\rowsp & \; 1 &  \underline{1} &    \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	\; , \;
@@ -375,7 +371,7 @@ Using $\mathbb{Z}_2$ coefficients and homology in dimension 1 to simplify the pr
 	\kern-0.2em & a & b & c  \\
 		\begin{block}{c[ccc]}
   		u \kern\rowsp  & \; 1 & 1 & 1 \; \topstrut \\
-  		v \kern\rowsp & \;     & 1 & \fbox{1} \; \\
+  		v \kern\rowsp & \;     & 1 & \underline{1} \; \\
   		w \kern\rowsp & \; 1 &    &    \; \botstrut \\
 		\end{block}
 	\end{blockarray}
@@ -472,31 +468,59 @@ The goal of the vineyards algorithm can now be described explicitly: to prescrib
 	\begin{blockarray}{cccc}{R_1}
 	 \kern-0.2em & a & b & c  \\
 		\begin{block}{c[ccc]}
-  		u \kern\rowsp  & \; 1 & 1 &  \; \topstrut \\
-  		v \kern\rowsp & \;  & 1 &  \; \\
-  		w \kern\rowsp & \; 1 &  &  \; \botstrut \\  
+  		u \kern\rowsp  & \; 1 & 1 &  \hphantom{1} \; \topstrut \\
+  		v \kern\rowsp & \;  & 1 &  \hphantom{1} \; \\
+  		w \kern\rowsp & \; 1 &  &  \hphantom{1} \; \botstrut \\  
 		\end{block}
 	\end{blockarray}
-	\,\,, 
+	\xrightarrow{S_{1}^2} 
+	\begin{blockarray}{cccc}{}
+	\kern-0.2em & a & b & c  \\
+		\begin{block}{c[ccc]}
+  		 & \; 1 &  &  \hphantom{1} \; \topstrut \\
+  		 & \;  & 1 &  \hphantom{1} \; \\
+  		 & \; 1 & 1 & \hphantom{1} \; \botstrut \\
+		\end{block}
+	\end{blockarray}
+		\xrightarrow{P}
+	\hspace{-0.2em}
+	\begin{blockarray}{cccc}{}
+	\kern-0.2em & b & a & c  \\
+		\begin{block}{c[ccc]}
+  		& \;  & 1 &  \hphantom{1} \; \topstrut \\
+  		& \; 1 &  &  \hphantom{1} \; \\
+  		& \; 1 & \underline{1} &  \hphantom{1} \; \botstrut \\
+		\end{block}
+	\end{blockarray}
+	\xrightarrow{S_1^2}
+	\hspace{-0.1em}
+	\begin{blockarray}{cccc}{}
+	\kern-0.2em & b & a & c  \\
+		\begin{block}{c[ccc]}
+  		u \kern\rowsp & \;  & 1 &  \hphantom{1} \; \topstrut \\
+  		v \kern\rowsp & \; 1 & 1 &  \hphantom{1} \; \\
+  		w \kern\rowsp & \; 1 &  &  \hphantom{1} \; \botstrut \\
+		\end{block}
+	\end{blockarray}
+\end{displaymath}
+\vspace{-3.0em}
+% Start V 
+\begin{displaymath}	
+	\def\rowsp{0.4em}
+	\def\arraystretch{0.95}
+	\makeatletter\setlength\BA@colsep{1.2pt}\makeatother
+	%
 	\begin{blockarray}{cccc}{V_1}
 	\kern-0.2em & a & b & c  \\
 		\begin{block}{c[ccc]}
-        a \kern\rowsp  & \; 1 &  \fbox{1} & 1 \; \topstrut \\
+        a \kern\rowsp  & \; 1 &  \underline{1} & 1 \; \topstrut \\
   		b \kern\rowsp & \;  & 1 & 1 \; \\
   		c \kern\rowsp & \;  &  & 1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	\xrightarrow{S_{1}^2} 
 	\hspace{-0.1em}
-	\begin{blockarray}{cccc}{}
-	\kern-0.2em & a & b & c  \\
-		\begin{block}{c[ccc]}
-  		 & \; 1 &  &  \; \topstrut \\
-  		 & \;  & 1 &  \; \\
-  		 & \; 1 & 1 & \; \botstrut \\
-		\end{block}
-	\end{blockarray}
-	\,\,, 
+	\, \,
 	\begin{blockarray}{cccc}{}
 	\kern-0.2em & a & b & c  \\
 		\begin{block}{c[ccc]}
@@ -506,16 +530,6 @@ The goal of the vineyards algorithm can now be described explicitly: to prescrib
 		\end{block}
 	\end{blockarray}
 	\xrightarrow{P}
-	\hspace{-0.2em}
-	\begin{blockarray}{cccc}{}
-	\kern-0.2em & b & a & c  \\
-		\begin{block}{c[ccc]}
-  		& \;  & 1 &  \; \topstrut \\
-  		& \; 1 &  &  \; \\
-  		& \; 1 & \fbox{1} &  \; \botstrut \\
-		\end{block}
-	\end{blockarray}
-	\,\,, 
 	\begin{blockarray}{cccc}{}
 	\kern-0.2em & b & a & c  \\
 		\begin{block}{c[ccc]}
@@ -525,25 +539,95 @@ The goal of the vineyards algorithm can now be described explicitly: to prescrib
 		\end{block}
 	\end{blockarray}
 	\xrightarrow{S_1^2}
-	\hspace{-0.1em}
 	\begin{blockarray}{cccc}{}
 	\kern-0.2em & b & a & c  \\
 		\begin{block}{c[ccc]}
-  		u \kern\rowsp  & \;  & 1 &  \; \topstrut \\
-  		v \kern\rowsp & \; 1 & 1 &  \; \\
-  		w \kern\rowsp & \; 1 &  &  \; \botstrut \\
-		\end{block}
-	\end{blockarray}
-	\,\,,
-	\begin{blockarray}{cccc}{}
-	\kern-0.2em & b & a & c  \\
-		\begin{block}{c[ccc]}
-  		  & \; 1 & 1 & 1 \; \topstrut \\
-  		 & \; & 1 & 1 \; \\
-  		 & \;  &  & 1 \; \botstrut \\
+  		 b \kern\rowsp & \; 1 & 1 & 1 \; \topstrut \\
+  		 a \kern\rowsp & \; & 1 & 1 \; \\
+  		 c \kern\rowsp & \;  &  & 1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 \end{displaymath}
+%\begin{displaymath}
+%	\def\rowsp{0.4em}
+%	\def\arraystretch{0.95}
+%	\makeatletter\setlength\BA@colsep{1.2pt}\makeatother
+%	%
+%	\begin{blockarray}{cccc}{R_1}
+%	 \kern-0.2em & a & b & c  \\
+%		\begin{block}{c[ccc]}
+%  		u \kern\rowsp  & \; 1 & 1 &  \; \topstrut \\
+%  		v \kern\rowsp & \;  & 1 &  \; \\
+%  		w \kern\rowsp & \; 1 &  &  \; \botstrut \\  
+%		\end{block}
+%	\end{blockarray}
+%	\,\,, 
+%	\begin{blockarray}{cccc}{V_1}
+%	\kern-0.2em & a & b & c  \\
+%		\begin{block}{c[ccc]}
+%        a \kern\rowsp  & \; 1 &  \fbox{1} & 1 \; \topstrut \\
+%  		b \kern\rowsp & \;  & 1 & 1 \; \\
+%  		c \kern\rowsp & \;  &  & 1 \; \botstrut \\
+%		\end{block}
+%	\end{blockarray}
+%	\xrightarrow{S_{1}^2} 
+%	\hspace{-0.1em}
+%	\begin{blockarray}{cccc}{}
+%	\kern-0.2em & a & b & c  \\
+%		\begin{block}{c[ccc]}
+%  		 & \; 1 &  &  \; \topstrut \\
+%  		 & \;  & 1 &  \; \\
+%  		 & \; 1 & 1 & \; \botstrut \\
+%		\end{block}
+%	\end{blockarray}
+%	\,\,, 
+%	\begin{blockarray}{cccc}{}
+%	\kern-0.2em & a & b & c  \\
+%		\begin{block}{c[ccc]}
+%  		 & \; 1 &  & 1 \; \topstrut \\
+%  		 & \;  & 1 & 1 \; \\
+%  		 & \;  &  & 1 \; \botstrut \\
+%		\end{block}
+%	\end{blockarray}
+%	\xrightarrow{P}
+%	\hspace{-0.2em}
+%	\begin{blockarray}{cccc}{}
+%	\kern-0.2em & b & a & c  \\
+%		\begin{block}{c[ccc]}
+%  		& \;  & 1 &  \; \topstrut \\
+%  		& \; 1 &  &  \; \\
+%  		& \; 1 & \fbox{1} &  \; \botstrut \\
+%		\end{block}
+%	\end{blockarray}
+%	\,\,, 
+%	\begin{blockarray}{cccc}{}
+%	\kern-0.2em & b & a & c  \\
+%		\begin{block}{c[ccc]}
+%  		& \; 1 &  & 1 \; \topstrut \\
+%  		& \;  & 1 & 1 \; \\
+%  		& \;  &  & 1 \; \botstrut \\
+%		\end{block}
+%	\end{blockarray}
+%	\xrightarrow{S_1^2}
+%	\hspace{-0.1em}
+%	\begin{blockarray}{cccc}{}
+%	\kern-0.2em & b & a & c  \\
+%		\begin{block}{c[ccc]}
+%  		u \kern\rowsp  & \;  & 1 &  \; \topstrut \\
+%  		v \kern\rowsp & \; 1 & 1 &  \; \\
+%  		w \kern\rowsp & \; 1 &  &  \; \botstrut \\
+%		\end{block}
+%	\end{blockarray}
+%	\,\,,
+%	\begin{blockarray}{cccc}{}
+%	\kern-0.2em & b & a & c  \\
+%		\begin{block}{c[ccc]}
+%  		  & \; 1 & 1 & 1 \; \topstrut \\
+%  		 & \; & 1 & 1 \; \\
+%  		 & \;  &  & 1 \; \botstrut \\
+%		\end{block}
+%	\end{blockarray}
+%\end{displaymath}
 %Prior to performing the exchange, observe that that the bold entry in $V_1$ would render $V_1$ non-upper triangular after the exchange. This entry is removed by a left-to-right column operation, given by applying the $S_1^{2}$ on the right to $R_1$ and $V_1$. After this operation, the permutation may be safely applied to $V_1$. In this case, both before and after the permutation, $R_1$ is rendered non-reduced, requiring another column operation to restore the decomposition to a valid state.
 Starting with a valid reduction $R = DV$ and prior to performing the exchange, observe that that the highlighted entry in $V_1$ would render $V_1$ non-upper triangular after the exchange. This entry is removed by a left-to-right column operation, given by applying the $S_1^{2}$ on the right to $R_1$ and $V_1$. After this operation, the permutation may be safely applied to $V_1$. Both before and after the permutation $P$, $R_1$ is rendered non-reduced, requiring another column operation to restore the decomposition to a valid state.
 
@@ -551,7 +635,7 @@ Starting with a valid reduction $R = DV$ and prior to performing the exchange, o
  Informally, since column operations are the largest complexity operations needed and each column can have potentially $m$ entries, the complexity of vineyards is $O(m)$ per transposition. 
  However, there are a number of subtleties involved in this statement. 
  The first  is that both the $V$ and $R$ matrices tend to be quite sparse, and thus column and row operations rarely require $m$ operations---in fact, as a rule of thumb, most transpositions require no column operations~\cite{edelsbrunner2000topological}. A second subtlety, due to the necessity of sparse matrix data structures, is that querying the non-zero status of any particular entry typically takes $O(\log m)$ time. This hidden cost may seem minor, however, the quadratic scaling of the number of transpositions vineyards typically requires makes this cost non-trivial.   
-In fact, achieving $O(m)$ complexity per transposition requires a special sparse matrix representation that allows swapping any two rows and columns in $O(1)$---see the appendix for more details and discussion. Finally, note the constant factor associated with the stated complexity: inspection of the individual cases of the algorihtm from~\cite{cohen2006vines} shows that there are at most two $O(m)$ operations, on both $R$ and $V$, that may be needed for any single transposition.
+In fact, achieving $O(m)$ complexity per transposition requires a special sparse matrix representation that allows swapping any two rows and columns in $O(1)$, as described in~\cite{cohen2006vines}. Finally, note the constant factor associated with the stated complexity: inspection of the individual cases of the algorithm from~\cite{cohen2006vines} shows that there are at most two $O(m)$ operations, on both $R$ and $V$, that may be needed for any single transposition.
  
  % As a rule of thumb, due to the sparsity of both $R$ and $V$, most transpositions actually require no $O(m)$ operations. For example, exchanging two simplices of differing dimensions never requires column operations. A simple analysis given by Chen et al.~\cite{chen2013output} quantifies the order of magnitude we can expect the sparsity of these matrices to be.  
 
@@ -560,7 +644,7 @@ In fact, achieving $O(m)$ complexity per transposition requires a special sparse
 Though they are similar, move operations confer a few computational advantages compared to vineyards. Informally, a move operation has two convenient properties:
 \\	
  \begin{enumerate}[labelsep=5pt, topsep=0pt,itemsep=-0.25ex,parsep=1.2ex]
- 	\item[M1:] Querying the non-zero status of entries in either $R$ or $V$ occurs once per move.
+ 	\item[M1:] Querying the non-zero status of entries in $R$ or $V$ occurs once per move.
  	\item[M2:] $R = D V$ is \underline{not} guaranteed to be valid  during the movement of $\sigma_i $ to $ \sigma_j$.
  \end{enumerate} 
  \vspace*{1em}
@@ -576,8 +660,8 @@ Indeed, if one has a pair of filtrations $(K_0, K_1)$ each with $m$ simplices, a
 \noindent \textbf{Example:} We continue the example used in sections~\ref{sec:vineyards} and~\ref{sec:reduction} to illustrate moves. Consider moving the edge $a$ to the position of edge $c$ in the filtration. The donor columns introduced in~\cite{busaryev2010tracking} are shown on the left side of each matrix. Note that using vineyards, the equivalent permutation to the decomposition would require $4$ column operations on both $R_1$ and $V_1$, respectively, whereas a single move operation accomplishes this permutation using only $2$ column operations per matrix. 
 \begin{displaymath}
 	\def\rowsp{0.4em}
-	\def\arraystretch{0.95}
-	\makeatletter\setlength\BA@colsep{1.2pt}\makeatother
+	\def\arraystretch{0.60}
+	\makeatletter\setlength\BA@colsep{0.9pt}\makeatother
 	%
 	\begin{blockarray}{cc}{d_R}
 	\kern-0.2em & a \\
@@ -588,12 +672,12 @@ Indeed, if one has a pair of filtrations $(K_0, K_1)$ each with $m$ simplices, a
 		\end{block}
 	\end{blockarray}
 	\; \;
-	\begin{blockarray}{cccc}{R_1}
+	\begin{blockarray}{cccc}{R}
 	 \kern-0.2em & a & b & c  \\
 		\begin{block}{c[ccc]}
-  		u \kern \rowsp & \; 1 & 1 &  \; \topstrut \\
-  		v \kern \rowsp & \;  & 1 &  \; \\
-  		w \kern \rowsp & \; 1 &  &  \; \botstrut \\
+  		u \kern \rowsp & \; 1 & 1 &  \hphantom{1} \; \topstrut \\
+  		v \kern \rowsp & \;  & 1 &  \hphantom{1} \; \\
+  		w \kern \rowsp & \; 1 &  &  \hphantom{1} \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	%
@@ -611,9 +695,9 @@ Indeed, if one has a pair of filtrations $(K_0, K_1)$ each with $m$ simplices, a
 \begin{blockarray}{cccc}{}
 	\kern-0.2em & a & b & c  \\
 		\begin{block}{c[ccc]}
-  		  & \; 1 &    &  \; \topstrut \\
-  		  & \;    & 1 &  \; \\
-  		 & \; 1 & \fbox{1} &  \; \botstrut \\
+  		  & \; 1 &    &  \hphantom{1} \; \topstrut \\
+  		  & \;    & 1 &  \hphantom{1} \; \\
+  		 & \; 1 & \underline{1} &  \hphantom{1} \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	%
@@ -633,13 +717,13 @@ Indeed, if one has a pair of filtrations $(K_0, K_1)$ each with $m$ simplices, a
 		\begin{block}{c[ccc]}
   		  & \; 1   &    &   1  \; \topstrut \\
   		 & \;       &  1  &  1  \; \\
-  		 & \; 1   &   \fbox{1}   &     \; \botstrut \\
+  		 & \; 1   &   \underline{1}   &     \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 %
 \; \xrightarrow{P} 
 \begin{blockarray}{cc}{}
-	\kern-0.2em & c \\
+	\kern-0.2em & a \\
 		\begin{block}{c[c]}
   		  & \; \hphantom{1} \; \topstrut \\
   		 & \; \hphantom{1} \; \\
@@ -652,45 +736,45 @@ Indeed, if one has a pair of filtrations $(K_0, K_1)$ each with $m$ simplices, a
 		\begin{block}{c[ccc]}
   		  & \;  & 1 &  1\; \topstrut \\
   		 & \; 1 & 1 &  \; \\
-  		 & \; 1 &  & \fbox{1} \; \botstrut \\
+  		 & \; 1 &  & \underline{1} \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 %
-\; \xrightarrow{d_R} 
-\begin{blockarray}{cccc}{R_1}
+\xrightarrow{d_R} 
+\begin{blockarray}{cccc}
 \kern-0.2em & b & c & a  \\
 	\begin{block}{c[ccc]}
-		u \kern \rowsp & \;  & 1 &  \; \topstrut \\
-		v \kern \rowsp & \; 1 & 1 &  \; \\
-		w \kern \rowsp & \; 1 &  &  \; \botstrut \\
+		& \;  & 1 &  \hphantom{1} \; \topstrut \\
+		& \; 1 & 1 &  \hphantom{1} \; \\
+		& \; 1 &  &  \hphantom{1} \; \botstrut \\
 	\end{block}
 	% \undermat{B}{ & & }  
 \end{blockarray}
 \end{displaymath}
 
-\vspace{-1.0em}
+\vspace{-3.0em}
 
-% Start V example 
+% start V example (1) 
 \begin{displaymath}
 	\def\rowsp{0.4em}
-	\def\arraystretch{0.95}
-	\makeatletter\setlength\BA@colsep{1.2pt}\makeatother
+	\def\arraystretch{0.60}
+	\makeatletter\setlength\BA@colsep{0.9pt}\makeatother
 	%
 	\begin{blockarray}{cc}{d_V}
 	\kern-0.2em & a \\
 		\begin{block}{c[c]}
-  		 & \; 1 \; \topstrut \\
-  		& \;  \; \\
-  		& \;  \; \botstrut \\
+  		a \kern \rowsp & \; 1 \; \topstrut \\
+  		b \kern \rowsp & \;  \; \\
+  		c \kern \rowsp & \;  \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	\; \;
-	\begin{blockarray}{cccc}{V_1}
+	\begin{blockarray}{cccc}{V}
 	 \kern-0.2em & a & b & c  \\
 		\begin{block}{c[ccc]}
-  		 & \; 1 & \fbox{1} &  \fbox{1}\; \topstrut \\
-  		& \;  & 1 &  1\; \\
-  		& \; &  & 1 \; \botstrut \\
+  		a \kern \rowsp & \; 1 & \underline{1} & \underline{1} \; \topstrut \\
+  		b \kern \rowsp & \;  & 1 & 1 \; \\
+  		c \kern \rowsp & \;  &  & 1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	%
@@ -699,18 +783,18 @@ Indeed, if one has a pair of filtrations $(K_0, K_1)$ each with $m$ simplices, a
 \begin{blockarray}{cc}{}
 	\kern-0.2em & b \\
 		\begin{block}{c[c]}
-  		 & \; 1 \; \topstrut \\
-  		& \;  1 \; \\
-  		& \; \; \botstrut \\
+  		  & \; 1 \; \topstrut \\
+  		 & \;  1 \; \\
+  		 & \; \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	\; \;
 \begin{blockarray}{cccc}{}
-	 \kern-0.2em & a & b & c  \\
+	\kern-0.2em & a & b & c  \\
 		\begin{block}{c[ccc]}
-  		 & \; 1 & &  \fbox{1}\; \topstrut \\
-  		& \;  & 1 &  1\; \\
-  		& \; &   & 1 \; \botstrut \\
+  		  & \; 1 &    & \underline{1} \; \topstrut \\
+  		  & \;    & 1 &  1 \; \\
+  		 & \;  & &  1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 	%
@@ -719,51 +803,50 @@ Indeed, if one has a pair of filtrations $(K_0, K_1)$ each with $m$ simplices, a
 	\begin{blockarray}{cc}{}
 	\kern-0.2em & c \\
 		\begin{block}{c[c]}
-  		 & \; 1 \; \topstrut \\
-  		& \;  1 \; \\
-  		& \; 1 \; \botstrut \\
+  		  & \; 1 \; \topstrut \\
+  		 & \; 1 \; \\
+  		 & \; 1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
-	\; \;
+	\; \; 
 	\begin{blockarray}{cccc}{}
 	\kern-0.2em & a & b &  c \\
 		\begin{block}{c[ccc]}
-  		 & \; 1 & &   \; \topstrut \\
-  		& \;  & 1 &   \; \\
-  		& \;  &   & 1 \; \botstrut \\
+  		  & \; 1   &    &    \; \topstrut \\
+  		 & \;   &  1  &   \; \\
+  		 & \;   &   &  1   \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 %
-\; \xrightarrow{P} \\
-% 
+\; \xrightarrow{P} 
 \begin{blockarray}{cc}{}
 	\kern-0.2em & a \\
 		\begin{block}{c[c]}
-  		 & \; 1 \; \topstrut \\
-  		& \;  1 \; \\
-  		& \; 1 \; \botstrut \\
+  		  & \; 1 \; \topstrut \\
+  		 & \; 1 \; \\
+  		 & \; 1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 \; \;
 \begin{blockarray}{cccc}{}
 	\kern-0.2em & b & c & a  \\
 		\begin{block}{c[ccc]}
-  		 & \; 1 & &\; \topstrut \\
-  		& \;  & 1 &  \; \\
-  		& \; &  & 1 \; \botstrut \\
+  		  & \; 1 &  &  \; \topstrut \\
+  		 & \;  & 1 &  \; \\
+  		 & \; &  & 1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
 %
-\; \xrightarrow{d_V}
-% 
-	\begin{blockarray}{cccc}{V_1}
-	\kern-0.2em & b & c & a  \\
-		\begin{block}{c[ccc]}
-  		b \kern \rowsp & \; 1 & & 1 \; \topstrut \\
-  		c \kern \rowsp & \; & 1 &  1 \; \\
-  		a \kern \rowsp & \; &  & 1  \; \botstrut \\
-		\end{block}
-	\end{blockarray}
+\xrightarrow{d_V} 
+\begin{blockarray}{cccc}
+\kern-0.2em & b & c & a  \\
+	\begin{block}{c[ccc]}
+		& \;  1 & &  1 \; \topstrut \\
+		& \;  & 1 &  1\; \\
+		& \; &  & 1 \; \botstrut \\
+	\end{block}
+	% \undermat{B}{ & & }  
+\end{blockarray}
 \end{displaymath}
 
 \begin{algorithm}[!htb]
@@ -912,14 +995,14 @@ In the vineyards (i.e., continuous time) case, we are given a homotopy $F : K \t
 The choice of homotopy $F$ completely determines the number of adjacent transpositions that transform $K_0$ into $K_1$ via $F$, so to get a meaningful bound we must know something about $F$. 
 If we assume that the curves $\tau \mapsto F(\cdot, \tau)$  are in general position in $[0,1]\times \mathbb{R}$, and that each pair of curves cross  at most once, then the set of adjacent transpositions $S_F$ that $F$ decomposes into is given by the pairs of simplices in $K$ with changes in their relative ordering:
 \begin{align}\label{eq:sf_schedule}
-	S_F &= \{ (i,j) \, | \, f_0(\sigma_i) < f_0(\sigma_j) \mbox{ and }  f_1(\sigma_i) > f_1(\sigma_j) \quad  \; i,j \in [m] \} \\
+	S_F &= \{ (i,j) \, \mid \, f_0(\sigma_i) < f_0(\sigma_j) \mbox{ and }  f_1(\sigma_i) > f_1(\sigma_j) \quad  \; i,j \in [m] \} \\
 	&= \{ s_1, s_2, \dots, s_k \}
 \end{align}
 %We assume, without loss of generality, that the underlying complexes $K_0$ and $K_1$ have the same cardinality. 
 %Since we deal exclusively with essential filtrations, we may think of $K_1$ as simply a reordering of $K_0$ (or vice versa). 
 Let $p = [m]$ and let $q = \mathrm{Im}\,f^\ast$, where $f^\ast : [m] \to [m]$ is the one-to-one correspondence induced by the reindexing bijection $f: K_0 \to K_1$. Then $S_F$ is given by the inversions between $p$ and $q$:
 \[S_F = 
-\mathrm{Inv}(p, q) = \{ \, (i,j) \, | \, p(i) < p(j) \mbox{ and } q(i) > q(j)  \quad \; i,j \in [m]\, \}
+\mathrm{Inv}(p, q) = \{ \, (i,j) \, \mid \, p(i) < p(j) \mbox{ and } q(i) > q(j)  \quad \; i,j \in [m]\, \}
 \]
 The cardinality of $  S_F $ is exactly the \emph{Kendall}-$\tau$ distance $K_\tau(p,q)$ between $p$ and $q$: 
 \begin{equation}\label{eq:kendall_dist}
@@ -997,8 +1080,8 @@ The choice of $\Sigma$ defines the universe of operations and thus the type of e
 Many types of edit distances can be described succinctly. 
 Let $\beta(i,j,k,l)$ with $1 \leq i < j \leq k < l \leq m$ denote the permutation that exchanges the two closed intervals given by $i, j-1$ and $k,l-1$:
 \[
-\setlength\arraycolsep{2.3pt}
-\scalefont{1.0}{
+\setlength\arraycolsep{1.8pt}
+\scalefont{0.90}{
 \setcounter{MaxMatrixCols}{20}
 \left (
 \begin{array}{*3c|*4c|*4c|*4c|*{5}c } 
@@ -1023,7 +1106,8 @@ For example, while sorting by transpositions and reversals is NP-hard, and sorti
 
 Here we consider sorting by moves. In terms of permutations, a permutation $m_{ij}$ that moves $i$ to $j$ in $[m]$, for $i < j$, corresponds to: 
 \[
-\scalefont{1.0}{
+\setlength\arraycolsep{1.8pt}
+\scalefont{0.90}{
 \setcounter{MaxMatrixCols}{20}
 \left (
 \begin{array}{*3c | *5c | *{3}c } 
@@ -1169,9 +1253,9 @@ By definition, a subsequence $\mathcal{L}$ of symbols common to both $p$ and $q$
  
 \subsection{Minimizing schedule cost}\label{sec:schedule_cost}
 \subsubsection{Motivation}
-The results from the previous section yield a sufficient algorithm for generating move schedules of minimal cardinality: simply compute a $\mathrm{LCS}(K_0, K_1)$ for a pair $(K_0, K_1)$ and fix an order of simplices in the set $\mathrm{LCS}(K_0, K_1) \smallsetminus K_0$ to move. Any sequence of moves which increases the LCS on each move is guaranteed to have size $m - \lvert \mathrm{LCS}(K_0, K_1) \rvert$, and the reduction to the permutation edit distance problem ensures this size is optimal. 
-However, like in the vineyards algorithm, certain pairs of simplices cost more to exchange depending on whether they are critical pairs in the sense described in~\cite{cohen2006vines}. 
-This small variation in cost-per-transposition induces a large variability in the cost of randomly generated schedules, which is computationally undesirable in practice. Ideally, we would like to generate a schedule which not only is minimal in size, but is also minimal in terms of the column operations it requires. 
+The results from the previous section yield a sufficient algorithm for generating move schedules of minimal cardinality: any schedule of moves $S$ sorting $K_0 \mapsto K_1$ above is guaranteed to have size $\lvert S \rvert = m - \lvert \mathrm{LCS}(K_0, K_1) \rvert$, and the reduction to the permutation edit distance problem ensures this size is optimal. 
+However, as with the vineyards algorithm, certain pairs of simplices cost more to exchange depending on whether they are critical pairs in the sense described in~\cite{cohen2006vines}, resulting in a large variability in the cost of randomly generated schedules. This variability is undesirable in practice: we would like to generate a schedule which not only small in size, but is also efficient in terms of its required column operations. 
+
 %Formally, given two permutations $p, q \in S_m$, let $S = ( s_1, s_2, \dots, s_d )$ denote a sorting such that $S \circ p = q$. 
 %The example given in section~\ref{sec:greedy} shows all (minimal size) $d!$ possible choices of $S$ for a fixed pair of permutations and choice of $\mathrm{LCS}(p,q)$. 
 %Let $\nu = \mathrm{LCS}(p,q)$ and let $\sigma \in S_d$ denote a choice of ordering for the symbols in  $p \smallsetminus \nu$, such that $S(\sigma)$ denotes a schedule generated from this ordering. Rephrasing from the description above, we would like to achieve something similar to the following objective: 
@@ -1219,7 +1303,7 @@ Towards minimizing the number of column operations a schedule requires, it is na
 $$ K_0 = \{ {\color{red} a \; b \; c \; d \; u \; v \; w} \; x \; y \; z  \} = { {\color{red} 1 \; 2 \; 3 \; 4 \; 5 \; 6 \; 7 } \; 8 \; 9 \; 10 } $$
 $$ K_1 = \{ {\color{red} a \; b \; c \; d } \; x \; y \; z \; {\color{red} u \; v \; w } \}  = { {\color{red} 1 \; 2 \; 3 \; 4 } \;8 \; 9 \; 10 \; {\color{red} 5 \; 6 \; 7 } }$$
 The subset of the filtration which corresponds to the simplices which lie in the LCS between these permutations is colored in red. For this example, the permutation edit distance is 
-$d = m - |\mathrm{LCS}(K_0, K_1)|$ implies that exactly $3$ moves are needed to apply the mapping $K_0 \mapsto K_1$. There are six possible valid schedules of moves: 
+$d = m - \lvert \mathrm{LCS}(K_0, K_1) \rvert$ implies that exactly $3$ moves are needed to apply the mapping $K_0 \mapsto K_1$. There are six possible valid schedules of moves: 
 \begin{alignat*}{3}
 	S_1 = m_{x u}, m_{y u}, m_{z u} \quad & S_3 = m_{y u}, m_{x y}, m_{z u} \quad  & S_5 = m_{z u}, m_{x z}, m_{y z} \\
 	S_2 = m_{x u}, m_{z u}, m_{y z} \quad  & S_4 = m_{y u}, m_{z u}, m_{x y} \quad  & S_6 = m_{z u}, m_{y z}, m_{x z} 
@@ -1228,9 +1312,9 @@ where the notation $m_{x y}$ represents the move permutation that moves symbol $
 \begin{table}[h]
 \caption{Move schedule costs}
 \centering
-\begin{tabular}{ |P{0.4cm}|P{0.8cm}|P{0.8cm}|P{0.8cm}|P{0.8cm}|  }
+\begin{tabular}{ m{0.4cm} m{0.8cm} m{0.8cm} m{0.8cm} m{0.8cm}  }
  \hline
- \multicolumn{5}{|c|}{Cost of each permutation} \\
+ \multicolumn{5}{c}{Cost of each permutation} \\
  \hline
  & 1st & 2nd & 3rd & Total\\
  \hline
@@ -1691,11 +1775,11 @@ Finally, we record the number of column reductions needed to compute the fibered
 \begin{table}[h]
 \caption{Cost to computing $\mathcal{T}$ for various coarsening choices of $\beta(M)$.}\label{tab:barcode_templates}
 \centering
-\begin{tabular}{ |P{1.6cm}|P{1.6cm}|P{1.2cm}|P{2.8cm}|P{2.4cm}|}
+\begin{tabular}{ m{1.6cm} m{1.6cm} m{1.2cm} m{2.8cm} m{2.4cm} }
  \hline
  %\multicolumn{7}{|c|}{ Size and cost of constructing $\mathcal{A}^\ast(M)$ } \\
  %\hline
-  \multicolumn{1}{|c|}{ $\beta(M)$ } & \multicolumn{1}{|c|}{$\mathcal{A}(M)$ } & \multicolumn{3}{c|}{ Column reductions / Permutations } \\
+  \multicolumn{1}{|c|}{ $\beta(M)$ } & \multicolumn{1}{|c|}{$\mathcal{A}(M)$ } & \multicolumn{3}{c|}{ Col. Reductions / Permutations } \\
  \hline
 \small{Coarsening} & \# 2-cells & \texttt{phCol} & Vineyards / $d_{K}$ & Moves / $d_{\text{LCS}}$ \\
  \hline
@@ -1950,67 +2034,57 @@ Moving forward, our results suggest there are many aspects of computing persiste
 
 % REQUIRED: siamplain format
 %\bibliographystyle{siamplain}
-\bibliographystyle{unsrt}
+%\bibliographystyle{unsrt}
 \bibliography{move_schedules}
 
 
 
-\appendix 
-\section{}\label{sec:appendix}
-\subsection*{Vineyard Algorithm}
-\begin{algorithm}[!htb]
-	\caption{Vineyards: Tranposition Framework}\label{alg:tr}
-	\setstretch{1.15}
-	\begin{algorithmic}[1]
-		\Require Matrices $R, V$ satisfying $R = D V$, $1 \leq i \leq m - 1$
-		\Ensure Output $(R, V)$ maintains the decomposition invariants
-        \Function{Transpose}{$R$, $V$, $i$}
-            \State $\mathrm{pos} \gets $ columns satisfying $\mathrm{col}_R = 0$
-            \If {$\mathrm{pos}[i]$ \textbf{and} $\mathrm{pos}[i+1]$}
-	            \If{$V[i,i+1] \neq 0$}
-            		\State $\mathrm{col}_V(i+1)  \mathrel{+}= \mathrm{col}_V(i)$	
-            	\EndIf
-            	\If {$\exists \; k, l$ s.t. $\mathrm{low}_R(k) = i, \mathrm{low}_R(l) = i+1$ and $R[i,l] \neq 0$} \Comment{O(m)}
-            		\If {$k < l$}
-            			\State \Return $(\, R, \, V \,) \gets (\, PRPS_k^l, \, PVP S_k^l \,)$
-            		\Else
-            			\State \Return $(\, R, \, V \,) \gets  (\, PRPS_l^k, \, PVP S_l^k\,) $
-            		\EndIf
-            	\EndIf 
-            \ElsIf{$!\mathrm{pos}[i]$ \textbf{and} $!\mathrm{pos}[i+1]$}
-            	\If{$V[i,i+1] \neq 0$}\Comment{O(m)}
-            		\If{$\mathrm{low}_R(i) < \mathrm{low}_R(i+1)$}
-            			\State \Return  $(\, R, V \,) \gets (P R S^{i+1}_i P, \, P V S^{i+1}_i  P) $
-            		\Else 
-            			\State \Return  $(\, R, V \,) \gets (P R S^{i+1}_i P S^{i+1}_i, \, P V S^{i+1}_i P S^{i+1}_i ) $
-            		\EndIf 
-            	\EndIf
-          	\ElsIf{$!\mathrm{pos}[i]$ \textbf{and} $\mathrm{pos}[i+1]$} 
-            	\If{$V[i,i+1] \neq 0$}\Comment{O(m)}
-            		\State \Return  $(\, R, V \,) \gets (P R S^{i+1}_i P S^{i+1}_i, \, P V S^{i+1}_i P S^{i+1}_i ) $
-            	\EndIf
-            \ElsIf{$\mathrm{pos}[i]$ \textbf{and} $!\mathrm{pos}[i+1]$}
-            	\If{$V[i,i+1] \neq 0$}\Comment{O(m)}
-            		\State $\mathrm{col}_V(i+1) \mathrel{+}= \mathrm{col}_V(i)$
-            	\EndIf 
-            \EndIf
-            \State \Return $(\, R , V \,) \gets (\, P R P , P V P \,)$
-        \EndFunction
-    \end{algorithmic}
-\end{algorithm}
-
-\subsection*{Transposition complexity details}
-Consider Algorithm~\ref{alg:tr}. The matrices $R, V$ are both $(m \times m)$, where $m$ is the number of simplices in the underlying filtration. Each transposition $\mathrm{Tr}(i, i+1)$ requires at most 2 column operations (denoted with $S_{i}^{j}$ in the algorithm) in both $R$ and $V$, a constant number of queries to the matrix representation, and exactly 1 row and column exchange. Column operations take $O(m)$ time. Querying to determine whether an entry at position $(i,i+1)$ is non-zero depends on the sparse matrix implementation, but is generally either $O(\log m)$ or $O(m)$. In compressed sparse matrix representation, column and row exchanges take upwards of $O(z)$ time, where $z$ is the number of non-zero entries in the matrix, however this can be made $O(1)$ time by using the data structure described in~\cite{cohen2006vines}. This data structure requires storing an index using at most $O(m \log m)$ bits with each non-zero entry, as well as several $O(m)$-sized auxiliary arrays to protect the matrices from row exchanges. 
-
-% The principle motivation  
-% Upon moving $s$ 
-
-% Denote this class with $c_s$.
-% Now if the position of $s$ in $P_1$ is $i$ and the position in $P_2$ is $j$, and $i < j$, then the 
-
-% % Note: patience sorting gives means of enumerating all LIS's
-% % Note #2: Consider having the identity permutation be the target and going in reverse--at the end, there is only one symbol to move into place
-% % prims-MST like approach possible? 
+%\appendix 
+%\section{}\label{sec:appendix}
+%\subsection*{Vineyard Algorithm}
+%\begin{algorithm}[!htb]
+%	\caption{Vineyards: Tranposition Framework}\label{alg:tr}
+%	\setstretch{1.15}
+%	\begin{algorithmic}[1]
+%		\Require Matrices $R, V$ satisfying $R = D V$, $1 \leq i \leq m - 1$
+%		\Ensure Output $(R, V)$ maintains the decomposition invariants
+%        \Function{Transpose}{$R$, $V$, $i$}
+%            \State $\mathrm{pos} \gets $ columns satisfying $\mathrm{col}_R = 0$
+%            \If {$\mathrm{pos}[i]$ \textbf{and} $\mathrm{pos}[i+1]$}
+%	            \If{$V[i,i+1] \neq 0$}
+%            		\State $\mathrm{col}_V(i+1)  \mathrel{+}= \mathrm{col}_V(i)$	
+%            	\EndIf
+%            	\If {$\exists \; k, l$ s.t. $\mathrm{low}_R(k) = i, \mathrm{low}_R(l) = i+1$ and $R[i,l] \neq 0$} \Comment{O(m)}
+%            		\If {$k < l$}
+%            			\State \Return $(\, R, \, V \,) \gets (\, PRPS_k^l, \, PVP S_k^l \,)$
+%            		\Else
+%            			\State \Return $(\, R, \, V \,) \gets  (\, PRPS_l^k, \, PVP S_l^k\,) $
+%            		\EndIf
+%            	\EndIf 
+%            \ElsIf{$!\mathrm{pos}[i]$ \textbf{and} $!\mathrm{pos}[i+1]$}
+%            	\If{$V[i,i+1] \neq 0$}\Comment{O(m)}
+%            		\If{$\mathrm{low}_R(i) < \mathrm{low}_R(i+1)$}
+%            			\State \Return  $(\, R, V \,) \gets (P R S^{i+1}_i P, \, P V S^{i+1}_i  P) $
+%            		\Else 
+%            			\State \Return  $(\, R, V \,) \gets (P R S^{i+1}_i P S^{i+1}_i, \, P V S^{i+1}_i P S^{i+1}_i ) $
+%            		\EndIf 
+%            	\EndIf
+%          	\ElsIf{$!\mathrm{pos}[i]$ \textbf{and} $\mathrm{pos}[i+1]$} 
+%            	\If{$V[i,i+1] \neq 0$}\Comment{O(m)}
+%            		\State \Return  $(\, R, V \,) \gets (P R S^{i+1}_i P S^{i+1}_i, \, P V S^{i+1}_i P S^{i+1}_i ) $
+%            	\EndIf
+%            \ElsIf{$\mathrm{pos}[i]$ \textbf{and} $!\mathrm{pos}[i+1]$}
+%            	\If{$V[i,i+1] \neq 0$}\Comment{O(m)}
+%            		\State $\mathrm{col}_V(i+1) \mathrel{+}= \mathrm{col}_V(i)$
+%            	\EndIf 
+%            \EndIf
+%            \State \Return $(\, R , V \,) \gets (\, P R P , P V P \,)$
+%        \EndFunction
+%    \end{algorithmic}
+%\end{algorithm}
+%
+%\subsection*{Transposition complexity details}
+%Consider Algorithm~\ref{alg:tr}. The matrices $R, V$ are both $(m \times m)$, where $m$ is the number of simplices in the underlying filtration. Each transposition $\mathrm{Tr}(i, i+1)$ requires at most 2 column operations (denoted with $S_{i}^{j}$ in the algorithm) in both $R$ and $V$, a constant number of queries to the matrix representation, and exactly 1 row and column exchange. Column operations take $O(m)$ time. Querying to determine whether an entry at position $(i,i+1)$ is non-zero depends on the sparse matrix implementation, but is generally either $O(\log m)$ or $O(m)$. In compressed sparse matrix representation, column and row exchanges take upwards of $O(z)$ time, where $z$ is the number of non-zero entries in the matrix, however this can be made $O(1)$ time by using the data structure described in~\cite{cohen2006vines}. This data structure requires storing an index using at most $O(m \log m)$ bits with each non-zero entry, as well as several $O(m)$-sized auxiliary arrays to protect the matrices from row exchanges. 
 
 
 % \begin{definition}[Coarsening]

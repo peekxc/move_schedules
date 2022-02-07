@@ -1,49 +1,71 @@
 This is BibTeX, Version 0.99d (TeX Live 2021)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: /Users/mpiekenbrock/move_schedules/move_schedules.aux
-The style file: unsrt.bst
+The style file: sn-mathphys.bst
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=200001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: move_schedules.bib
 Warning--entry type for "rivet" isn't style-file defined
 --line 423 of file move_schedules.bib
+Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
 You've used 47 entries,
-            1791 wiz_defined-function locations,
-            722 strings with 11750 characters,
-and the built_in function-call counts, 11686 in all, are:
-= -- 1101
-> -- 464
-< -- 12
-+ -- 173
-- -- 126
-* -- 782
-:= -- 1786
-add.period$ -- 146
+            7385 wiz_defined-function locations,
+            1448 strings with 17806 characters,
+and the built_in function-call counts, 748884 in all, are:
+= -- 139761
+> -- 1524
+< -- 767
++ -- 86780
+- -- 418
+* -- 16314
+:= -- 130108
+add.period$ -- 53
 call.type$ -- 47
-change.case$ -- 47
-chr.to.int$ -- 0
+change.case$ -- 412
+chr.to.int$ -- 1997
 cite$ -- 47
-duplicate$ -- 529
-empty$ -- 1145
-format.name$ -- 126
-if$ -- 2643
-int.to.chr$ -- 0
-int.to.str$ -- 47
-missing$ -- 46
-newline$ -- 237
-num.names$ -- 47
-pop$ -- 124
+duplicate$ -- 2050
+empty$ -- 9379
+format.name$ -- 977
+if$ -- 194535
+int.to.chr$ -- 1
+int.to.str$ -- 92
+missing$ -- 0
+newline$ -- 665
+num.names$ -- 188
+pop$ -- 999
 preamble$ -- 1
-purify$ -- 0
+purify$ -- 232
 quote$ -- 0
-skip$ -- 273
+skip$ -- 86648
 stack$ -- 0
-substring$ -- 888
-swap$ -- 146
-text.length$ -- 12
+substring$ -- 68812
+swap$ -- 1177
+text.length$ -- 737
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 0
+type$ -- 1917
 warning$ -- 0
-while$ -- 126
-width$ -- 49
-write$ -- 516
+while$ -- 1489
+width$ -- 0
+write$ -- 757
 (There was 1 warning)
