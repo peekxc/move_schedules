@@ -1,52 +1,49 @@
-This is BibTeX, Version 0.99d (TeX Live 2015)
-Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
-The top-level auxiliary file: /Users/mpiekenbrock/Downloads/MoveSchedules/move_schedules.aux
-The style file: ieeetr.bst
+This is BibTeX, Version 0.99d (TeX Live 2021)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: /Users/mpiekenbrock/move_schedules/move_schedules.aux
+The style file: unsrt.bst
 Database file #1: move_schedules.bib
-Repeated entry---line 259 of file move_schedules.bib
- : @article{morozov2005persistence
- :                                ,
-I'm skipping whatever remains of this entry
-Warning--there's a number but no series in romik2015surprising
-You've used 30 entries,
-            1876 wiz_defined-function locations,
-            657 strings with 8887 characters,
-and the built_in function-call counts, 9030 in all, are:
-= -- 925
-> -- 317
-< -- 0
-+ -- 117
-- -- 87
-* -- 619
-:= -- 1221
-add.period$ -- 31
-call.type$ -- 30
-change.case$ -- 29
+Warning--entry type for "rivet" isn't style-file defined
+--line 423 of file move_schedules.bib
+You've used 47 entries,
+            1791 wiz_defined-function locations,
+            722 strings with 11750 characters,
+and the built_in function-call counts, 11686 in all, are:
+= -- 1101
+> -- 464
+< -- 12
++ -- 173
+- -- 126
+* -- 782
+:= -- 1786
+add.period$ -- 146
+call.type$ -- 47
+change.case$ -- 47
 chr.to.int$ -- 0
-cite$ -- 31
-duplicate$ -- 497
-empty$ -- 853
-format.name$ -- 87
-if$ -- 2232
+cite$ -- 47
+duplicate$ -- 529
+empty$ -- 1145
+format.name$ -- 126
+if$ -- 2643
 int.to.chr$ -- 0
-int.to.str$ -- 30
-missing$ -- 31
-newline$ -- 94
-num.names$ -- 30
-pop$ -- 99
+int.to.str$ -- 47
+missing$ -- 46
+newline$ -- 237
+num.names$ -- 47
+pop$ -- 124
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 360
+skip$ -- 273
 stack$ -- 0
-substring$ -- 656
-swap$ -- 224
-text.length$ -- 0
+substring$ -- 888
+swap$ -- 146
+text.length$ -- 12
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 1
-while$ -- 93
-width$ -- 32
-write$ -- 303
-(There was 1 error message)
+warning$ -- 0
+while$ -- 126
+width$ -- 49
+write$ -- 516
+(There was 1 warning)

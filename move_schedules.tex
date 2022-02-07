@@ -1,3 +1,4 @@
+\pdfoutput=1
 % \documentclass[review]{siamart190516} % for SICOMP 
 \documentclass{article} % for arxiv 
 \usepackage{arxiv}
@@ -869,12 +870,8 @@ The pipeline can be summarized as follows.
 Fix reindexing  bijections $f_i : K_i \to K_{i+1}$. 
 Each $f_i$ induces a bijection $f_i^\ast : [m] \to [m]$, or equivalently, a permutation of the index set $[m]$. For each pair of filtrations $(K_i, K_{i+1})$, we assign labels to the simplices of $K_i$ using the index set $[m]$ and relabel $K_{i+1}$ accordingly using $f_i$. Denote these permutations by $p$ and $q$. 
 We compute the longest increasing subsequence (LIS) of $q$ and use this subsequence to recover a longest common subsequence (LCS) $\mathrm{LCS}(p,q)$. We pass $p$, $q$, and this LCS to our greedy scheduling algorithm, which returns as output an ordered set of move permutations  $\mathcal{S}$ of minimum size, which we call a \emph{schedule}.
-Not all valid schedules are created equal:
-some incur a much larger number of column operations,
-even if they have a minimal number of moves. 
-Minimizing schedule costs will be addressed in 
-Section~\ref{sec:schedule_cost}.
-We proceed to computing an $R=DV$ decomposition for the first filtration $K_1$, and then execute the moves stored in $\mathcal{S}$ in sequence, extracting their corresponding persistence diagrams along the way. During execution, we obtain a valid decomposition $R = DV$ for each filtration $K_1, K_2, \dots, K_n$. 
+Not all valid schedules are created equal: some incur a much larger number of column operations, even if they have a minimal number of moves; we address this issue in Section~\ref{sec:schedule_cost}.
+Given the set of schedules for each pair $(K_i, K_{i+1})$, we proceed to computing an $R=DV$ decomposition for the first filtration $K_1$, and then execute the moves stored in $\mathcal{S}$ in sequence. During execution, we obtain a valid decomposition $R = DV$ for each filtration $K_1, K_2, \dots, K_n$ from which we extract persistence diagrams along the way. 
 
 \begin{algorithm}[h]
 	\caption{Scheduling algorithm}\label{alg:schedule}
@@ -903,7 +900,7 @@ We proceed to computing an $R=DV$ decomposition for the first filtration $K_1$, 
 \noindent Algorithm~\ref{alg:schedule} is purely illustrative at this point, 
 and is meant to serve as a guidepost before discussing its  components in depth. 
 Specifically, lines (4-5) are discussed next in section~\ref{sec:schedule_sizes}, and the algorithm for line (6) is given in section~\ref{sec:schedule_cost}. 
-Note that the loop starting at line (3) in Algorithm~\ref{alg:schedule} could always be merged with the loop starting at line (8), i.e. the individual schedules $S_i$ may be computed on the fly. Due to the combinatorial aspect of our approach, there is actually no need to have access to---or explicitly store---the entire family of filtrations and the schedules between them. That is, Algorithm~\ref{alg:schedule} can be  modified to be completely online, keeping at most two filtrations and one decomposition in memory at any given time. 
+Note that the loop starting at line (3) in Algorithm~\ref{alg:schedule} could always be merged with the loop starting at line (8), i.e. the individual schedules $S_i$ may be computed on the fly. Due to the combinatorial aspect of our approach, there is actually no need to have access to---or explicitly store---the entire family of filtrations and the schedules between them. That is, Algorithm~\ref{alg:schedule} can be modified to be completely online, keeping at most two filtrations and one decomposition in memory at any given time. 
 
 \subsection{Minimizing schedule size}\label{sec:schedule_sizes}
 Here we describe the reasoning for lines (4-5) in Algorithm~\ref{alg:schedule}. Recall in section~\ref{sec:motivation}, an example was given showing the vineyards algorithm efficiency compared to a naïve approach at three varying levels of coarseness. It was hypothesized that the reason the vineyards algorithm was more expensive than the naïve approach is due to the extra overhead of maintaining the decomposition at each transposition. Thus, decreasing the number of times the decomposition is restored to a valid state ought to reduce the total number of column operations needed to update a decomposition. This motivates the following question: 

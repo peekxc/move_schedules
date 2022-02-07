@@ -1,148 +1,269 @@
 \begin{thebibliography}{10}
 
 \bibitem{cohen2007stability}
-D.~Cohen-Steiner, H.~Edelsbrunner, and J.~Harer, ``Stability of persistence
-  diagrams,'' {\em Discrete \& computational geometry}, vol.~37, no.~1,
-  pp.~103--120, 2007.
+David Cohen-Steiner, Herbert Edelsbrunner, and John Harer.
+\newblock Stability of persistence diagrams.
+\newblock {\em Discrete \& computational geometry}, 37(1):103--120, 2007.
 
 \bibitem{cohen2006vines}
-D.~Cohen-Steiner, H.~Edelsbrunner, and D.~Morozov, ``Vines and vineyards by
-  updating persistence in linear time,'' in {\em Proceedings of the
-  twenty-second annual symposium on Computational geometry}, pp.~119--126,
-  2006.
+David Cohen-Steiner, Herbert Edelsbrunner, and Dmitriy Morozov.
+\newblock Vines and vineyards by updating persistence in linear time.
+\newblock In {\em Proceedings of the twenty-second annual symposium on
+  Computational geometry}, pages 119--126, 2006.
 
 \bibitem{kim2020spatiotemporal}
-W.~Kim and F.~M{\'e}moli, ``Spatiotemporal persistent homology for dynamic
-  metric spaces,'' {\em Discrete \& Computational Geometry}, pp.~1--45, 2020.
-
-\bibitem{polanco2019adaptive}
-L.~Polanco and J.~A. Perea, ``Adaptive template systems: Data-driven feature
-  selection for learning with persistence diagrams,'' in {\em 2019 18th IEEE
-  International Conference On Machine Learning And Applications (ICMLA)},
-  pp.~1115--1121, IEEE, 2019.
-
-\bibitem{adams2017persistence}
-H.~Adams, T.~Emerson, M.~Kirby, R.~Neville, C.~Peterson, P.~Shipman,
-  S.~Chepushtanova, E.~Hanson, F.~Motta, and L.~Ziegelmeier, ``Persistence
-  images: A stable vector representation of persistent homology,'' {\em Journal
-  of Machine Learning Research}, vol.~18, 2017.
-
-\bibitem{ulmer2019topological}
-M.~Ulmer, L.~Ziegelmeier, and C.~M. Topaz, ``A topological approach to
-  selecting models of biological experiments,'' {\em PloS one}, vol.~14, no.~3,
-  p.~e0213679, 2019.
-
-\bibitem{zomorodian2005computing}
-A.~Zomorodian and G.~Carlsson, ``Computing persistent homology,'' {\em Discrete
-  \& Computational Geometry}, vol.~33, no.~2, pp.~249--274, 2005.
-
-\bibitem{lesnick2015interactive}
-M.~Lesnick and M.~Wright, ``Interactive visualization of 2-d persistence
-  modules,'' {\em arXiv preprint arXiv:1512.00180}, 2015.
-
-\bibitem{busaryev2010tracking}
-O.~Busaryev, T.~K. Dey, and Y.~Wang, ``Tracking a generator by persistence,''
-  {\em Discrete Mathematics, Algorithms and Applications}, vol.~2, no.~04,
-  pp.~539--552, 2010.
-
-\bibitem{chen2011persistent}
-C.~Chen and M.~Kerber, ``Persistent homology computation with a twist,'' in
-  {\em Proceedings 27th European Workshop on Computational Geometry}, vol.~11,
-  pp.~197--200, 2011.
-
-\bibitem{topaz2015topological}
-C.~M. Topaz, L.~Ziegelmeier, and T.~Halverson, ``Topological data analysis of
-  biological aggregation models,'' {\em PloS one}, vol.~10, no.~5, p.~e0126383,
-  2015.
-
-\bibitem{xian2020capturing}
-L.~Xian, H.~Adams, C.~M. Topaz, and L.~Ziegelmeier, ``Capturing dynamics of
-  time-varying data via topology,'' {\em arXiv preprint arXiv:2010.05780},
-  2020.
-
-\bibitem{de2011dualities}
-V.~De~Silva, D.~Morozov, and M.~Vejdemo-Johansson, ``Dualities in persistent
-  (co) homology,'' {\em Inverse Problems}, vol.~27, no.~12, p.~124003, 2011.
-
-\bibitem{bauer2019ripser}
-U.~Bauer, ``Ripser: efficient computation of vietoris-rips persistence
-  barcodes,'' {\em arXiv preprint arXiv:1908.02518}, 2019.
-
-\bibitem{bauer2017phat}
-U.~Bauer, M.~Kerber, J.~Reininghaus, and H.~Wagner, ``Phat--persistent homology
-  algorithms toolbox,'' {\em Journal of symbolic computation}, vol.~78,
-  pp.~76--90, 2017.
-
-\bibitem{attali2009persistence}
-D.~Attali, M.~Glisse, S.~Hornus, F.~Lazarus, and D.~Morozov,
-  ``Persistence-sensitive simplication of functions on surfaces in linear
-  time,'' in {\em TopoInVis' 09}, 2009.
-
-\bibitem{edelsbrunner2000topological}
-H.~Edelsbrunner, D.~Letscher, and A.~Zomorodian, ``Topological persistence and
-  simplification,'' in {\em Proceedings 41st annual symposium on foundations of
-  computer science}, pp.~454--463, IEEE, 2000.
-
-\bibitem{delfinado1995incremental}
-C.~J.~A. Delfinado and H.~Edelsbrunner, ``An incremental algorithm for betti
-  numbers of simplicial complexes on the 3-sphere,'' {\em Computer Aided
-  Geometric Design}, vol.~12, no.~7, pp.~771--784, 1995.
-
-\bibitem{chen2013output}
-C.~Chen and M.~Kerber, ``An output-sensitive algorithm for persistent
-  homology,'' {\em Computational Geometry}, vol.~46, no.~4, pp.~435--447, 2013.
-
-\bibitem{oesterling2015computing}
-P.~Oesterling, C.~Heine, G.~H. Weber, D.~Morozov, and G.~Scheuermann,
-  ``Computing and visualizing time-varying merge trees for high-dimensional
-  data,'' in {\em Topological Methods in Data Analysis and Visualization},
-  pp.~87--101, Springer, 2015.
-
-\bibitem{kapron2013dynamic}
-B.~M. Kapron, V.~King, and B.~Mountjoy, ``Dynamic graph connectivity in
-  polylogarithmic worst case time,'' in {\em Proceedings of the twenty-fourth
-  annual ACM-SIAM symposium on Discrete algorithms}, pp.~1131--1142, SIAM,
-  2013.
+Woojin Kim and Facundo M{\'e}moli.
+\newblock Spatiotemporal persistent homology for dynamic metric spaces.
+\newblock {\em Discrete \& Computational Geometry}, pages 1--45, 2020.
 
 \bibitem{morozov2005persistence}
-D.~Morozov, ``Persistence algorithm takes cubic time in worst case,'' {\em
-  BioGeometry News, Dept. Comput. Sci., Duke Univ}, vol.~2, 2005.
+Dmitriy Morozov.
+\newblock Persistence algorithm takes cubic time in worst case.
+\newblock {\em BioGeometry News, Dept. Comput. Sci., Duke Univ}, 2, 2005.
+
+\bibitem{polanco2019adaptive}
+Luis Polanco and Jose~A Perea.
+\newblock Adaptive template systems: Data-driven feature selection for learning
+  with persistence diagrams.
+\newblock In {\em 2019 18th IEEE International Conference On Machine Learning
+  And Applications (ICMLA)}, pages 1115--1121. IEEE, 2019.
+
+\bibitem{adams2017persistence}
+Henry Adams, Tegan Emerson, Michael Kirby, Rachel Neville, Chris Peterson,
+  Patrick Shipman, Sofya Chepushtanova, Eric Hanson, Francis Motta, and Lori
+  Ziegelmeier.
+\newblock Persistence images: A stable vector representation of persistent
+  homology.
+\newblock {\em Journal of Machine Learning Research}, 18, 2017.
+
+\bibitem{ulmer2019topological}
+M~Ulmer, Lori Ziegelmeier, and Chad~M Topaz.
+\newblock A topological approach to selecting models of biological experiments.
+\newblock {\em PloS one}, 14(3):e0213679, 2019.
+
+\bibitem{zomorodian2005computing}
+Afra Zomorodian and Gunnar Carlsson.
+\newblock Computing persistent homology.
+\newblock {\em Discrete \& Computational Geometry}, 33(2):249--274, 2005.
+
+\bibitem{otter2017roadmap}
+Nina Otter, Mason~A Porter, Ulrike Tillmann, Peter Grindrod, and Heather~A
+  Harrington.
+\newblock A roadmap for the computation of persistent homology.
+\newblock {\em EPJ Data Science}, 6:1--38, 2017.
+
+\bibitem{lesnick2015interactive}
+Michael Lesnick and Matthew Wright.
+\newblock Interactive visualization of 2-d persistence modules.
+\newblock {\em arXiv preprint arXiv:1512.00180}, 2015.
+
+\bibitem{rivet}
+{The RIVET Developers}.
+\newblock Rivet, 2020.
+
+\bibitem{busaryev2010tracking}
+Oleksiy Busaryev, Tamal~K Dey, and Yusu Wang.
+\newblock Tracking a generator by persistence.
+\newblock {\em Discrete Mathematics, Algorithms and Applications},
+  2(04):539--552, 2010.
+
+\bibitem{chen2011persistent}
+Chao Chen and Michael Kerber.
+\newblock Persistent homology computation with a twist.
+\newblock In {\em Proceedings 27th European Workshop on Computational
+  Geometry}, volume~11, pages 197--200, 2011.
+
+\bibitem{topaz2015topological}
+Chad~M Topaz, Lori Ziegelmeier, and Tom Halverson.
+\newblock Topological data analysis of biological aggregation models.
+\newblock {\em PloS one}, 10(5):e0126383, 2015.
+
+\bibitem{xian2020capturing}
+Lu~Xian, Henry Adams, Chad~M Topaz, and Lori Ziegelmeier.
+\newblock Capturing dynamics of time-varying data via topology.
+\newblock {\em arXiv preprint arXiv:2010.05780}, 2020.
+
+\bibitem{de2011dualities}
+Vin De~Silva, Dmitriy Morozov, and Mikael Vejdemo-Johansson.
+\newblock Dualities in persistent (co) homology.
+\newblock {\em Inverse Problems}, 27(12):124003, 2011.
+
+\bibitem{bauer2021ripser}
+Ulrich Bauer.
+\newblock Ripser: efficient computation of vietoris--rips persistence barcodes.
+\newblock {\em Journal of Applied and Computational Topology}, pages 1--33,
+  2021.
+
+\bibitem{bauer2017phat}
+Ulrich Bauer, Michael Kerber, Jan Reininghaus, and Hubert Wagner.
+\newblock Phat--persistent homology algorithms toolbox.
+\newblock {\em Journal of symbolic computation}, 78:76--90, 2017.
+
+\bibitem{attali2009persistence}
+Dominique Attali, Marc Glisse, Samuel Hornus, Francis Lazarus, and Dmitriy
+  Morozov.
+\newblock Persistence-sensitive simplication of functions on surfaces in linear
+  time.
+\newblock In {\em TopoInVis' 09}, 2009.
+
+\bibitem{edelsbrunner2000topological}
+Herbert Edelsbrunner, David Letscher, and Afra Zomorodian.
+\newblock Topological persistence and simplification.
+\newblock In {\em Proceedings 41st annual symposium on foundations of computer
+  science}, pages 454--463. IEEE, 2000.
+
+\bibitem{delfinado1995incremental}
+Cecil Jose~A Delfinado and Herbert Edelsbrunner.
+\newblock An incremental algorithm for betti numbers of simplicial complexes on
+  the 3-sphere.
+\newblock {\em Computer Aided Geometric Design}, 12(7):771--784, 1995.
+
+\bibitem{chen2013output}
+Chao Chen and Michael Kerber.
+\newblock An output-sensitive algorithm for persistent homology.
+\newblock {\em Computational Geometry}, 46(4):435--447, 2013.
+
+\bibitem{oesterling2015computing}
+Patrick Oesterling, Christian Heine, Gunther~H Weber, Dmitriy Morozov, and
+  Gerik Scheuermann.
+\newblock Computing and visualizing time-varying merge trees for
+  high-dimensional data.
+\newblock In {\em Topological Methods in Data Analysis and Visualization},
+  pages 87--101. Springer, 2015.
+
+\bibitem{kapron2013dynamic}
+Bruce~M Kapron, Valerie King, and Ben Mountjoy.
+\newblock Dynamic graph connectivity in polylogarithmic worst case time.
+\newblock In {\em Proceedings of the twenty-fourth annual ACM-SIAM symposium on
+  Discrete algorithms}, pages 1131--1142. SIAM, 2013.
 
 \bibitem{boissonnat2000efficient}
-J.-D. Boissonnat and J.~Snoeyink, ``Efficient algorithms for line and curve
-  segment intersection using restricted predicates,'' {\em Computational
-  Geometry}, vol.~16, no.~1, pp.~35--52, 2000.
+Jean-Daniel Boissonnat and Jack Snoeyink.
+\newblock Efficient algorithms for line and curve segment intersection using
+  restricted predicates.
+\newblock {\em Computational Geometry}, 16(1):35--52, 2000.
 
 \bibitem{labarre2013lower}
-A.~Labarre, ``Lower bounding edit distances between permutations,'' {\em SIAM
-  Journal on Discrete Mathematics}, vol.~27, no.~3, pp.~1410--1428, 2013.
+Anthony Labarre.
+\newblock Lower bounding edit distances between permutations.
+\newblock {\em SIAM Journal on Discrete Mathematics}, 27(3):1410--1428, 2013.
 
-\bibitem{bar2004approximating}
-Z.~Bar-Yossef, T.~Jayram, R.~Krauthgamer, and R.~Kumar, ``Approximating edit
-  distance efficiently,'' in {\em 45th Annual IEEE Symposium on Foundations of
-  Computer Science}, pp.~550--559, IEEE, 2004.
+\bibitem{bergroth2000survey}
+Lasse Bergroth, Harri Hakonen, and Timo Raita.
+\newblock A survey of longest common subsequence algorithms.
+\newblock In {\em Proceedings Seventh International Symposium on String
+  Processing and Information Retrieval. SPIRE 2000}, pages 39--48. IEEE, 2000.
 
 \bibitem{bespamyatnikh2000enumerating}
-S.~Bespamyatnikh and M.~Segal, ``Enumerating longest increasing subsequences
-  and patience sorting,'' {\em Information Processing Letters}, vol.~76,
-  no.~1-2, pp.~7--11, 2000.
+Sergei Bespamyatnikh and Michael Segal.
+\newblock Enumerating longest increasing subsequences and patience sorting.
+\newblock {\em Information Processing Letters}, 76(1-2):7--11, 2000.
 
-\bibitem{romik2015surprising}
-D.~Romik, {\em The surprising mathematics of longest increasing subsequences}.
-\newblock No.~4, Cambridge University Press, 2015.
+\bibitem{kumar1987linear}
+S~Kiran Kumar and C~Pandu Rangan.
+\newblock A linear space algorithm for the lcs problem.
+\newblock {\em Acta Informatica}, 24(3):353--362, 1987.
+
+\bibitem{baik1999distribution}
+Jinho Baik, Percy Deift, and Kurt Johansson.
+\newblock On the distribution of the length of the longest increasing
+  subsequence of random permutations.
+\newblock {\em Journal of the American Mathematical Society}, 12(4):1119--1178,
+  1999.
+
+\bibitem{boissonnat2018efficient}
+Jean-Daniel Boissonnat and Karthik CS.
+\newblock An efficient representation for filtrations of simplicial complexes.
+\newblock {\em ACM Transactions on Algorithms (TALG)}, 14(4):1--21, 2018.
 
 \bibitem{diaconis1977spearman}
-P.~Diaconis and R.~L. Graham, ``Spearman's footrule as a measure of disarray,''
-  {\em Journal of the Royal Statistical Society: Series B (Methodological)},
-  vol.~39, no.~2, pp.~262--268, 1977.
+Persi Diaconis and Ronald~L Graham.
+\newblock Spearman's footrule as a measure of disarray.
+\newblock {\em Journal of the Royal Statistical Society: Series B
+  (Methodological)}, 39(2):262--268, 1977.
 
 \bibitem{biedl2009complexity}
-T.~Biedl, F.~J. Brandenburg, and X.~Deng, ``On the complexity of crossings in
-  permutations,'' {\em Discrete Mathematics}, vol.~309, no.~7, pp.~1813--1823,
-  2009.
+Therese Biedl, Franz~J Brandenburg, and Xiaotie Deng.
+\newblock On the complexity of crossings in permutations.
+\newblock {\em Discrete Mathematics}, 309(7):1813--1823, 2009.
 
-\bibitem{de1997computational}
-M.~De~Berg, M.~Van~Kreveld, M.~Overmars, and O.~Schwarzkopf, ``Computational
-  geometry,'' in {\em Computational geometry}, pp.~1--17, Springer, 1997.
+\bibitem{lesnick2012multidimensional}
+Michael~Phillip Lesnick.
+\newblock {\em Multidimensional interleavings and applications to topological
+  inference}.
+\newblock Stanford University, 2012.
+
+\bibitem{buchet2015topological}
+Micka{\"e}l Buchet, Fr{\'e}d{\'e}ric Chazal, Tamal~K Dey, Fengtao Fan, Steve~Y
+  Oudot, and Yusu Wang.
+\newblock Topological analysis of scalar fields with outliers.
+\newblock In {\em 31st International Symposium on Computational Geometry},
+  pages 827--841. Schloss Dagstuhl, Leibniz-Zentrum f{\"u} Informatik GmbH,
+  2015.
+
+\bibitem{fugacci2019chunk}
+Ulderico Fugacci and Michael Kerber.
+\newblock Chunk reduction for multi-parameter persistent homology.
+\newblock In {\em 35th International Symposium on Computational Geometry, SoCG
+  2019, June 18-21, 2019, Portland, Oregon, USA}, pages 37--1, 2019.
+
+\bibitem{carlsson2010computing}
+Gunnar Carlsson, Gurjeet Singh, and Afra~J Zomorodian.
+\newblock Computing multidimensional persistence.
+\newblock {\em Journal of Computational Geometry}, 1(1):72--100, 2010.
+
+\bibitem{landi2014rank}
+Claudia Landi.
+\newblock The rank invariant stability via interleavings.
+\newblock {\em arXiv preprint arXiv:1412.3374}, 2014.
+
+\bibitem{carlsson2009theory}
+Gunnar Carlsson and Afra Zomorodian.
+\newblock The theory of multidimensional persistence.
+\newblock {\em Discrete \& Computational Geometry}, 42(1):71--93, 2009.
+
+\bibitem{lesnick2019computing}
+Michael Lesnick and Matthew Wright.
+\newblock Computing minimal presentations and bigraded betti numbers of
+  2-parameter persistent homology.
+\newblock {\em arXiv preprint arXiv:1902.05708}, 2019.
+
+\bibitem{boissonnat2000robust}
+Jean-Daniel Boissonnat and Franco~P Preparata.
+\newblock Robust plane sweep for intersecting segments.
+\newblock {\em SIAM Journal on Computing}, 29(5):1401--1421, 2000.
+
+\bibitem{christofides1976worst}
+Nicos Christofides.
+\newblock Worst-case analysis of a new heuristic for the travelling salesman
+  problem.
+\newblock Technical report, Carnegie-Mellon Univ Pittsburgh Pa Management
+  Sciences Research Group, 1976.
+
+\bibitem{lee2003nonlinear}
+Ann~B Lee, Kim~S Pedersen, and David Mumford.
+\newblock The nonlinear statistics of high-contrast patches in natural images.
+\newblock {\em International Journal of Computer Vision}, 54(1):83--103, 2003.
+
+\bibitem{hateren_schaaf_1998}
+J.~H.~van Hateren and A.~van~der Schaaf.
+\newblock Independent component filters of natural images compared with simple
+  cells in primary visual cortex.
+\newblock {\em Proceedings: Biological Sciences}, 265(1394):359--366, Mar 1998.
+
+\bibitem{carlsson2008local}
+Gunnar Carlsson, Tigran Ishkhanov, Vin De~Silva, and Afra Zomorodian.
+\newblock On the local behavior of spaces of natural images.
+\newblock {\em International journal of computer vision}, 76(1):1--12, 2008.
+
+\bibitem{perea2014klein}
+Jose~A Perea and Gunnar Carlsson.
+\newblock A klein-bottle-based dictionary for texture representation.
+\newblock {\em International journal of computer vision}, 107(1):75--97, 2014.
+
+\bibitem{perea2018brief}
+Jose~A Perea.
+\newblock A brief history of persistence.
+\newblock {\em arXiv preprint arXiv:1809.03624}, 2018.
 
 \end{thebibliography}
