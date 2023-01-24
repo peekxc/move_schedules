@@ -223,7 +223,7 @@ Since persistence has found many applications in dynamic contexts~\cite{topaz201
  
 \textbf{Our approach and contributions are as follows:} First, we leverage the \emph{moves} framework of Busaryev et al.~\cite{busaryev2010tracking} to include  coarser  operations---in terms of the number of valid intermediate decomposition states, as compared to vineyards---for dynamic persistence. 
 We give a tight lower bound on the number of moves needed to perform an arbitrary permutation to the $R = D V$ decomposition, and give a proof of optimality by a reduction to the permutation edit distance problem.
-We also give worst-case bounds in expectation as well as efficient algorithms for achieving these bounds---both of which are derived from a reduction to the Longest Increasing Subsequence (LIS) problem. 
+We also give worst-case sizes of these quantities in expectation as well as efficient algorithms for achieving these bounds---both of which are derived from a reduction to the Longest Increasing Subsequence (LIS) problem. 
 This reduction yields an efficient algorithm for generating sequences of moves $( s_1, s_2, \dots, s_d )$ of minimal size $d$, which we call \emph{schedules}. 
 However, not all minimal size schedules incur the same  cost 
 (i.e., number of column operations).
@@ -306,8 +306,7 @@ In Section \ref{sec:conclusion} we conclude the paper by discussing other possib
 % Interesting+ hard + solved + novel. 
 
 \section{Background}\label{sec:background} 
-\subsection{Notation}\label{sec:notation} 
-
+%\subsection{Notation}\label{sec:notation} 
 Suppose one has a family $\{K_i\}_{i\in I}$ of simplicial complexes indexed by a totally ordered   set $I$, and so that for any $i< j \in I$ we have $K_i \subseteq K_j$. There are two index sets of interest in what follows: $\mathbb{R}$ and $[n] = \{ 1, \dots, n\}$. 
 Such a family is called a \emph{filtration},
 which is deemed \emph{simplexwise} if $K_j \smallsetminus K_i = \{\sigma_j\}$ 
@@ -344,28 +343,21 @@ and referred to as the $p$-th \emph{persistence diagram} of $K$.
 If a homology class is born at time $i$ and dies entering time $j$, the difference $\lvert i - j \rvert$ is called the \emph{persistence} of that class.
 In practice, filtrations often arise from triangulations parameterized by geometric scaling parameters, and the ``persistence'' of a homology class actually refers to its lifetime with respect to the scaling parameter. 
 %For this reason, we'll refer to the difference $\lvert i - j \rvert$ of a homology class $[c]$ as its \emph{index persistence}.
-\\
-\\
-\noindent \textbf{Example 2.1:} Non-simplexwise filtrations often arise in geometrical contexts. For example, given a finite metric space $(X, d)$, the \emph{Vietoris-Rips} complex at scale $\epsilon \in \mathbb{R}$ is the abstract simplicial complex given by: 
-\begin{equation}\label{eq:rips}
-	\mathrm{Rips_\epsilon}(X) = \{ S \subseteq X : S \neq \emptyset \;\mbox{ and }\;\mathrm{diam}(S) \leq \epsilon \}
-\end{equation} 
-The corresponding filtration is called the \emph{Vietoris-Rips} (VR) filtration, indexed by $I = \mathbb{R}$. 
-A VR filtration indexed over $\mathbb{R}$ can be condensed to an simplexwise filtration indexed over the set of pairwise distances $\{\, d(x,x') \; \mid \; x,x' \in X \, \}$  by extending a total order of $X$ to its power set using any linear extension of the face poset, such as e.g. the lexicographical ordering. 
+%\\
+%\\
+%\noindent \textbf{Example 2.1:} Non-simplexwise filtrations often arise in geometrical contexts. For example, given a finite metric space $(X, d)$, the \emph{Vietoris-Rips} complex at scale $\epsilon \in \mathbb{R}$ is the abstract simplicial complex given by: 
+%\begin{equation}\label{eq:rips}
+%	\mathrm{Rips_\epsilon}(X) = \{ S \subseteq X : S \neq \emptyset \;\mbox{ and }\;\mathrm{diam}(S) \leq \epsilon \}
+%\end{equation} 
+%The corresponding filtration is called the \emph{Vietoris-Rips} (VR) filtration, indexed by $I = \mathbb{R}$. 
+%A VR filtration indexed over $\mathbb{R}$ can be condensed to an simplexwise filtration indexed over the set of pairwise distances $\{\, d(x,x') \; \mid \; x,x' \in X \, \}$  by extending a total order of $X$ to its power set using any linear extension of the face poset, such as e.g. the lexicographical ordering. 
 %This is often necessary in the computational setting, where it is easier to work with a filtration with $m$ simplices indexed over $[m]$ instead of $\mathbb{R}$. 
 \\
 \\
 Let $\mathbb{X}$ be a triangulable topological space and $K$ an abstract simplicial complex whose geometric realization is homeomorphic to $\mathbb{X}$. 
 Let  $f: \mathbb{X} \to \mathbb{R}$ be continuous and  write $\mathbb{X}_a = f^{-1}(-\infty, a]$ to denote the sublevel sets of $\mathbb{X}$ defined by the value $a$. 
-A \emph{homological critical value} of $f$ is any value $a \in \mathbb{R}$ such that the homology of the sublevel sets of $f$ changes at $a$, i.e.  if for some $p$ the inclusion-induced homomorphism  $H_p(\mathbb{X}_{a - \epsilon}) \to H_p(\mathbb{X}_{a+\epsilon})$ is not an isomorphism for  any small enough $\epsilon >0$. If there are only finitely many of these homological critical values, then $f$ is said to be \emph{tame}. 
+A \emph{homological critical value} of $f$ is any value $a \in \mathbb{R}$ such that the homology of the sublevel sets of $f$ changes at $a$, i.e.  if for some $p$ the inclusion-induced homomorphism  $H_p(\mathbb{X}_{a - \epsilon}) \to H_p(\mathbb{X}_{a+\epsilon})$ is not an isomorphism for  any small enough $\epsilon >0$. If there are only finitely many of these homological critical values, then $f$ is said to be \emph{tame}. The concept of homological critical points and tameness will be revisited in section~\ref{sec:vineyards}.
 
-Consider a homotopy $F(x,\tau) : \mathbb{X} \times [0,1] \to \mathbb{R}$ and denote its ``snapshot'' at a given time-point $\tau$ by $f_\tau(x) = F(x,\tau)$.
-The snapshot $f_0$ denotes the initial function at time $\tau = 0$ and $f_1$ denotes the function at the last time step. 
-As $\tau$ varies in $[0,1]$, the points in $\mathrm{dgm}_p(f_\tau)$ trace curves in $\mathbb{R}^3$, called \emph{vines}, which collectively form a \emph{vineyard}. 
-The stability of persistence implies that these curves will be continuous if $F$ is continuous
-and the $f_\tau$'s are tame \cite{cohen2007stability}.
-The vineyard analogy acts as a guidepost for practitioners seeking to understand how subtle changes occurring to the topological structure over time.
-A more detailed discussion of the vineyards approach is provided in section~\ref{sec:vineyards}.
 %Let $\mathbb{M}$ be a smooth $d$-manifold and $f : \mathbb{M} \to \mathbb{R}$ a smooth function. 
 %A critical point $x$ is called \emph{non-degenerate} if the Hessian matrix of second partial derivatives is non-singular, otherwise if the Hessian is zero $x$ is said to be \emph{degenerate}. A \emph{Morse function} is a smooth function that has only non-degenerate critical points with distinct critical values. 
 %and two Morse functions $f_0, f_1: \mathbb{M} \to \mathbb{R}$, and further suppose we equip $f_0, f_1$ with with a smooth homotopy $F : \mathbb{M}: [0,1] \to \mathbb{R}$ such that $F(x, 0) = f_0(x)$ and $F(x, 1) = f_1(x)$ for $x \in \mathbb{M}$. We use $f_\tau$ to denote the function at $F(x, \tau)$, where $\tau \in [0, 1]$. 
@@ -380,26 +372,7 @@ A more detailed discussion of the vineyards approach is provided in section~\ref
 
 \subsection{The Reduction Algorithm}\label{sec:reduction}
 In this section we briefly recount the original reduction algorithm introduced in~\cite{zomorodian2005computing}, also sometimes called the \emph{standard} algorithm or more explicitly \texttt{pHcol}~\cite{de2011dualities}. 
-The pseudocode is outlined in Algorithm~\ref{alg:reduce}. Without optimizations, like   clearing   or       implicit matrix reduction, the standard  algorithm is very inefficient. Nonetheless, it serves as the foundation of most implementations that compute persistent homology, and its invariants are necessary before introducing both vineyards in section~\ref{sec:vineyards} and our move schedules  in section~\ref{sec:move_schedules}.
-
-\begin{algorithm}[t]
-	\setstretch{1.15}
-	\caption{Reduction Algorithm (\texttt{pHcol}) }
-	\begin{algorithmic}[1]
-		\Require{$D = (m \times m)$ filtration boundary matrix }
-		\Ensure{$R$ is reduced, $V$ is full rank upper triangular, and $R = D V$}
-		\Function{Reduction}{$D$}
-		\State $(R, V) \gets (D, I)$
-		\For{$j = 1$ \textbf{to} $m$} 
-			\While{$\exists \, i < j$ \textbf{such that} $\mathrm{low}_R(i) = \mathrm{low}_R(j)$ }
-				\State $\lambda \gets \mathrm{pivot}_R(j)/\mathrm{pivot}_R(i)$
-				\State $(\mathrm{col}_R(j), \mathrm{col}_V(j)) \mathrel{-}= \left ( \lambda \cdot \mathrm{col}_R(i), \lambda \cdot \mathrm{col}_V(i) \right )$
-			\EndWhile
-		\EndFor 
-		\State \Return $(R, V)$
-		\EndFunction
-	\end{algorithmic}	\label{alg:reduce}
-\end{algorithm}
+The pseudocode is outlined in Algorithm~\ref{alg:reduce} in the appendix. Without optimizations, like   clearing   or       implicit matrix reduction, the standard  algorithm is very inefficient. Nonetheless, it serves as the foundation of most persistent homology implementations, and its invariants are necessary before introducing both vineyards in section~\ref{sec:vineyards} and our move schedules  in section~\ref{sec:move_schedules}.
 
  The main output of the reduction algorithm is a matrix decomposition $R = D V$, where the persistence diagram is encoded in $R$, and the generating cycles in the columns of $V$. 
  Given a filtration $K$ with $m$ simplices, one assembles the elementary boundary chains $\partial(\sigma)$ as columns ordered according to the filtration, forming the square $m \times m$  \emph{filtration boundary matrix} $D$. 
@@ -480,7 +453,7 @@ Using $\mathbb{Z}_2$ coefficients and homology in dimension 1 for simplicity, th
 \\
 \\
 \noindent
-Inspection of Algorithm~\ref{alg:reduce} suggests that a loose upper bound for the reduction is $O(m^3)$, where $m$ is the number of simplices of the filtration---this bound is in fact tight~\cite{morozov2005persistence}. 
+Inspection of the reduction algorithm from~\cite{edelsbrunner2000topological} suggests that a loose upper bound for the reduction is $O(m^3)$, where $m$ is the number of simplices of the filtration---this bound is in fact tight~\cite{morozov2005persistence}. 
 Nonetheless, many variations and optimizations to Algorithm~\ref{alg:reduce} have been proposed over the past decade, see~\cite{bauer2017phat, bauer2021ripser, chen2011persistent} for an overview. Despite these variations in computation, the resulting decomposition must satisfy the following invariants:
   \vspace*{0.8em}
   \\
@@ -503,13 +476,18 @@ In particular, once $R$ is in reduced form, the persistence diagram of the corre
 % \section*{Computational Perspective} To convey a meaningful computational perspective, the continuous notion of \emph{dynamic persistence} needs to be translated to a discrete, combinatorial definition. Such a description requires a few prerequisite definitions, accompanied by some simplifying assumptions. 
 %\subsection*{A General Matrix Framework} Perhaps the most frequently used approach to computing the persistence diagram of a given filtration $K$ is with the \emph{reduction} algorithm. There have been many advancements in the past decade in improving the reduction algorithm---a comprehensive overview is beyond the scope of this effort. The majority of these computational improvements were developed to improve the efficiency of performing the \emph{initial} reduction. A concise summary of these advancements can be found in~\cite{bauer2019ripser}. In contrast, we focus here on improving the efficiency of maintaining a \emph{given} decomposition under an arbitrary reordering.  
 \subsection{Vineyards}\label{sec:vineyards}
+Consider a homotopy $F(x,\tau) : \mathbb{X} \times [0,1] \to \mathbb{R}$ on a triangulable topological space $\mathbb{X}$, and denote its ``snapshot'' at a given time-point $\tau$ by $f_\tau(x) = F(x,\tau)$.
+The snapshot $f_0$ denotes the initial function at time $\tau = 0$ and $f_1$ denotes the function at the last time step. 
+As $\tau$ varies in $[0,1]$, the points in $\mathrm{dgm}_p(f_\tau)$ trace curves in $\mathbb{R}^3$, which will be continuous if $F$ is continuous and the $f_\tau$'s are tame, due to the stability of persistence.
+Cohen-steiner et al.~\cite{cohen2007stability} referred to these curves as \emph{vines}, as collection of which forms as \emph{vineyard}---the geometric analogy meant to act as a guidepost for practitioners seeking to understand how subtle changes occurring to the topological structure over time.
+
 The original purpose of the vineyards algorithm, as described in~\cite{cohen2006vines}, was to compute a continuous 1-parameter family of persistence diagrams over a time-varying filtration, detecting homological critical events along the way.
 As homological critical events can only occur when the filtration order changes, detecting all such critical events can be reduced to computing valid decompositions at all time points interleaving  changes in the filtration order. 
 At the finest scale, these changes manifest as transpositions of adjacent simplices for simplexwise filtrations. 
 As a result, any fixed set of rules that maintains a valid $R = D V$ decomposition under adjacent transpositions is sufficient to simulate persistence dynamically. 
-These rules prescribe certain column and row operations to apply to a given matrix decomposition either before, during, or after each individual transposition to ensure it is a valid decomposition.   
 
-Let $S_{i}^j$ represent the upper-triangular matrix such that $A S_{i}^j$ is equivalent to the elementary operation that adds column $i$ of $A$ to column $j$ of $A$ and $S_{i}^j A$ is equivalent to adding row $j$ of $A$ to row $i$ of $A$.
+These rules prescribe certain column and row operations to apply to a given matrix decomposition either before, during, or after each individual transposition to ensure it is a valid decomposition.   
+Formally, let $S_{i}^j$ represent the upper-triangular matrix such that $A S_{i}^j$ is equivalent to the elementary operation that adds column $i$ of $A$ to column $j$ of $A$ and $S_{i}^j A$ is equivalent to adding row $j$ of $A$ to row $i$ of $A$.
 Similarly, let $P$ denote the matrix so that $A P$ applies a fixed permutation to the columns of $A$ and $P^T A$ applied the same permutation to the rows of $A$.
 Since the columns of $P$ are orthonormal, then  $P^{-1} = P^T$, and thus one would write $P^T A P$ to denote the application of the same permutation to both the columns and rows of $A$. In the special case where $P$ represents a transposition, we have $P = P^T$ and may instead simply write $P A P$. 
 The goal of the vineyards algorithm can now be described explicitly: to prescribe a set of rules, written as matrices $S_{i}^{j}$, such that if $R = D V$ is a valid decomposition, then $(\ast P \ast R \ast P \ast) = (PDP)(\ast P\ast V \ast P \ast)$ is also a valid decomposition, where $\ast$ is some number (possibly zero) of matrices encoding elementary column or row operations. 
@@ -702,7 +680,7 @@ On the negative side, one needs to constantly query the non-zero status of vario
 
 \subsection{Moves}\label{sec:moves} Busaryev et al.~\cite{busaryev2010tracking} introduced an algorithm which maintains an $R = D V$ decomposition under \emph{move operations}. A move operation $\mathrm{Move}(i,j)$ is a set of rules for maintaining a valid decomposition under the application of a permutation $P$ that moves a simplex $\sigma_i$ at position $i$ to position $j$. If $j = i \pm 1$, this operation is an adjacent transposition, and thus in some sense Busaryev's move algorithm is a generalization of  vineyards.
 
-For completeness, we now describe the moves algorithm from~\cite{busaryev2010tracking}.
+%For completeness, we now describe the moves algorithm from~\cite{busaryev2010tracking}.
 
 Though similar, move operations confer a few computational advantages compared to vineyards. We focus on two convenient properties of moves:
 \\	
@@ -719,7 +697,7 @@ In this way, we interpret move operations as making a tradeoff in granularity: w
 Indeed, the number of intermediate persistence diagrams is bounded above by $O(m^2)$ using vineyards if each pair of simplices $\sigma_i, \sigma_j \in K$ switches relative ordering at most once in a given schedule of transpositions, whereas with move operations this bound clearly is at most $O(m)$.  
 \\ 
 
-\noindent \textbf{Example:} We continue the example used in sections~\ref{sec:vineyards} and~\ref{sec:reduction} to illustrate moves. Consider moving the edge $a$ to the position of edge $c$ in the filtration. The donor columns introduced in~\cite{busaryev2010tracking} are shown on the left side of each matrix. Note that using vineyards, the equivalent permutation to the decomposition would require $4$ column operations on both $R_1$ and $V_1$, respectively, whereas a single move operation accomplishes this permutation using only $2$ column operations per matrix. 
+\noindent \textbf{Example 2.3:} We re-use the running example from sections~\ref{sec:reduction} and~\ref{sec:vineyards} to illustrate moves. Consider moving the edge $a$ to the position of edge $c$ in the filtration. The donor columns introduced in~\cite{busaryev2010tracking} are shown on the left side of each matrix. Note that using vineyards, the equivalent permutation to the decomposition would require $4$ column operations on both $R_1$ and $V_1$, respectively, whereas a single move operation accomplishes this permutation using only $2$ column operations per matrix. 
 \begin{displaymath}
 	\def\rowsp{0.4em}
 	\def\arraystretch{0.60}
@@ -1507,20 +1485,22 @@ There are many challenges to depicting topological behavior in dynamic settings.
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=0.95\textwidth]{crocker_combo_1.png}
-	\caption{An example of a crocker plot (right) depicting the evolution of dimension $p = 1$ Betti curves over time. The green $\mathrm{X}$ marks correspond chronologically to the complexes (left), in row-major order. The large orange and purple areas depict $1$-cycles persisting in both space (the y-axis) and time (x-axis). }\label{fig:crocker1}
+	\caption{A crocker plot (right) depicts the evolution of dimension $p = 1$ Betti curves over time. The green $\mathrm{X}$ marks correspond chronologically to the complexes (left), in row-major order. The large orange and purple areas depict $1$-cycles persisting in both space (the y-axis) and time (x-axis). }\label{fig:crocker1}
 \end{figure}
 
 Acknowledging this, Topaz et al.~\cite{topaz2015topological} proposed the use of a 2-dimensional summary visualization, called a \emph{crocker}\footnote{\emph{crocker} stands for ``Contour Realization Of Computed k-dimensional hole Evolution in the Rips complex.'' Although the acronym includes \emph{Rips complexes} in the name, in principle a crocker plot could just as easily be created using other types of triangulations (e.g. \v{C}ech filtrations).} plot. 
-In brief, a crocker plot is a contour plot on a family of Betti curves. Formally, given a filtration $K = K_0 \subseteq K_1 \subseteq \dots \subseteq K_m$, a $p$-dimensional \emph{Betti curve} $\beta_p^{\bullet}$ is defined as the ordered sequence of $p$-th dimensional Betti numbers:
+In brief, a crocker plot is a contour plot of a family of Betti curves. Formally, given a filtration $K = K_0 \subseteq K_1 \subseteq \dots \subseteq K_m$, a $p$-dimensional \emph{Betti curve} $\beta_p^{\bullet}$ is defined as the ordered sequence of $p$-th dimensional Betti numbers:
 $$ \beta_p^\bullet = \{ \, \mathrm{rank}(H_p(K_0)), \, \mathrm{rank}(H_p(K_1)), \, \dots, \, \mathrm{rank}(H_p(K_m))\, \}$$
-Given a time-varying filtration $K(\tau)$, a crocker plot can be interpreted as a contour plot on the 1-parameter family of Betti curves $\beta_p^\bullet(\tau)$. A example of a crocker plot generated from the simulation described below is given in Figure~\ref{fig:crocker1}. Since only the Betti numbers at each simplex in the filtration are needed to generate these Betti curves, the persistence diagram is not directly needed to generate a crocker plot; it is sufficient to use e.g. any of the specialized methods discussed in~\ref{sec:related_work}. This dependence only on the Betti numbers makes crocker plots easier to compute than standard persistence, however what one gains in efficiency one loses in stability; it is known that Betti curves are inherently unstable with respect to small fluctuations about the diagonal of the persistence diagram. 
+Given a time-varying filtration $K(\tau)$, a crocker plot displays changes to $\beta_p^\bullet(\tau)$ as a function of $\tau$. A example of a crocker plot generated from the simulation described below is given in Figure~\ref{fig:crocker1}. Since only the Betti numbers at each simplex in the filtration are needed to generate these Betti curves, the persistence diagram is not directly needed to generate a crocker plot; it is sufficient to use e.g. any of the specialized methods discussed in~\ref{sec:related_work}. This dependence only on the Betti numbers makes crocker plots easier to compute than standard persistence, however what one gains in efficiency one loses in stability; it is known that Betti curves are inherently unstable with respect to small fluctuations about the diagonal of the persistence diagram. 
 
-Acknowledging this, Xian et al.~\cite{xian2020capturing} showed that crocker plots may be \emph{smoothed} to inherit the stability property of persistence diagrams and reduce noise in the visualization. That is, when applied to a time-varying persistence module $M = \{M_t\}_{t \in [0, T]}$ an $\alpha$-smoothed crocker plot for $\alpha \geq 0$ is the rank of the map $M_t(\epsilon - \alpha) \to M_t(\epsilon + \alpha)$ at time $t$ and scale $\epsilon$. For example, the standard crock plot is a $0$-smoothed crocker plot. Allowing all three parameters ($t, \epsilon, \alpha$) to vary continuously leads to 3D visualization called an $\alpha$\emph{-smoothed crocker stack}.
+Xian et al.~\cite{xian2020capturing} showed that crocker plots may be \emph{smoothed} to inherit the stability property of persistence diagrams and reduce noise in the visualization. That is, when applied to a time-varying persistence module $M = \{M_t\}_{t \in [0, T]}$ an $\alpha$-smoothed crocker plot for $\alpha \geq 0$ is the rank of the map $M_t(\epsilon - \alpha) \to M_t(\epsilon + \alpha)$ at time $t$ and scale $\epsilon$. For example, the standard crock plot is a $0$-smoothed crocker plot. Allowing all three parameters ($t, \epsilon, \alpha$) to vary continuously leads to 3D visualization called an $\alpha$\emph{-smoothed crocker stack}.
 \begin{definition}[crocker stack]
 	A crocker stack is a family of $\alpha$-smoothed crock plots which summarizes the topological information of a time-varying persistence module $M$ via the function $f_M : [0, T] \times [0, \infty) \times [0, \infty) \to \mathbb{N}$, where:
 	$$ f_M(t,\epsilon, \alpha) = \mathrm{rank}(M_t(\epsilon - \alpha) \to M_t(\epsilon + \alpha)) $$
+	and $f_M$ satisfies $f_M(t,\epsilon,\alpha') \leq f_M(t,\epsilon, \alpha)$ for all $0 \leq \alpha \leq \alpha'$.
 \end{definition}
-\noindent A crocker stack is a sequence of $\alpha$-smoothed crocker plots that vary over $\alpha \geq 0$, satisfying $f_M(t,\epsilon,\alpha) \leq f_M(t,\epsilon, \alpha)$ for all $\alpha \geq \alpha'$. Note that, unlike crocker plots, applying this $\alpha$ smoothing efficiently \emph{requires} the persistence pairing. Indeed, it has been shown that crocker stacks and stacked persistence diagrams (i.e. vineyards) are equivalent to each other in the sense that either one contains the information needed to reconstruct the other~\cite{xian2020capturing}. Thus, computing crocker stacks reduces to computing the persistence of a (time-varying) family of filtrations.
+%\noindent A crocker stack is a sequence of $\alpha$-smoothed crocker plots that vary over $\alpha \geq 0$, satisfying $f_M(t,\epsilon,\alpha) \leq f_M(t,\epsilon, \alpha)$ for all $\alpha \geq \alpha'$. 
+\noindent Note that, unlike crocker plots, applying this $\alpha$ smoothing efficiently \emph{requires} the persistence pairing. Indeed, it has been shown that crocker stacks and stacked persistence diagrams (i.e. vineyards) are equivalent to each other in the sense that either one contains the information needed to reconstruct the other~\cite{xian2020capturing}. Thus, computing crocker stacks reduces to computing the persistence of a (time-varying) family of filtrations.
 
 %To describe this formally, let $K_\tau^\epsilon$ denote a simplicial filtration with simplices $\sigma \in K_\tau^\epsilon$ whose function value $f_\tau(\sigma) \leq \epsilon$. The $\alpha$
 
@@ -1703,6 +1683,26 @@ Moving forward, our results suggest there are many aspects of computing persiste
 \section*{Appendix}
 
 \subsection{Algorithms}
+
+\subsubsection{Reduction Algorithm}
+\begin{algorithm}[t]
+	\setstretch{1.15}
+	\caption{Reduction Algorithm (\texttt{pHcol}) }
+	\begin{algorithmic}[1]
+		\Require{$D = (m \times m)$ filtration boundary matrix }
+		\Ensure{$R$ is reduced, $V$ is full rank upper triangular, and $R = D V$}
+		\Function{Reduction}{$D$}
+		\State $(R, V) \gets (D, I)$
+		\For{$j = 1$ \textbf{to} $m$} 
+			\While{$\exists \, i < j$ \textbf{such that} $\mathrm{low}_R(i) = \mathrm{low}_R(j)$ }
+				\State $\lambda \gets \mathrm{pivot}_R(j)/\mathrm{pivot}_R(i)$
+				\State $(\mathrm{col}_R(j), \mathrm{col}_V(j)) \mathrel{-}= \left ( \lambda \cdot \mathrm{col}_R(i), \lambda \cdot \mathrm{col}_V(i) \right )$
+			\EndWhile
+		\EndFor 
+		\State \Return $(R, V)$
+		\EndFunction
+	\end{algorithmic}	\label{alg:reduce}
+\end{algorithm}
 
 \subsubsection*{Move Algorithms}
 \begin{algorithm}[!htb]
