@@ -1087,7 +1087,7 @@ Given a pair of filtrations $K_0, K_1$ of equal size $m$ and a fixed bijection $
 %	\item $j = i+1$ and $l = k+1$ $\implies$ $\beta$ swaps two not necessarily adjacent elements, called an \emph{exchange}\footnote{In comparative genomics, exchanging two elements is sometimes called a \emph{super short transposition}.}
 %\end{enumerate}
 \noindent Here we consider sorting by moves. Phrased using permutations, a \emph{move operation} $m_{ij}$ that moves $i$ to $j$ in $[m]$, for $i < j$, corresponds to the permutation: 
-\begin{equation}
+\begin{equation}\label{eq:move_perm}
 \setlength\arraycolsep{1.8pt}
 \scalefont{0.90}{
 \setcounter{MaxMatrixCols}{20}
@@ -1124,9 +1124,9 @@ The Wagner-Fischer algorithm---a dynamic programming type approach---can compute
 As such, we obtain the following bound on the minimum size of a sorting (i.e., a schedule) using moves and the complexity of computing it. 
 \begin{proposition}[Schedule Size]\label{prop:schedule_size}
 Let $K_0$ and $ K_1$ be filtrations of a fixed simplicial complex $K$ with $\lvert K \rvert = m$ simplices.
-Then, the smallest size any move schedule $S^*$ transforming $K_0$ into $K_1$ can have has cardinality: 
+Then, the smallest size any move schedule $S^*$ transforming $K_0$ into $K_1$ is given by: 
 $$ d = m - \lvert \mathrm{LCS}(K_0, K_1) \rvert $$ 
-Moreover, any $S^*$ of minimal size can be computed in $O(m \log \log m)$ time. 
+Moreover, the size of $S^\ast$ can be determined in $O(m \log \log m)$ time. 
 \end{proposition}
 \begin{proof} \normalsize
 Recall our definition of  edit distance given above, 
@@ -1140,7 +1140,7 @@ $$ d_\Sigma(p,q) = d_\Sigma(\iota, p^{-1} \circ q) = d_\Sigma(q^{-1} \circ p, \i
 where $\iota = [m]$, the identity permutation. Suppose we are given permutations $p = K_0, q = K_1$, and we seek to compute $\mathrm{LCS}(p, q)$. Consider the permutation $p' = q^{-1} \circ p$. Since the LCS distance is a valid edit distance, if $\lvert \mathrm{LCS}(p, q) \rvert = k$, then $\lvert \mathrm{LCS}(p', \iota) \rvert = k$ as well. Notice that $\iota$ is strictly increasing and that any common subsequence $\iota$ has with $p'$ must also be strictly increasing. Thus, the problem of computing $\mathrm{LCS}(p, q)$ reduces to the problem of computing the \emph{longest increasing subsequence} (LIS) of $p'$, which can done in $O( m \log \log m)$ time using van Emde Boas trees~\cite{bespamyatnikh2000enumerating}. The optimality of $d$ follows from the optimality of the well-studied LCS problem~\cite{kumar1987linear}. 
 \end{proof}
 \begin{corollary}\label{cor:expectation}
-If $K_0, K_1$ are random distinct filtrations each of size $m$, then $d \sim m - \sqrt{m}$ in expectation, with probability $1$ as $m \to \infty$.
+If $K, K'$ are random distinct filtrations each of size $m$, then $d \sim m - \sqrt{m}$ in expectation, with probability $1$ as $m \to \infty$.
 \end{corollary}
 \begin{proof} \normalsize
 	The proof of this result reduces to showing the average length of the LIS for random permutations. Let $L(p) \in [1,m]$ denote the maximal length of a increasing subsequence of $p \in S_m$. 
@@ -1153,23 +1153,25 @@ $$ \frac{\ell_m}{\sqrt{m}} \to 2\rlap{\quad \text{as } $m \to \infty$} $$
 Thus, if $p \in S_m$ denotes a uniformly random permutation in $S_m$, then $L(p)/\sqrt{m} \to 2$ in probability as $m \to \infty$. Using the reduction from above to show that $\mathrm{LCS}(p,q) \Leftrightarrow \mathrm{LIS}(p')$, the claimed bound follows.
 \end{proof}
 \begin{remark}
-\noindent It's worth noting that the quantity from Corollary~\ref{cor:expectation} captures the size of $S^\ast$ under worst-case conditions, i.e. between pairs of uniformly sampled permutations, as opposed to uniformly sampled filtrations. Simplicial filtrations have more structure due to the subface relation that must be respected, so one might wonder if this structure reduces the the size of $d$ even further. 
-However, Boissonnat~\cite{boissonnat2018efficient} has shown that for any $k$-dimensional simplicial complex $K$ with $m$ simplices, the number of distinct filtrations built from $K$ is \emph{at least} $\floor{\frac{t+1}{k+1}}^m$, where $t$ is the number of distinct filtration values associated with the complex $K$. 
-In the case where $t \sim O(m)$ and $k << m$ fixed, this lower bound grows similarly to $m!$---thus,  $d \approx n - \sqrt{n}$ is not too pessimistic a value to expect when the pair of filtrations are no more similar than two random permutations. 
-In practice, when one has a time-varying filtration and the sampling points are relatively close [in time], the LCS between adjacent filtrations is expected to be much larger, shrinking $d$ substantially. 
-For example, the average size of the LCS across the 10 filtrations from Section~\ref{sec:motivation} each having $m=417$ simplices sampled at evenly spaced time points was $343$, implying $d \approx 70$ permutations needed on average to update the decomposition at adjacent time points.    
+\noindent Note the quantity from Corollary~\ref{cor:expectation} captures the size of $S^\ast$ between pairs of uniformly sampled permutations, as opposed to uniformly sampled filtrations, which have more structure. 
+%One may wonder if filtrations would exhibit a smaller upper bound due to the subface relation that must be respected.
+However, Boissonnat~\cite{boissonnat2018efficient} prove the number of distinct filtrations built from $k$-dimensional simplicial complex $K$ with $m$ simplices and $t$ distinct filtration values is \emph{at least} $\floor{\frac{t+1}{k+1}}^m$. 
+Since this bound grows similarly to $m!$ when $t \sim O(m)$ and $k << m$ fixed, $d \approx n - \sqrt{n}$ is not too pessimistic a bound between random filtrations.     
 \end{remark}
+ In practice, when one has a time-varying filtration and the sampling points are relatively close [in time], the LCS between adjacent filtrations is expected to be much larger, shrinking $d$ substantially. 
+For example, the average size of the LCS across the 10 filtrations from Section~\ref{sec:motivation} each having $m=417$ simplices sampled at evenly spaced time points was $343$, implying $d \approx 70$ permutations needed on average to update the decomposition at adjacent time points.
  
 Before discussing the practice of constructing such a schedule, we conclude by combining the propositions we've given so far and present the main theorem of this effort. 
   \begin{theorem}\label{prop:sparsity_result}
-   Given a pair of simplicial filtrations $K, K'$ and a decomposition $R = DV$ of $K$, algorithm~\ref{alg:schedule} produces a sequence $\mathcal{S} = \left( s_1, s_2, \dots, s_d \right)$ of cyclic permutations $s_k = (i_k, j_k)$ of size $\lvert \mathcal{S} \rvert = m - \lvert \mathrm{LCS}(K, K') \rvert$, satisfying: 
+   Given a pair of distinct filtrations $K, K'$ of a simplicial complex $S$ and a decomposition $R = DV$ of $K$, the size of a minimal sequence $\mathcal{S} = \left( s_1, s_2, \dots, s_d \right)$ of cyclic permutations $s_k = (i_k, j_k)$ satisfying~\eqref{eq:move_perm} and: 
    	\begin{equation}\label{eq:rv_seq}
    		R = D_0 V_0 \overset{s_1}{\to} D_1 V_{1} \overset{s_2}{\to} \dots \overset{s_d}{\to} D_d V_{d} = R'
    	\end{equation}
-	in $O(m \log \log m)$ time and $O(m)$ space. Moreover, if $i_k < j_k$ for all $k \in [d]$, then~\eqref{eq:rv_seq} can be computed using $O(d\kappa)$ column operations, where:	  
+   	can be determined in $O(m \log \log m)$ time and $O(m)$ space. 
+   	Moreover, if $i_k < j_k$ for all $k \in [d]$, then computing~\eqref{eq:rv_seq} requires $O(d\kappa)$ column operations, where:	  
 	$$  \quad \kappa = \sum\limits_{k = 1}^d \, \lvert \mathbb{I}_{k}\rvert + \lvert \mathbb{J}_{k}\rvert $$
 	% where $\lvert \mathbb{I}_{(k)} \rvert$ and $\lvert \mathbb{J}_{(k)} \rvert$ are the computed quantities in lines (2) and (3) in algorithm~\ref{alg:mr} (here we assume if $i_\ast < j_\ast$).
-	where $\lvert \mathbb{I}_{k} \rvert$ denotes the number of non-zero entries $V_k[i_k, i_k:j_k]$ and $\lvert \mathbb{J}_{k}\rvert$ are the number of columns satisfying $\mathrm{low}_{R_k} \in [i_k:j_k]$ and $\mathrm{row}_{R_k}(i_k) \neq 0$ and $d = m - \lvert \mathrm{LCS}(K, K') \rvert$.
+	and where $\lvert \mathbb{I}_{k} \rvert$ denotes the number of non-zero entries $V_k[i_k, i_k:j_k]$, $\lvert \mathbb{J}_{k}\rvert$ the number of columns satisfying $\mathrm{low}_{R_k} \in [i_k:j_k]$ and $\mathrm{row}_{R_k}(i_k) \neq 0$, and $d = m - \lvert \mathrm{LCS}(K, K') \rvert$.
 \end{theorem}
 \begin{proof} \normalsize
 	Proposition~\ref{prop:schedule_size} yields the necessary conditions for constructing $\mathcal{S}$  with optimal size $d$ in $O(m \log \log m)$ time and $O(m)$. The definition of $\kappa$ follows directly from Algorithm~\ref{alg:mr}. 
@@ -1798,6 +1800,7 @@ We recall an important claim given in~\cite{busaryev2010tracking} on the effect 
 \noindent The effect of the movement on intermediate simplices depends on the direction of the movement. If $i < j$ (respectively, $j < i$), all simplices at positions $k \in [i+1\;:\;j] $ are shifted down (respectively, up) by $1$. 
 
 \subsubsection{LCS-Sort}
+
  \algnewcommand{\IfThenElse}[3]{% \IfThenElse{<if>}{<then>}{<else>}
   \State \algorithmicif\ #1\ \algorithmicthen\ #2\ \algorithmicelse\ #3}
   \begin{algorithm}[h]
