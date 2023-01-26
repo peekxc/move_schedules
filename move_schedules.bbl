@@ -514,92 +514,16 @@ pp. \bfpage{550}--\blpage{559}
 
 %%% 35
 \bibitem{lesnick2012multidimensional}
-\begin{bbook}
-\bauthor{\bsnm{Lesnick}, \binits{M.P.}}:
-\bbtitle{Multidimensional Interleavings and Applications to Topological
-  Inference}.
-\bpublisher{Stanford University}, \blocation{???}
-(\byear{2012})
-\end{bbook}
+\begin{botherref}
+\oauthor{\bsnm{Lesnick}, \binits{M.P.}}:
+Multidimensional interleavings and applications to topological inference.
+PhD thesis,
+Stanford University
+(2012)
+\end{botherref}
 \endbibitem
 
 %%% 36
-\bibitem{landi2014rank}
-\begin{botherref}
-\oauthor{\bsnm{Landi}, \binits{C.}}:
-The rank invariant stability via interleavings.
-arXiv preprint arXiv:1412.3374
-(2014)
-\end{botherref}
-\endbibitem
-
-%%% 37
-\bibitem{lee2003nonlinear}
-\begin{barticle}
-\bauthor{\bsnm{Lee}, \binits{A.B.}},
-\bauthor{\bsnm{Pedersen}, \binits{K.S.}},
-\bauthor{\bsnm{Mumford}, \binits{D.}}:
-\batitle{The nonlinear statistics of high-contrast patches in natural images}.
-\bjtitle{International Journal of Computer Vision}
-\bvolume{54}(\bissue{1}),
-\bfpage{83}--\blpage{103}
-(\byear{2003})
-\end{barticle}
-\endbibitem
-
-%%% 38
-\bibitem{hateren_schaaf_1998}
-\begin{barticle}
-\bauthor{\bsnm{Hateren}, \binits{J.H.v.}},
-\bauthor{\bsnm{Schaaf}, \binits{A.v.d.}}:
-\batitle{Independent component filters of natural images compared with simple
-  cells in primary visual cortex}.
-\bjtitle{Proceedings: Biological Sciences}
-\bvolume{265}(\bissue{1394}),
-\bfpage{359}--\blpage{366}
-(\byear{1998})
-\end{barticle}
-\endbibitem
-
-%%% 39
-\bibitem{carlsson2008local}
-\begin{barticle}
-\bauthor{\bsnm{Carlsson}, \binits{G.}},
-\bauthor{\bsnm{Ishkhanov}, \binits{T.}},
-\bauthor{\bsnm{De~Silva}, \binits{V.}},
-\bauthor{\bsnm{Zomorodian}, \binits{A.}}:
-\batitle{On the local behavior of spaces of natural images}.
-\bjtitle{International journal of computer vision}
-\bvolume{76}(\bissue{1}),
-\bfpage{1}--\blpage{12}
-(\byear{2008})
-\end{barticle}
-\endbibitem
-
-%%% 40
-\bibitem{perea2014klein}
-\begin{barticle}
-\bauthor{\bsnm{Perea}, \binits{J.A.}},
-\bauthor{\bsnm{Carlsson}, \binits{G.}}:
-\batitle{A klein-bottle-based dictionary for texture representation}.
-\bjtitle{International journal of computer vision}
-\bvolume{107}(\bissue{1}),
-\bfpage{75}--\blpage{97}
-(\byear{2014})
-\end{barticle}
-\endbibitem
-
-%%% 41
-\bibitem{perea2018brief}
-\begin{botherref}
-\oauthor{\bsnm{Perea}, \binits{J.A.}}:
-A brief history of persistence.
-arXiv preprint arXiv:1809.03624
-(2018)
-\end{botherref}
-\endbibitem
-
-%%% 42
 \bibitem{buchet2015topological}
 \begin{bchapter}
 \bauthor{\bsnm{Buchet}, \binits{M.}},
@@ -614,6 +538,82 @@ pp. \bfpage{827}--\blpage{841}
 (\byear{2015}).
 \bcomment{Schloss Dagstuhl, Leibniz-Zentrum f{\"u} Informatik GmbH}
 \end{bchapter}
+\endbibitem
+
+%%% 37
+\bibitem{landi2014rank}
+\begin{botherref}
+\oauthor{\bsnm{Landi}, \binits{C.}}:
+The rank invariant stability via interleavings.
+arXiv preprint arXiv:1412.3374
+(2014)
+\end{botherref}
+\endbibitem
+
+%%% 38
+\bibitem{lee2003nonlinear}
+\begin{barticle}
+\bauthor{\bsnm{Lee}, \binits{A.B.}},
+\bauthor{\bsnm{Pedersen}, \binits{K.S.}},
+\bauthor{\bsnm{Mumford}, \binits{D.}}:
+\batitle{The nonlinear statistics of high-contrast patches in natural images}.
+\bjtitle{International Journal of Computer Vision}
+\bvolume{54}(\bissue{1}),
+\bfpage{83}--\blpage{103}
+(\byear{2003})
+\end{barticle}
+\endbibitem
+
+%%% 39
+\bibitem{hateren_schaaf_1998}
+\begin{barticle}
+\bauthor{\bsnm{Hateren}, \binits{J.H.v.}},
+\bauthor{\bsnm{Schaaf}, \binits{A.v.d.}}:
+\batitle{Independent component filters of natural images compared with simple
+  cells in primary visual cortex}.
+\bjtitle{Proceedings: Biological Sciences}
+\bvolume{265}(\bissue{1394}),
+\bfpage{359}--\blpage{366}
+(\byear{1998})
+\end{barticle}
+\endbibitem
+
+%%% 40
+\bibitem{carlsson2008local}
+\begin{barticle}
+\bauthor{\bsnm{Carlsson}, \binits{G.}},
+\bauthor{\bsnm{Ishkhanov}, \binits{T.}},
+\bauthor{\bsnm{De~Silva}, \binits{V.}},
+\bauthor{\bsnm{Zomorodian}, \binits{A.}}:
+\batitle{On the local behavior of spaces of natural images}.
+\bjtitle{International journal of computer vision}
+\bvolume{76}(\bissue{1}),
+\bfpage{1}--\blpage{12}
+(\byear{2008})
+\end{barticle}
+\endbibitem
+
+%%% 41
+\bibitem{perea2014klein}
+\begin{barticle}
+\bauthor{\bsnm{Perea}, \binits{J.A.}},
+\bauthor{\bsnm{Carlsson}, \binits{G.}}:
+\batitle{A klein-bottle-based dictionary for texture representation}.
+\bjtitle{International journal of computer vision}
+\bvolume{107}(\bissue{1}),
+\bfpage{75}--\blpage{97}
+(\byear{2014})
+\end{barticle}
+\endbibitem
+
+%%% 42
+\bibitem{perea2018brief}
+\begin{botherref}
+\oauthor{\bsnm{Perea}, \binits{J.A.}}:
+A brief history of persistence.
+arXiv preprint arXiv:1809.03624
+(2018)
+\end{botherref}
 \endbibitem
 
 %%% 43
