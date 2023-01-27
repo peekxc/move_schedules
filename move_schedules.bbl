@@ -388,19 +388,6 @@ arXiv preprint arXiv:2010.05780
 \endbibitem
 
 %%% 26
-\bibitem{diaconis1977spearman}
-\begin{barticle}
-\bauthor{\bsnm{Diaconis}, \binits{P.}},
-\bauthor{\bsnm{Graham}, \binits{R.L.}}:
-\batitle{Spearman's footrule as a measure of disarray}.
-\bjtitle{Journal of the Royal Statistical Society: Series B (Methodological)}
-\bvolume{39}(\bissue{2}),
-\bfpage{262}--\blpage{268}
-(\byear{1977})
-\end{barticle}
-\endbibitem
-
-%%% 27
 \bibitem{boissonnat2000efficient}
 \begin{barticle}
 \bauthor{\bsnm{Boissonnat}, \binits{J.-D.}},
@@ -411,6 +398,19 @@ arXiv preprint arXiv:2010.05780
 \bvolume{16}(\bissue{1}),
 \bfpage{35}--\blpage{52}
 (\byear{2000})
+\end{barticle}
+\endbibitem
+
+%%% 27
+\bibitem{diaconis1977spearman}
+\begin{barticle}
+\bauthor{\bsnm{Diaconis}, \binits{P.}},
+\bauthor{\bsnm{Graham}, \binits{R.L.}}:
+\batitle{Spearman's footrule as a measure of disarray}.
+\bjtitle{Journal of the Royal Statistical Society: Series B (Methodological)}
+\bvolume{39}(\bissue{2}),
+\bfpage{262}--\blpage{268}
+(\byear{1977})
 \end{barticle}
 \endbibitem
 

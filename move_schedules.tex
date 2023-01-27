@@ -458,7 +458,7 @@ Nonetheless, many variations and optimizations to Algorithm~\ref{alg:reduce} hav
   \vspace*{0.8em}
   \\
   \textbf{ Decomposition Invariants:}
- \begin{enumerate}[labelsep=3pt, topsep=2pt,itemsep=-0.25ex,parsep=1.0ex]
+ \begin{enumerate}[labelsep=3pt, topsep=2pt,itemsep=-0.25ex,parsep=1.0ex]\label{inv:decomposition}
  	\item[I1.] $R = D V$ where $D$ is the boundary matrix of the filtration $K$
  	\item[I2.] $V$ is full-rank upper-triangular
  	\item[l3.] $R$ is \emph{reduced}: if both $\mathrm{col}_i(R) \neq 0$ and $\mathrm{col}_j(R) \neq 0$, then $\mathrm{low}_R(i) \neq \mathrm{low}_R(j)$ 
@@ -916,7 +916,7 @@ Using vineyards, one must consistently perform $\lvert i - j \rvert - 1$ non-zer
 
 Property M2 implies the decomposition is not fully maintained during the execution of \textit{RestoreRight} and \textit{RestoreLeft} below, which starkly contrasts the vineyards algorithm. 
 In this way, we interpret move operations as making a tradeoff in granularity: whereas a sequence of adjacent transpositions $(i, i{+}1), (i{+}1, i{+}2), \dots, (j{-}1, j)$ generates $\lvert i - j \rvert $ valid decompositions in vineyards, an equivalent move operation $\mathrm{Move}(i,j)$ generates only one.
-Indeed, Property M3 directly follows from this fact, as one may simply move each simplex $\sigma \in K$ into its order in $K'$ via insertion sort. Note that the number of valid decomposition produced by vineyards is bounded above by $O(m^2)$, since each pair of simplices $\sigma_i, \sigma_j \in K$ switches its relative ordering at most once is the homotopy assumptions from~\ref{sec:vineyards} hold.
+Indeed, Property M3 directly follows from this fact, as one may simply move each simplex $\sigma \in K$ into its order in $K'$ via insertion sort. Note that the number of valid decomposition produced by vineyards is bounded above by $O(m^2)$ if each pair of simplices $\sigma_i, \sigma_j \in K$ switches its relative ordering at most once during the interpolation from $K$ to $K'$.
 
 As a final note, we remark the combination of \emph{MoveRight} and \emph{MoveLeft} enable the addition or deletion of simplices to the underlying complex. In particular, given $K$ and its decomposition $R = DV$, obtaining a valid decomposition $R' = D' V'$ of $K' = K \cup \sigma$ can be achieved by appending its requisite elementary chains to $D$ and $V$, reducing them, and then executing \emph{MoveLeft}$(m+1, i)$, where $i = f'(\sigma)$. Dually, deleting a simplex $\sigma_i$ may be achieved via \emph{MoveRight} by moving $i$-th to the end of the decomposition and dropping the corresponding columns. 
 % with a logarithmic loss in efficiency, although executing the movement has a higher constant factor. Nonetheless, we can still move a simplex arbitrarily within the given filtration with such a procedure,  which when paired with the augmented sparse matrix structure from~\cite{} implies one can move simplices within the filtration with just O(|i - j|) time permutation, as opposed the |i - j| separate O(1) permutations. Moreover, the ability to move a simplex earlier in the filtration enables a key preprocessing step which we introduce next which, as we shall prove, may greatly reduce the number of times the decomposition need be maintained. 
@@ -935,8 +935,8 @@ As a final note, we remark the combination of \emph{MoveRight} and \emph{MoveLef
 %\subsection{Proposed approach}
 Let us begin with a brief overview of the pipeline, outlined in Algorithm~\ref{alg:schedule} below.
 As before, we assume as input  a discrete $1$-parameter family of filtrations $\mathcal{K} = (K_1, K_2, \dots, K_n)$ of an abstract simplicial complex $K$ with $\lvert K \rvert =m$, and the goal being to compute their persistence diagrams.
-Fix reindexing  bijections $f_i : K_i \to K_{i+1}$. 
-Each $f_i$ induces a bijection $f_i^\ast : [m] \to [m]$, or equivalently, a permutation of the index set $[m]$. For each pair of filtrations $(K_i, K_{i+1})$, we assign the simplices of $K_i$ labels from index set $[m]$ in filtration order, relabeling $K_{i+1}$ accordingly using $f_i$. 
+Fix reindexing bijections $\rho_i : K_i \to K_{i+1}$. 
+Each $\rho_i$ induces a bijection $\rho_i^\ast : [m] \to [m]$, or equivalently, a permutation of the index set $[m]$. For each pair of filtrations $(K_i, K_{i+1})$, we assign the simplices of $K_i$ labels from index set $[m]$ in filtration order, relabeling $K_{i+1}$ accordingly using $\rho_i$. 
 As $p$ is now a strictly increasing sequence, we may compute the longest increasing subsequence $\mathrm{LIS}(q)$ and use this subsequence to recover a longest common subsequence (LCS) between $(K_i, K_{i+1})$, which we denote later with $\mathrm{LCS}(K_i, K_{i+1})$. We pass $q$ and $\mathrm{LIS}(q)$ to our greedy scheduling algorithm, which returns as output an ordered set of move permutations  $\mathcal{S}$ of minimum size, which we call a \emph{schedule}.
 Note one need not explicitly store the entire family of filtrations nor the schedules between them---Algorithm~\ref{alg:schedule} may be easily modified to be completely \emph{online}, keeping at most two filtrations and one decomposition in memory at any given time. 
 % Not all valid schedules are created equal: some incur a much larger number of column operations, even if they have a minimal number of moves; we address this issue in Section~\ref{sec:schedule_cost}.
@@ -970,17 +970,29 @@ Here we describe the reasoning for lines (4-5) in Algorithm~\ref{alg:schedule}. 
 It was hypothesized that the reason the vineyards algorithm was more expensive than the naïve approach is due to the extra overhead of maintaining the decomposition at each transposition.
 Thus, decreasing the number of times the decomposition is restored to a valid state ought to reduce the total number of column operations needed to update a decomposition. This motivates the question: can one simultaneously minimize the number of times the decomposition is restored to a valid state and retain an efficient update scheme for \emph{arbitrary} permutations? 
 
-\subsubsection{The Vineyards Setting}\label{sec:continuous_setting}
-In the vineyards (i.e., continuous time) case, we are given a homotopy $F : K \times [0,1] \to \mathbb{R}$ interpolating between  a pair of filtrations $K_0, K_1$ of $K$, with simplices  ordered according to $f_0 = F(\cdot, 0)$ and $f_1 = F(\cdot, 1)$, respectively. 
-The choice of homotopy $F$ completely determines the number of adjacent transpositions that transform $K_0$ into $K_1$ via $F$, so to get a meaningful bound we must know something about $F$. 
-If we assume that the curves $\tau \mapsto F(\cdot, \tau)$  are in general position in $[0,1]\times \mathbb{R}$, and that each pair of curves cross  at most once, then the set of adjacent transpositions $S_F$ that $F$ decomposes into is given by the pairs of simplices in $K$ with changes in their relative ordering:
+\subsubsection{Continuous setting}\label{sec:continuous_setting}
+In the continuous time case (i.e., vineyards), we are given a homotopy $F : K \times [0,1] \to \mathbb{R}$ interpolating between  a pair of filtrations $K, K'$ from some underlying complex $S$, with simplices ordered according to $f = F(\cdot, 0)$ and $f' = F(\cdot, 1)$, respectively. 
+As the choice of homotopy $F$ determines the number of transpositions that transform $K$ into $K$ via $F$, bounding this number requires assumptions on $F$. 
+If we assume the curves $\tau \mapsto F(\cdot, \tau)$ are in general position in $[0,1]\times \mathbb{R}$ and that each pair of curves cross  at most once, then the  functions $\tau\mapsto F(\cdot, \tau)$ belong to a class of $x$-monotone curves called \emph{pseudo-segments}.
+%, i.e. parameterized curves whose behavior with respect to a certain restricted set of geometric predicates is invariant. 
+This family includes the straight-line homotopy $F(\sigma, \tau) = (1 - \tau) f(\sigma) + \tau f'(\sigma)$,  studied in the original vineyards paper~\cite{cohen2006vines}. 
+Detecting all $k$ intersections of $m$ pseudo-segments is a well-studied problem in computational geometry that can be optimally solved in output-sensitive $O(m \log m + k)$ time by several algorithms~\cite{boissonnat2000efficient}, where $k$ is the output-sensitive term. 
+
+If one has two distinct filtrations $K,K'$ both derived from the same underlying complex $S$ of size $m = \lvert S \rvert$, observe the simplexwise representations of both $K$ and $K'$ can be thought of as elements of the symmetric group $S_m$.
+Moreover, as the application of permutations to $K$ implies additional elementary column operations to the underlying matrix decomposition, we think of the action of any set of such permutations on the initial decomposition $R=DV$ of $K$ as a \emph{schedule} with respect to the pair $K,K'$. We formalize this with a definition.
+\begin{definition}[Schedule]\label{def:schedule}
+Given a pair of filtrations $K, K'$ from an underlying complex $S$ and a fixed bijection $\rho : K \to K'$, let $\rho^\ast : [m] \to [m]$ denote its induced bijection on $S_m$. Given a decomposition $R = DV$ of $K$, a \emph{schedule}  $\mathcal{S} = (s_1, s_2, \dots, s_d )$ is a sequence of permutations mapping satisfying: 
+	\begin{equation}\label{eq:rv_seq}
+   		R = D_0 V_0 \overset{s_1}{\to} D_1 V_{1} \overset{s_2}{\to} \dots \overset{s_d}{\to} D_d V_{d} = R'
+   	\end{equation}
+   	where, for each $i \in [d]$, $R_i = D_i V_i$ is a valid decomposition respecting invariants~\ref{inv:decomposition}, and $R'$ is a valid decomposition of $K'$.
+\end{definition}
+\noindent Let $F : K \times [0,1] \to \mathbb{R}$ denote a homotopy of $x$-monotone curves. Then  $F$ decomposes into an ordered set of adjacent transpositions $S_F$ given by pairs of simplices in $K$ that change in their relative ordering between $K$ and $K'$:
 \begin{align*}\label{eq:sf_schedule}
-	S_F &= \{ (i,i+1) \, \mid \, f_0(\sigma_i) < f_0(\sigma_{i+1}), \;  f_1(\sigma_i) > f_1(\sigma_{i+1}), \; i \in [m] \} \\
+	S_F &= \{ (i,i+1) \, \mid \, f(\sigma_i) < f(\sigma_{i+1}), \;  f'(\sigma_i) > f'(\sigma_{i+1}), \; i \in [m] \} \\
 	&= \{ s_1, s_2, \dots, s_k \} 
 \end{align*}
-%We assume, without loss of generality, that the underlying complexes $K_0$ and $K_1$ have the same cardinality. 
-%Since we deal exclusively with essential filtrations, we may think of $K_1$ as simply a reordering of $K_0$ (or vice versa). 
-Let $p = [m]$ and let $q = \mathrm{Im}\,f^\ast$, where $f^\ast : [m] \to [m]$ is the one-to-one correspondence induced by the reindexing bijection $f: K_0 \to K_1$. Then $S_F$ is given by the inversions between $p$ and $q$:
+Moreover, let $p = [m]$ and let $q = \mathrm{Im}\,\rho^\ast$, where $\rho^\ast : [m] \to [m]$ is the one-to-one correspondence induced by the reindexing bijection $\rho: K \to K'$. Then $S_F$ is given by the inversions between $p$ and $q$:
 \[S_F = 
 \mathrm{Inv}(p, q) = \{ \, (i,i+1) \, \mid \, p(i) < p(i+1), \; q(i) > q(i+1), \; i \in [m]\, \}
 \]
@@ -988,20 +1000,8 @@ The cardinality of $  S_F $ is exactly the \emph{Kendall}-$\tau$ distance~\cite{
 \begin{equation}\label{eq:kendall_dist}
 	K_\tau(p, q) = \lvert \, \mathrm{Inv}(p, q) \, \rvert
 \end{equation}
-Geometrically, our assumptions on $F$ imply that the  functions $\tau\mapsto F(\cdot, \tau)$ belong to a class of $x$-monotone curves called \emph{pseudo-segments}.
-%, i.e. parameterized curves whose behavior with respect to a certain restricted set of geometric predicates is invariant. 
-This family includes 
-the straight-line homotopy $F(\sigma, \tau) = (1 - \tau) f_0(\sigma) + \tau f_1(\sigma)$,   studied in the original vineyards paper~\cite{cohen2006vines}. Detecting all $k$ intersections of $m$ pseudo-segments is a well-studied problem in computational geometry that can be optimally solved in output-sensitive $O(m \log m + k)$ time by several algorithms~\cite{boissonnat2000efficient}, where $k$ is the output-sensitive term. 
-Since $k \sim O(m^2)$ in the worst case, achieved when $f_1 = - f_0$, we have the following upper bound on $\lvert S_F \rvert$
-\begin{equation}\label{eq:sf_m2}
-	\lvert S_F \rvert \approx O(m^2)
-\end{equation}   
- This bound is exhibited in the grayscale image data example in section~\ref{sec:motivation}: each 9x9 patch contains $(81, 208, 128)$ simplices of dimensions $(0, 1, 2)$ yielding $m=417$ simplices in total which, as the homotopy is simulated, generate $\approx 70,\!000$ transpositions. The upper bound size on $\lvert S_F \rvert$ is thus $\binom{417}{2} \approx 87,\!000$, which nearly occurs in this case, since the last filtration is approximately the reverse of the filtration at the beginning.   
- This quadratic scaling can induce a number of issues in practical implementations of vineyards.
- Indeed, although many transpositions require no column reductions in practice, detecting the existence of non-zero entries at specific positions in the sparse matrix takes $O(\log(m))$ time per transposition. 
+This implies the $\lvert S_F \rvert \sim O(m^2)$ in the worst case, achieved when $f = - f'$, which is exhibited in the grayscale image data example in section~\ref{sec:motivation}: each 9x9 patch contains $(81, 208, 128)$ simplices of dimensions $(0, 1, 2)$ yielding $m=417$ simplices in total. As the homotopy is simulated, observe $\approx 70,\!000$ transpositions are generated. The upper bound size on $\lvert S_F \rvert$ is thus $\binom{417}{2} \approx 87,\!000$, which nearly occurs in this case, since the last filtration is nearly the reverse of the initial one.   
 
-The ordered set of inversions $(i,j) \in S_F$ can be interpreted as permutations to apply to the decomposition, and hence 
-can be thought of as a \emph{schedule} with respect to $F$. 
 If our goal is to decrease the size of $\lvert S_F \rvert$, one option is to \emph{coarsen} $S_F$ to a new schedule $\widetilde{S}_F$ by collapsing contiguous sequences of adjacent transpositions to moves, via the map:
 \begin{equation}\label{eq:tr_to_mv}
 	 (i, i+1)(i+1, i+2)\cdots(j-1, j) \mapsto (j, i+1, \cdots, j-1, i)  \quad \text{ if } i < j
@@ -1009,32 +1009,42 @@ If our goal is to decrease the size of $\lvert S_F \rvert$, one option is to \em
 We expect $\widetilde{S}_F$ to be cheaper to execute than $S_F$, with the tradeoff  that less diagrams are produced.
 We make this precise next:
 \begin{proposition}\label{prop:factor2}
-	Let $R = D V$ be a valid decomposition of size $(m \times m)$, let $C$ denote the number of $O(m)$ operations required to execute schedule $S_F$, and similarly let $L$ be the number of $O(m)$ operations required to execute a coarsened schedule $\widetilde{S}_F$ of $S_F$. We have the following relationship between $C$ and $L$:
-	$$ \frac{C}{2} \leq L \leq C$$ 
+	Let $K$ denote a filtration of size $\lvert K \rvert = m$ with valid decomposition $R = D V$, $T$ the maximum number of $O(m)$ operations required to execute schedule $S_F$ using vineyards, and $M$ be the maximum number of $O(m)$ operations required to execute the coarsened schedule $\widetilde{S}_F$ with moves. Then:
+	$$ M \leq {\textstyle \frac{1}{2} \, T} $$ 
 \end{proposition}
 \begin{proof} \normalsize
-Consider executing the vineyards algorithm on a given schedule $S_F$.
-	%Consider Algorithms~\ref{alg:tr} and~\ref{alg:mr}, where Algorithm~\ref{alg:tr} is used to execute a given schedule $S$ and Algorithm~\ref{alg:mr} is used to execute its coarsened version $\widetilde{S}$. If maps are created providing $O(1)$ access to the low entries needed by lines (5) and (12), and the non-zero entries in each column are sorted according to some fixed order providing $O(\log(m))$ time for lines (5), (11), (17), and (20), then  
-	%If we maintain a map locating the position of the lowest entries in $R$ in $O(1)$ time, 
-	The dominant subcomputation for the vineyards algorithm are the column operations---which take $O(m)$ time---since the permutations can be made to the matrix in $O(1)$ time and all other computations take at most $O(\log m)$ time. In the vineyards algorithm, there are at most $2$ column operations for a given adjacent transposition per matrix. 
-	Thus, for any contiguous sequence of transpositions $(i,i+1), (i+1,i+2), \ldots (j-1,j)$ we require at most $2(\lvert i - j \rvert)$ column operations in both $R$ and $V$, giving a total of $4(\lvert i - j \rvert)$ column operations.
-	
-	Now consider using the MoveRight($i$,$j$) for a single move operation, as a replacement for the sequence of transpositions above. Here, the dominant cost again are the column operations (line 5), since although permutations take $O(\lvert i - j\rvert)$ time we require only $1$ such permutation per movement. 
-	If we allocate an extra $O(m)$ memory space for the donor columns $d_\ast$ prior to the movement, notice that the assignment to and from $d_\ast$ (lines (4), and (7) in RestoreRight of MoveRight in Algorithm~\ref{alg:mr}) can be completed in $O(1)$ time by storing the column memory addresses as pointers and swapping their pointers. When $d_\mathrm{low}' < d_\mathrm{low}$, instead of copying $\mathrm{col}_\ast(k)$ to $d_\ast'$, which takes $O(m)$ time, we swap their column pointers in $O(1)$ and proceed by modifying the donor column $d_\ast$ with the necessary column operations. After the operations, $d_\ast$ contains the newly modified column and $\mathrm{col}_\ast(k)$ contains the unmodified donor $d_\ast'$, so we swap them once more in $O(1)$ time. 
-Since we require at most $1$ $O(m)$ column operation for each index in $[i: j]$, moving a column from $i$ to $j$ where $i < j$ requires at most $2(\lvert i - j \rvert)$ column operations for both $R$ and $V$. The claimed inequality follows. 
+First, consider executing the vineyards algorithm on a given schedule $S_F$. As there are at most $2$ column operations, any contiguous sequence of transpositions $(i,i+1), (i+1,i+2), \ldots (j-1,j)$ induces at most $2(\lvert i - j \rvert)$ column operations in both $R$ and $V$, giving a total of $4(\lvert i - j \rvert)$ column operations.
+
+Now consider a single MoveRight($i$,$j$) outlined in Algorithm~\ref{alg:mr}. Here, the dominant cost again are the column operations (line 5). 
+Though we need an extra $O(m)$ storage allocation for the donor columns $d_\ast$ prior to the movement, notice that the assignment to and from $d_\ast$ (lines (4), and (7) in RestoreRight of MoveRight in Algorithm~\ref{alg:mr}) can be completed in $O(1)$ time via a pointer swapping argument. That is, when $d_\mathrm{low}' < d_\mathrm{low}$, instead of copying $\mathrm{col}_\ast(k)$ to $d_\ast'$---which takes $O(m)$ time---we swap their column pointers in $O(1)$ before proceeding with the necessary column operations. After the movement, $d_\ast$ contains the newly modified column and $\mathrm{col}_\ast(k)$ contains the unmodified donor $d_\ast'$, so we swap them once more in $O(1)$ time. 
+Since we require at most one $O(m)$ column operation for each index in $[i, j]$, moving a column from $i$ to $j$ where $i < j$ requires at most $2(\lvert i - j \rvert)$ column operations for both $R$ and $V$. The claimed inequality follows. 
+%since although permutations take $O(\lvert i - j\rvert)$ time we require only $1$ such permutation per movement. 
 	%Identifying non-zero entries in the matrix occurs once, which takes $O(\lvert i - j \rvert \log(m))$ time.
 \end{proof}
-In terms of bounds, we have $\lvert \widetilde{S}_F \rvert \leq \lvert S_F \rvert$, and the associated coarsened schedule $\widetilde{S}_F$ can be computed in $O(m)$ time. 
-However, the coarsening depends entirely on the choice of $F$ and the upper bound from~\eqref{eq:sf_m2} remains, as its always possible that there are no contiguous subsequences to collapse. If a straight line homotopy is used, the number of collapsible subsequences may depend on the simplices categorization as critical points; transpositions between pairs of simplices which trigger  changes in homology tend to be more expensive. Cohen-Steiner~\cite{cohen2006vines} referred to these as \emph{switches}, see~\cite{edelsbrunner2000topological} for more details. 
+\noindent 
+In terms of size bounds, though clearly $\lvert \widetilde{S}_F \rvert \leq \lvert S_F \rvert$ and the associated coarsened $\widetilde{S}_F$ requires just $O(m)$ time to compute, the coarsening depends entirely on the initial choice of $F$---thus the quadratic upper bound remains, as its always possible that there are no contiguous subsequences to collapse. 
+As mentioned in~\ref{sec:vineyards}, this quadratic scaling induces a number of issues in the practical implementations of the vineyards algorithm.
+% Indeed, although many transpositions require no column reductions in practice, detecting the existence of non-zero entries at specific positions in the sparse matrix takes $O(\log(m))$ time per transposition. 
 
-\subsubsection{The Moves Setting}\label{sec:moves_setting}
-As we mentioned before, vineyards maintains $j-i$ valid decompositions while 
-performing the sequence $(i,i+1), (i+1,i+2), \ldots, (j-1,j)$ of adjacent transpositions. 
-The benefit of move operations is that one need not maintain a valid decomposition during the movement $(i,j)$, only at the end; thus, it is worth investigating whether the vineyard bounds can be improved. 
-In the case of vineyards, the bound is clear: if $\kappa = K_\tau(K_0, K_1)$ is the Kendall-$\tau$ distance, then $\Omega(\kappa)$ adjacent transpositions are required to transform $K_0 \mapsto K_1$. 
-In contrast, if we allow move operations in any order, we have $O(m)$ as a trivial upper bound: simply move each simplex in $K_0$ into its position in the filtration given by $K_1$ in the order given by the latter. However, it's not immediately clear whether this bound is tight. 
 
-To establish this formally, we require a few definitions. Let $S_m$ denote the symmetric group  of   permutations of  $[m]$ under function composition $\circ$. Given two fixed permutations $p, q \in S_m$ and a set $\Sigma \subseteq S_m$,  a common  problem is to find an ordered sequence of permutations $s_1, s_2, \dots, s_d \in \Sigma$ whose composition transforms $p$ into $q$:
+
+\subsection{Discrete setting}
+
+
+
+%If a straight line homotopy is used, the number of collapsible subsequences may depend on the simplices categorization as critical points; transpositions between pairs of simplices which trigger  changes in homology tend to be more expensive. Cohen-Steiner~\cite{cohen2006vines} referred to these as \emph{switches}, see~\cite{edelsbrunner2000topological} for more details. 
+
+%\subsubsection{The Moves Setting}\label{sec:moves_setting}
+%As we mentioned before, vineyards maintains $j-i$ valid decompositions while 
+%performing the sequence $(i,i+1), (i+1,i+2), \ldots, (j-1,j)$ of adjacent transpositions. 
+%The benefit of move operations is that one need not maintain a valid decomposition during the movement $(i,j)$, only at the end; thus, it is worth investigating whether the vineyard bounds can be improved. 
+%In the case of vineyards, the bound is clear: if $\kappa = K_\tau(K_0, K_1)$ is the Kendall-$\tau$ distance, then $\Omega(\kappa)$ adjacent transpositions are required to transform $K_0 \mapsto K_1$. 
+
+Contrasting the continuous-time setting, if we discard the use of a homotopy interpolation and allow move operations in any order, we have $\widetilde{S} \sim O(m)$ trivially: simply move each simplex in $K$ into its position in the filtration given by $K'$ in the order given by the latter. However, it's not immediately clear whether this bound is tight, or whether this strategy of generating schedules---which we call \emph{naive strategy}---is performant.  
+%Indeed, arbitrarily permuting a given filtration $K$: one must respect the face poset.
+
+
+To establish this formally, we require a few definitions. Given two fixed permutations $p, q \in S_m$ and a set $\Sigma \subseteq S_m$,  a common  problem is to find a sequence of permutations $s_1, s_2, \dots, s_d \in \Sigma$ whose composition satisfies:
 	\begin{equation}\label{eq:sorting}
 		s_d \circ \cdots \circ s_2 \circ s_1 \circ p = q
 	\end{equation}
@@ -1043,55 +1053,10 @@ A sequence $S = \{s_1, s_2, \dots, s_d\} \subseteq \Sigma \subseteq S_m$ of oper
 When $p, q$ are interpreted as strings, distances defined with respect to a fixed $\Sigma \subseteq S_m$ are commonly referred to as \emph{edit distances}~\cite{labarre2013lower}, which are denoted as $d_\Sigma(\cdot, \cdot)$, and the subsequent elementary operations on the strings are called \emph{edit operations}. 
 Note the choice of $\Sigma$ defines the universe of operations and thus the type of edit distance being measured---otherwise if $\Sigma = S_m$, then $d_\Sigma(p, q) = 1$ for any $p\neq  q \in S_m$.
 
-Both the difficulty of obtaining a minimal sorting and the size of $d_\Sigma(p,q)$ vary dramatically with the choice of $\Sigma$. 
-For example, while sorting by transpositions and reversals is NP-hard, and sorting by prefix  transpositions is unknown, there are polynomial time algorithms for sorting by block interchanges, exchanges, and prefix exchanges~\cite{labarre2013lower}. Sorting by adjacent transpositions can be achieved in many ways: any sorting algorithm that exchanges two adjacent elements during its execution (e.g. bubble sort, insertion sort, merge sort) yields a sorting of size $K_\tau(p, q)$.  
+Perhaps surprisingly, small changes to set of allowable edit operation $\Sigma$ can dramatically affect both the size of $d_\Sigma(p,q)$ and the difficulty of obtaining a minimal sorting. 
+For example, while sorting by transpositions and reversals is NP-hard and sorting by prefix  transpositions is unknown, there are polynomial time algorithms for sorting by block interchanges, exchanges, and prefix exchanges~\cite{labarre2013lower}. Sorting by adjacent transpositions can be achieved in many ways: any sorting algorithm that exchanges two adjacent elements during its execution (e.g. bubble sort, insertion sort) yields a sorting of size $K_\tau(p, q)$.  
 
-In the context of filtered simplicial filtration, we refer to sortings that repair the decomposition as \emph{schedules}. 
-\begin{definition}[Schedule]\label{def:schedule}
-Given a pair of filtrations $K_0, K_1$ of equal size $m$ and a fixed bijection $f : K_0 \to K_{1}$, let $f^\ast : [m] \to [m]$ denote its induced bijection on $S_m$. A \emph{schedule}  $\mathcal{S} = \{s_1, s_2, \dots, s_d \}$ is a sequence of permutations mapping $K_0 \mapsto K_1$ that satisfies: 
-	\begin{equation}\label{eq:rv_seq}
-   		R = D_0 V_0 \overset{s_1}{\to} D_1 V_{1} \overset{s_2}{\to} \dots \overset{s_d}{\to} D_d V_{d} = R'
-   	\end{equation}
-   	where, for each $i \in [d]$, $R_i = D_i V_i$ is a valid decomposition: $R_i$ is \emph{reduced} and $V_i$ is full rank upper-triangular. 
-\end{definition}
-% Note that one cannot arbitrarily permute a given filtration $K$ and its corresponding decomposition: one must respect the face poset.
-% Given a filtered simplicial complex $K$, denote by $R = D V$ the decomposition of its corresponding boundary matrix $\partial_K$ such that $R$ is reduced and $V$ is upper-triangular.
-% If one has a pair of filtrations $K, K'$ of equal size $m = \lvert K \rvert = \lvert K' \rvert$ and $R = \partial_{K} V$ has been computed, then it may be advantageous to use the information stored in ($R$, $V$) to reduce the computation of $R' = \partial_{K'} V'$. Our first result makes this more explicit.
-%   \begin{proposition}\label{prop:preprocessing_time}
-%   Given a decomposition $R = \partial_{K} V$ of a simplicial filtration $K$, algorithm~\ref{alg:schedule} can produce such a sequence $\mathcal{S} = \left( s_1, s_2, \dots, s_d \right)$ of permutations with size $\lvert \mathcal{S} \rvert \sim O(m)$ which induces a sequence of decompositions: 
-%   	\begin{equation}\label{eq:rv_seq}
-%   		R = D_0 V_0 \overset{s_1}{\to} D_1 V_{1} \overset{s_2}{\to} \dots \overset{s_d}{\to} D_d V_{d} = R'
-%   	\end{equation}
-%	in $O(m \log \log m)$ time and $O(m)$ memory.
-
-%In the context of performing updates to the $R = D V$ decomposition using moves,  such sequences will form schedules. 
-%There are typically many ways to solve (1), and any solution to (2) necessarily solves (1) and (3). 
-
-%Many types of edit distances can be described succinctly. 
-%Let $\beta(i,j,k,l)$ with $1 \leq i < j \leq k < l \leq m$ denote the permutation that exchanges the two closed intervals given by $i, j-1$ and $k,l-1$:
-%\[
-%\setlength\arraycolsep{1.5pt}
-%\scalefont{0.90}{
-%\setcounter{MaxMatrixCols}{20}
-%\left (
-%\begin{array}{*3c|*4c|*4c|*4c|*{5}c } 
-%\cline{4-7} \cline{12-15}  \rule{0pt}{2ex}
-%1 & \cdots & i -1 & i & i + 1 & \cdots & j - 1 & j & j +1 & \cdots & k - 1  & k & k+1 & \cdots & l - 1 & l & l + 1 & \cdots & m \\
-%\cline{4-7} \cline{12-15} 
-%\cline{4-7} \cline{12-15}  \rule{0pt}{2ex}
-%1 & \cdots & i -1 & k & k+1 & \cdots & l - 1 & j & j +1 & \cdots & k - 1  & i & i + 1 & \cdots & j - 1 & l & l + 1 & \cdots & m \\
-%\cline{4-7} \cline{12-15} 
-%\end{array}
-%\right ) 
-%}
-%\]
-%Common edit distances found in the literature expressed as specializations of $\beta$ are given below:
-%\begin{enumerate}
-%	\item (no restriction on $i,j,k,l$) $\implies$ $\beta$ is called a \emph{block interchange}
-%	\item $j = k$ $\implies$ $\beta$ swaps adjacent intervals, called a \emph{transposition}
-%	\item $j = i+1$ and $l = k+1$ $\implies$ $\beta$ swaps two not necessarily adjacent elements, called an \emph{exchange}\footnote{In comparative genomics, exchanging two elements is sometimes called a \emph{super short transposition}.}
-%\end{enumerate}
-\noindent Here we consider sorting by moves. Phrased using permutations, a \emph{move operation} $m_{ij}$ that moves $i$ to $j$ in $[m]$, for $i < j$, corresponds to the permutation: 
+Here we consider sorting by moves. Phrased using permutations, a \emph{move operation} $m_{ij}$ that moves $i$ to $j$ in $[m]$, for $i < j$, corresponds to the permutation: 
 \begin{equation}\label{eq:move_perm}
 \setlength\arraycolsep{1.8pt}
 \scalefont{0.90}{
