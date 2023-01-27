@@ -14,7 +14,8 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 % \usepackage{algorithm}
-
+\usepackage{bbm}
+\usepackage{dsfont}
 \usepackage{array}
 %\usepackage{algorithm2e}
 %%\usepackage{algorithmicx}
@@ -677,29 +678,25 @@ On the negative side, one needs to constantly query the non-zero status of vario
  
  % As a rule of thumb, due to the sparsity of both $R$ and $V$, most transpositions actually require no $O(m)$ operations. For example, exchanging two simplices of differing dimensions never requires column operations. A simple analysis given by Chen et al.~\cite{chen2013output} quantifies the order of magnitude we can expect the sparsity of these matrices to be.  
 
-\subsection{Moves}\label{sec:moves} Busaryev et al.~\cite{busaryev2010tracking} introduced an algorithm which maintains an $R = D V$ decomposition under \emph{move operations}. A move operation $\mathrm{Move}(i,j)$ is a set of rules for maintaining a valid decomposition under the application of a permutation $P$ that moves a simplex $\sigma_i$ at position $i$ to position $j$. If $j = i \pm 1$, this operation is an adjacent transposition, and thus in some sense Busaryev's move algorithm is a generalization of vineyards.
+\subsection{Moves}\label{sec:moves} Originally developed to accelerate tracking generators with temporal coherence, Busaryev et al.~\cite{busaryev2010tracking} introduced an extension of the vineyards algorithm which maintains a $R = D V$ decomposition under \emph{move operations}. A move operation $\mathrm{Move}(i,j)$ is a set of rules for maintaining a valid decomposition under the application of a permutation $P$ that moves a simplex $\sigma_i$ at position $i$ to position $j$. If $j = i \pm 1$, this operation is an adjacent transposition, and thus in some sense moves generalizes vineyards.
+However, despite being conceptually equivalent to performing a sequence of contiguous transpositions, the move operation presented by Busaryev exhibits several attractive qualities distinct from the vineyards approach that warrants further study.  
 
-For completeness, we recapitulate the moves algorithm from~\cite{busaryev2010tracking}. 
-Let $K$ denote a filtration of size $m = \lvert K \rvert$ and $R = DV = [ r_1, r_2, \dots, r_m]$ its decomposition, where $r_j$ ($v_j$) will denote the $j$-th column of $R$ ($V$). By definition, if $r_j = D v_j = 0$, then the inclusion $K_{j-1} \hookrightarrow K_{j}$ introduced a new cycle and homology class of dimension $p = \mathrm{dim}(\sigma_j)$ whose generator is encoded by the non-zero coefficients $(\alpha_i^{(j)}, \alpha_{i+1}^{(j)}, \dots, \alpha_j^{(j)})$ via the combination: 
+For completeness, we recapitulate the motivation of the moves algorithm from~\cite{busaryev2010tracking}. 
+Let $K$ denote a filtration of size $m = \lvert K \rvert$ and $R = DV$ its decomposition, where $R = [r_1, r_2, \dots, r_m]$ and $V = [v_1, v_2, \dots, v_m]$ denote the columns of $R$ and $V$, respectively. By definition, if $r_j = D v_j = 0$, then the inclusion $K_{j-1} \hookrightarrow K_{j}$ introduced a new cycle whose generator is given by:
+%the non-zero coefficients $(\alpha_i^{(j)}, \alpha_{i+1}^{(j)}, \dots, \alpha_j^{(j)})$ via the combination: 
 \begin{equation}
 	r_j = D v_j = \alpha_i^{(j)} \cdot \partial(\sigma_{i+1}) + \alpha_{i+1}^{(j)} \cdot \partial(\sigma_{i+1}) + \dots + \alpha_{j}^{(j)} \cdot \partial(\sigma_{j}) = 0
 \end{equation}
 Now, consider the permutation $P$ that moves a simplex $\sigma_i$ in $K$ to position $j$, shifting all intermediate simplices $\sigma_{i+1}, \dots, \sigma_{j}$ down by one ($i < j$). 
-To perform this shift, these non-zero coefficients $\alpha_i^{(i)}, \alpha_{i}^{(i+1)}, \dots, \alpha_i^{(j)}$ encoded in the boundary chains $r_i, r_{i+1}, \dots, r_j$ must be set to zero, otherwise $\partial(\sigma_i)$ contributes to earlier simplices in the filtration. 
-In matrix form, these coefficients are recorded by $v_j$, and thus setting $\alpha_i^k = 0$ for all $k \in [i,j]$ amounts to setting $v_i(i), v_{i+1}(i), \dots, v_{j}(i)$ to $0$.
+To perform this shift, the non-zero coefficients $\alpha_{i}^{(i+1)}, \dots, \alpha_i^{(j)}$ encoded in the boundary chains $r_{i+1}, \dots, r_j$ must be set to zero, otherwise $\partial(\sigma_i)$ contributes to earlier simplices in the filtration. 
+As these coefficients are recorded by $v_j$, setting $\alpha_i^k = 0$  amounts to setting $v_k(i) = 0$ for all $k \in [i+1,j]$---algorithmically, these manifest as column operations $\ast$ used to ensure $PV\ast$ is upper-triangular, thus maintaining invariant I2.
+Notice that, to maintain invariant I1, these operations induce a potentially unreduced $R' = P R \ast P^T$, breaking invariant I3.
+We could reduce $R'$ with an additional $k$ operations, however $k$ may scale quadratically in the interval $\lvert i - j\rvert$, rendering the efficiency of this approach at best that of vineyards and at worse that of the standard algorithm. 
 
-Computationally, setting $v_i(i) = v_{i+1}(i) = \dots = v_{j}(i) = 0$ with column operations $\ast$ ensures $PV\ast$ is upper-triangular, thus maintaining invariant I2.
-To maintain invariant I1, these operations induce a corresponding $R' = P R \ast P^T$, which may be unreduced (breaking invariant I3).
-We could reducing $R'$ with an additional $k$ operations, however $k$ may scale quadratically in the interval $\lvert i - j\rvert$, rendering the efficiency of this approach at best that of vineyards and at worse that of the standard algorithm. 
 To bypass this difficulty, Busaryev et al. observed that since the initial $R$ is reduced, if it contains $s$ pivot entries in the columns $[i,j]$ of $R$, then $R'$ must also have $s$ pivots. 
-In particular, if during the cancellation  of $v_i(i) = v_{i+1}(i) = 0$ the column $r_{i+1} \mapsto r_{i+1}'$ becomes unreduced, then the pivot $\mathrm{low}_R(i+1)$ becomes a \emph{free}, possibly becoming a pivot again in $r_{i+2}', \dots, r_j'$.  
-Thus, if we save $r_{i+1}$ prior to modification to a \emph{donor column}, we may re-use or \emph{donate} its pivot entry to one of $r_{i+2}, \dots, r_j$. 
-This process is repeated at most $j - i - 1$ times---by construction, the matrix $R'$ stays reduced during the movement in all except possibly for the $i$-th column, and since these operations are left-to-right $V'$ will be upper-triangular.
-%We may achieve this via left-to-right column operations, as before, however this may leave several chains in $R$ unreduced. 
-%To ameliorate this, observe that since the initial set of chains $r_i, r_{i+1}, \dots, r_j$ are already reduced, their pivots are unique---thus, we should expect these entries. 
-%setting any individual $\alpha_i^(k) = 0$ for some $i < k \leq j$ has the effect of changing its pivot entry
-% participates in a linear combination of another 
-%By definition, the column $r_i$ 
+In particular, if during the cancellation  of $v_{i+1}(i) = v_{i+2}(i) = 0$ the column $r_{i+2} \mapsto r_{i+2}'$ becomes unreduced, then the pivot $\mathrm{low}_R(i+2)$ becomes a \emph{free}, possibly becoming a pivot again in $r_{i+3}', \dots, r_j'$.  
+Thus, if $r_{i+2}$ is copied prior to modification to a \emph{donor column}, it may re-use or \emph{donate} its pivot entry to a later column $r_{i+3}, \dots, r_j$. 
+Repeating this process at most $j - i - 1$ times ensures $R'$ stays reduced in all except possibly for the $i$-th column by the end of the movement---and since the $k$-th such operation simultaneously sets $v_{k}(i) = 0$ without creating non-zeros at indices $v_{k}(j)$ for $j > k$, $V'$ retains its upper-triangularity. 
 \\
 \\
 \noindent \textbf{Example 2.3:} We re-use the running example from sections~\ref{sec:reduction} and~\ref{sec:vineyards} to illustrate moves. The donor columns of $R$ and $V$ are denoted as $d_R$ and $d_V$, respectively. Consider moving edge $a$ to the position of edge $c$ in the filtration. 
@@ -899,11 +896,19 @@ Note that the equivalent permutation using vineyards requires $4$ column operati
 %	Conceptually, there is a conceptual similarity between the cyclic permutation that moves a simplex in a filtration the \emph{cycle sort}~\cite{haddon1990cycle}, a simple sorting algorithm method that has $O(n^2)$ time complexity for general inputs and $O(n)$ complexity for permutations.
 %	Indeed, just as cycle sort rotates elements within a \emph{cycle} (in the permutation sense) using $O(1)$ auxiliary storage, the move right operation  
 %\end{remark}
-Though similar to vineyards, move operations confer a few additional advantages. We note two convenient properties of moves:
+
+As shown by example 2.3, move updates are cheaper than vineyard updates when $j > i+1$. More formally, we recall the proposition shown in~\cite{busaryev2010tracking}: 
+\begin{proposition}[Busaryev et al.~\cite{busaryev2010tracking}]
+	Let $K$ denote a filtration with $n$ simplices of dimension $p-1$, $p$, and $p+1$, respectively, and let $R = DV$ denote its associated decomposition. Then the operation $\mathrm{MoveRight}(i,j)$ constructs a valid decomposition $R' = D'V'$ in $O((s+t)n)$ time, where $s,t$ are given by:
+	$$ s = \sum\limits_{l=i+1}^j \mathds{1}\left(\, v_l(i) \neq 0 \, \right), \quad t = \sum\limits_{l=1}^m \mathds{1}\left(\, \mathrm{low}_R(l) \in [i,j] \text{ and } r_l(i) \neq 0 \, \right)$$
+	Moreover, the quantity $k = s + t$ satisfies $k \leq 2(j - i)$. 
+\end{proposition}
+\noindent Though similar to vineyards, move operations confer additional advantages, including the two computationally attractive properties given below:
 \\	
  \begin{enumerate}[labelsep=5pt, topsep=0pt,itemsep=-0.25ex,parsep=1.2ex]
  	\item[M1:] Querying the non-zero status of entries in $R$ or $V$ occurs once per move.
- 	\item[M2:] $R = D V$ is \underline{not} guaranteed to be valid  during the movement of $\sigma_i $ to $ \sigma_j$.
+ 	\item[M2:] $R = D V$ is \underline{not} guaranteed to be valid during the movement of $\sigma_i $ to $ \sigma_j$.
+ 	\item[M3:] At most $O(m)$ moves are needed to reindex $K \mapsto K'$ 
  \end{enumerate} 
  \vspace*{1em}
 First, consider property M1. Prior to applying any permutation $P$ to the decomposition, it is necessary to remove non-zero entries in $V$ which render $P^TVP$ non-upper triangular, to maintain invariant I2. 
@@ -911,9 +916,9 @@ Using vineyards, one must consistently perform $\lvert i - j \rvert - 1$ non-zer
 
 Property M2 implies the decomposition is not fully maintained during the execution of \textit{RestoreRight} and \textit{RestoreLeft} below, which starkly contrasts the vineyards algorithm. 
 In this way, we interpret move operations as making a tradeoff in granularity: whereas a sequence of adjacent transpositions $(i, i{+}1), (i{+}1, i{+}2), \dots, (j{-}1, j)$ generates $\lvert i - j \rvert $ valid decompositions in vineyards, an equivalent move operation $\mathrm{Move}(i,j)$ generates only one.
-Indeed, the number of intermediate persistence diagrams is bounded above by $O(m^2)$ using vineyards if each pair of simplices $\sigma_i, \sigma_j \in K$ switches relative ordering at most once in a given schedule of transpositions, whereas with move operations this bound clearly is at most $O(m)$.  
+Indeed, Property M3 directly follows from this fact, as one may simply move each simplex $\sigma \in K$ into its order in $K'$ via insertion sort. Note that the number of valid decomposition produced by vineyards is bounded above by $O(m^2)$, since each pair of simplices $\sigma_i, \sigma_j \in K$ switches its relative ordering at most once is the homotopy assumptions from~\ref{sec:vineyards} hold.
 
-As a final note, we remark that the combination of \emph{MoveRight} and \emph{MoveLeft} enable the dynamic addition or deletion of simplices to the underlying complex $K$ (in fact this was the motivation for its conception). In particular, given $K$ and its decomposition $R = DV$, obtaining the decomposition $R' = D' V'$ of $K' = K \cup \sigma$ can be achieved by appending its requisite elementary chains to $D$ and $V$, reducing them, and then calling \emph{MoveLeft}$(m+1, i)$, where $i = f'(\sigma)$. Dually, deleting a simplex $\sigma_i$ may be achieved via \emph{MoveRight} by moving $i$-th to the end and dropping them. 
+As a final note, we remark the combination of \emph{MoveRight} and \emph{MoveLeft} enable the addition or deletion of simplices to the underlying complex. In particular, given $K$ and its decomposition $R = DV$, obtaining a valid decomposition $R' = D' V'$ of $K' = K \cup \sigma$ can be achieved by appending its requisite elementary chains to $D$ and $V$, reducing them, and then executing \emph{MoveLeft}$(m+1, i)$, where $i = f'(\sigma)$. Dually, deleting a simplex $\sigma_i$ may be achieved via \emph{MoveRight} by moving $i$-th to the end of the decomposition and dropping the corresponding columns. 
 % with a logarithmic loss in efficiency, although executing the movement has a higher constant factor. Nonetheless, we can still move a simplex arbitrarily within the given filtration with such a procedure,  which when paired with the augmented sparse matrix structure from~\cite{} implies one can move simplices within the filtration with just O(|i - j|) time permutation, as opposed the |i - j| separate O(1) permutations. Moreover, the ability to move a simplex earlier in the filtration enables a key preprocessing step which we introduce next which, as we shall prove, may greatly reduce the number of times the decomposition need be maintained. 
 
 %% TODO: prove R stays reduced by re-reducing only columns in K: should be easy, first show that $R$ is reduced un until time T = i - delta, where delta = | i - j |. Then show that that the only columns in [ j, j + delta ] which have low entries that change are precisely the ones in R[i:j, i]
@@ -1123,9 +1128,9 @@ Intuitively, in the context of strings, given $\mathcal{L} = \mathrm{LCS}(p,q)$ 
 The Wagner-Fischer algorithm---a dynamic programming type approach---can compute the LCS distance in $O(m^2)$~\cite{bar2004approximating}. However, we can do better: if the pair of filtrations $K_0, K_1$ are identical up to a permutation, then computing $d$ reduces further to the \emph{permutation edit distance} problem.
 As such, we obtain the following bound on the minimum size of a sorting (i.e., a schedule) using moves and the complexity of computing it. 
 \begin{proposition}[Schedule Size]\label{prop:schedule_size}
-Let $K_0$ and $ K_1$ be filtrations of a fixed simplicial complex $K$ with $\lvert K \rvert = m$ simplices.
-Then, the smallest size any move schedule $S^*$ transforming $K_0$ into $K_1$ is given by: 
-$$ d = m - \lvert \mathrm{LCS}(K_0, K_1) \rvert $$ 
+Let $K, K'$ denote distinct filtrations of a simplicial complex $S$ of size $\lvert S\rvert = m$.
+Then, the smallest size any move schedule $S^*$ transforming $K$ into $K'$ is given by: 
+$$ d = m - \lvert \mathrm{LCS}(K, K') \rvert $$ 
 Moreover, the size of $S^\ast$ can be determined in $O(m \log \log m)$ time. 
 \end{proposition}
 \begin{proof} \normalsize
@@ -1135,20 +1140,20 @@ Moreover, edit distances are \emph{left-invariant}, i.e.
 \[
 d_\Sigma(p,q) = d_\Sigma(r \circ p, r \circ q) \quad \text{ for all } p,q,r \in S_m
 \]
-Conceptually, left-invariance implies that the edit distance between any pair of permutations $p,q$ is invariant under an arbitrary relabeling $p,q$--as long as the relabeling is consistent. Thus, the following identity always holds: 
+Conceptually, left-invariance implies that the edit distance between any pair of permutations $p,q$ is invariant under an arbitrary relabeling of $p,q$--as long as the relabeling is consistent. Thus, the following identity always holds: 
 $$ d_\Sigma(p,q) = d_\Sigma(\iota, p^{-1} \circ q) = d_\Sigma(q^{-1} \circ p, \iota) $$
-where $\iota = [m]$, the identity permutation. Suppose we are given permutations $p = K_0, q = K_1$, and we seek to compute $\mathrm{LCS}(p, q)$. Consider the permutation $p' = q^{-1} \circ p$. Since the LCS distance is a valid edit distance, if $\lvert \mathrm{LCS}(p, q) \rvert = k$, then $\lvert \mathrm{LCS}(p', \iota) \rvert = k$ as well. Notice that $\iota$ is strictly increasing and that any common subsequence $\iota$ has with $p'$ must also be strictly increasing. Thus, the problem of computing $\mathrm{LCS}(p, q)$ reduces to the problem of computing the \emph{longest increasing subsequence} (LIS) of $p'$, which can done in $O( m \log \log m)$ time using van Emde Boas trees~\cite{bespamyatnikh2000enumerating}. The optimality of $d$ follows from the optimality of the well-studied LCS problem~\cite{kumar1987linear}. 
+where $\iota = [m]$, the identity permutation. Suppose we are given two permutations $p, q \in S_n$ and we seek to compute $\mathrm{LCS}(p, q)$. Consider the permutation $p' = q^{-1} \circ p$. Since the LCS distance is a valid edit distance, if $\lvert \mathrm{LCS}(p, q) \rvert = k$, then $\lvert \mathrm{LCS}(p', \iota) \rvert = k$ as well. Notice that $\iota$ is strictly increasing and that any common subsequence $\iota$ has with $p'$ must also be strictly increasing. Thus, the problem of computing $\mathrm{LCS}(p, q)$ reduces to the problem of computing the \emph{longest increasing subsequence} (LIS) of $p'$, which can done in $O( m \log \log m)$ time using van Emde Boas trees~\cite{bespamyatnikh2000enumerating}. The optimality of $d$ follows from the optimality of the well-studied LCS problem~\cite{kumar1987linear}. 
 \end{proof}
 \begin{corollary}\label{cor:expectation}
-If $K, K'$ are random distinct filtrations each of size $m$, then $d \sim m - \sqrt{m}$ in expectation, with probability $1$ as $m \to \infty$.
+If $K, K'$ are random filtrations of a common simplicial complex $S$ of size $m$. Then the size of longest common subsequence of simplices between $K,K'$ is no larger than $m - \sqrt{m}$ in expectation, with probability $1$ as $m \to \infty$.
 \end{corollary}
 \begin{proof} \normalsize
 	The proof of this result reduces to showing the average length of the LIS for random permutations. Let $L(p) \in [1,m]$ denote the maximal length of a increasing subsequence of $p \in S_m$. 
 	The essential quantity to show the expected length of $L(p)$ over all permutations: 
 	$$ \mathbb{E} \, L(p) = \ell_m = \frac{1}{m!} \sum\limits_{p \in S_m} L(p)$$
-	The history of the mathematics of estimating this quantity dates back at least 50 years, and is sometimes called the \emph{Ulam-Hammersley} problem. The seminal work by Baik et al.~\cite{baik1999distribution} established that as $m \to \infty$:
+	A large body of work dates back at least 50 years has focused on estimating this quantity, which is sometimes called the \emph{Ulam-Hammersley} problem. Seminal work by Baik et al.~\cite{baik1999distribution} established that as $m \to \infty$:
 	$$ \displaystyle \ell_m = 2 \sqrt{m} + c m^{1/6} + o(m^{1/6}) $$
-where $c = -1.77108...$. As a result, we have: 
+where $c = -1.77108...$. Moreover, letting $m \to \infty$, we have: 
 $$ \frac{\ell_m}{\sqrt{m}} \to 2\rlap{\quad \text{as } $m \to \infty$} $$	 
 Thus, if $p \in S_m$ denotes a uniformly random permutation in $S_m$, then $L(p)/\sqrt{m} \to 2$ in probability as $m \to \infty$. Using the reduction from above to show that $\mathrm{LCS}(p,q) \Leftrightarrow \mathrm{LIS}(p')$, the claimed bound follows.
 \end{proof}
@@ -1532,11 +1537,11 @@ The cumulative number of $O(m)$ column operations executed by three different ap
 
 \subsection*{Multidimensional persistence}
 Given a procedure to filter a space in multiple dimensions simultaneously, a \emph{multifiltration}, the goal of multidimensional persistence is to identify persistent features by examining the entire multifiltration. 
-Such a generalization has appeared naturally in many application contexts, showing potential as a tool for exploratory data analysis~\cite{lesnick2012multidimensional}. Indeed, one of the often noted drawbacks of persistence is its instability with respect to strong outliers, which can obscure the detection of significant topological structures~\cite{buchet2015topological}.
-By filtering the data by density in tandem with the e.g. the ambient metric, multidimensional persistence in theory enables practitioner to handle outliers directly.
+Such a generalization has appeared naturally in many application contexts, showing potential as a tool for exploratory data analysis~\cite{lesnick2012multidimensional}. Indeed, one of the drawbacks of persistence is its instability with respect to strong outliers, which can obscure the detection of significant topological structures~\cite{buchet2015topological}.
+One exemplary use case of multi-parameter persistence is to detect these strong outliers by filtering the data with respect to both density and the associated metric.
 
-Unfortunately, unlike one-parameter persistence, there is no complete discrete invariant for multi-parameter persistence.
-Instead, Lesnick et al~\cite{lesnick2015interactive} associate a variety of incomplete invariants to 2-parameter persistence modules: we focus here on the \emph{fibered barcode} invariant, defined as follows: 
+Unfortunately, unlike the one-parameter case, there is no complete discrete invariant for multi-parameter persistence.
+Circumventing this, Lesnick et al~\cite{lesnick2015interactive} associate a variety of incomplete invariants to 2-parameter persistence modules; we focus here on the \emph{fibered barcode} invariant, defined as follows: 
 \begin{definition}[Fibered barcode]
 	%\in \overline{\mathcal{L}}
 	The fibered barcode $\mathcal{B}(M)$ of a 2D persistence module $M$ is the map which sends each line  $L \subset \mathbb{R}^2$ with non-negative slope to the barcode $\mathcal{B}_L(M)$: 
@@ -1549,7 +1554,7 @@ One obvious choice is fix $L$ via a linear combination of two filter functions, 
 However, this is an $O(m^3)$ time computation, which is prohibitive for exploratory data analysis purposes. 
 
 %Lesnick and Wright~\cite{lesnick2015interactive} introduced an elegant reparameterization that not only fully characterizes $\mathcal{B}(M)$, but also yields an efficient method for rendering $\mathcal{B}_L(M)$ in real time. 
-Utilizing the equivalence between the rank and fibered barcode invariants, Lesnick and Wright~\cite{lesnick2015interactive} developed an elegant way of computing $\mathcal{B}(M)$ via a reparameterization using standard point-line duality. This clever technique effectively reduces the fibered barcode computation to a sequence of 1-D barcode computations at ``template points'' lying within the 2-cells of particular planar subdivision $\mathcal{A}(M)$ of the half-plane $[0, \infty) \times \mathbb{R}$. This subdivision may be obtained via arrangement of ``critical lines'' induced by the bigraded Betti numbers $\beta(M)$ of $M$.
+Utilizing the equivalence between the rank and fibered barcode invariants, Lesnick and Wright~\cite{lesnick2015interactive} developed an elegant way of computing $\mathcal{B}(M)$ via a reparameterization using standard point-line duality. This clever technique effectively reduces the fibered barcode computation to a sequence of 1-D barcode computations at ``template points'' lying within the 2-cells of a particular planar subdivision $\mathcal{A}(M)$ of the half-plane $[0, \infty) \times \mathbb{R}$. This particular subdivision is induced by the arrangement of ``critical lines'' derived by the bigraded Betti numbers $\beta(M)$ of $M$.
 As the barcode of one template point $\mathcal{T}_e$ at the 2-cell $e \in \mathcal{A}(M)$ may be computed efficiently by re-using information from an adjacent template point $\mathcal{T}_{e'}$,~\cite{lesnick2015interactive} observed that computing the barcodes of all such template points (and thus, $\mathcal{B}(M)$) may be reduced to ordering the 2-cells in $\mathcal{A}(M)$ along a Eulerian path traversing the dual graph of $\mathcal{A}(M)$. 
 The full algorithm is out of scope for this effort; we include supplementary details for the curious reader in the appendix~\ref{app:2d_pers}. 
 \\
@@ -1568,14 +1573,12 @@ On the right side, dual space is shown: the black lines are the critical lines t
 Despite its elegance, there are significant computational barriers prohibiting the 2-parameter persistence algorithm outlined from being practical. 
 An analysis from~\cite{lesnick2015interactive} (using vineyards) shows the barcodes template computation requires on the order of $O(m^3 \kappa + m \kappa^2 \log \kappa)$ elementary operations and $O(m \kappa^2)$ storage.
 Since the number of 2-cells in $\mathcal{A}(M)$ is on the order $O(\kappa^2)$, and $\kappa$ itself is on the order of $O(m^2)$ in the worst case, the worse-case complexity of the barcode templates computation $O(m^5)$---this is both the highest complexity and most time-intensive sub-procedure the RIVET software~\cite{rivet} depends on. 
-Despite this significant barrier, there is room for optimism: in practice, the external stability result from~\cite{landi2014rank} justifies the use of a coarsening procedure which approximates the module $M$ with a smaller module $M'$ via a grid-like reduction, enabling practitioners to restrict the size of $\kappa$ to a relatively small constant. 
+Despite this significant complexity barrier, there is room for optimism: in practice, the external stability result from~\cite{landi2014rank} justifies the use of a coarsening procedure which approximates the module $M$ with a smaller module $M'$ via a grid-like reduction, enabling practitioners to restrict the size of $\kappa$ to a relatively small constant. 
 This in-turn dramatically reduces the size of $\mathcal{A}(M)$ and thus the number of barcode templates to compute. 
-Moreover, the ordering of barcode templates given by the dual graph traversal implies that adjacent  templates should be relatively similar---so long as $\kappa$ is not too small---suggesting barcode computations may be productively shared between adjacent templates. 
+Moreover, the ordering of barcode templates given by the dual graph traversal implies that adjacent  template points should be relatively close---so long as $\kappa$ is not too small---suggesting adjacent templates may productively share computations due to the high similarity of their associated filtrations. 
 %Intuitively, similar barcode templates should be easier to compute in sequence than independently. 
 Indeed, as algorithm~\ref{alg:schedule} was designed for precisely such a computation, 2-parameter persistence is prototypical of the class of methods that stand to benefit from move scheduling. 
 
-  
- 
  \subsubsection*{Natural images dataset} 
 As we have outlined the computational theory of 2-parameter persistence and elucidated it relevance to our proposed move scheduling approach, we now demonstrate the efficiency of scheduling with a practical application: detecting the presence of a low-dimensional topological space which well-approximates the distribution of patches from high-contrast images. 
  
