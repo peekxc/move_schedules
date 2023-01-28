@@ -381,24 +381,31 @@ A \emph{homological critical value} of $f$ is any value $a \in \mathbb{R}$ such 
 
 \subsection{The Reduction Algorithm}\label{sec:reduction}
 In this section we briefly recount the original reduction algorithm introduced in~\cite{zomorodian2005computing}, also sometimes called the \emph{standard} algorithm or more explicitly \texttt{pHcol}~\cite{de2011dualities}. 
-The pseudocode is outlined in Algorithm~\ref{alg:reduce} in the appendix. Without optimizations, like   clearing   or       implicit matrix reduction, the standard  algorithm is very inefficient. Nonetheless, it serves as the foundation of most persistent homology implementations, and its invariants are necessary before introducing both vineyards in section~\ref{sec:vineyards} and our move schedules  in section~\ref{sec:move_schedules}.
+The pseudocode is outlined in Algorithm~\ref{alg:reduce} in the appendix. Without optimizations, like   clearing   or implicit matrix reduction, the standard  algorithm is very inefficient. Nonetheless, it serves as the foundation of most persistent homology implementations, and its invariants are necessary before introducing both vineyards in section~\ref{sec:vineyards} and our move schedules  in section~\ref{sec:move_schedules}.
 
- The main output of the reduction algorithm is a matrix decomposition $R = D V$, where the persistence diagram is encoded in $R$, and the generating cycles in the columns of $V$. 
- Given a filtration $(K, f)$ with $m$ simplices, one assembles the elementary boundary chains $\partial(\sigma)$ as columns ordered according to $f$ into a $m \times m$  \emph{filtration boundary matrix} $D$. 
+
+ Given a filtration $(K, f)$ with $m$ simplices,  the main output of the reduction algorithm is a matrix decomposition $R = D V$, where the persistence diagram is encoded in $R$ and the generating cycles in the columns of $V$.
+ To begin the reduction, one starts by assembling the elementary boundary chains $\partial(\sigma)$ as columns ordered according to $f$ into a $m \times m$  \emph{filtration boundary matrix} $D$. Setting $V = I$ and $R = D$, one proceeds by performing elementary left-to-right column operations on $V$ and $R$ until the following invariants are satisfied:
+\textbf{ Decomposition Invariants:}
+ \begin{enumerate}[labelsep=3pt, topsep=2pt,itemsep=-0.25ex,parsep=1.0ex]\label{inv:decomposition}
+ 	\item[I1.] $R = D V$ where $D$ is the boundary matrix of the filtration $K$
+ 	\item[I2.] $V$ is full-rank upper-triangular
+ 	\item[l3.] $R$ is \emph{reduced}: if $\mathrm{col}_i(R) \neq 0$ and $\mathrm{col}_j(R) \neq 0$, then $\mathrm{low}_R(i) \neq \mathrm{low}_R(j)$ 
+ 	\end{enumerate} 
+ \vspace*{1em}
+ where $\mathrm{low}_R(i)$ denotes the largest row index of a non-zero entry in column $i$ of $R$. 
+We call the decomposition satisfying these three invariants \emph{valid}. Note that though the matrices $R$ and $V$ are not unique, the collection of persistent pairings are~\cite{zomorodian2005computing}. The persistence diagram of the corresponding filtration $K$ may be read off from lowest entries in $R$, once $R$ is in reduced form.
+ 
  It is at times more succinct to restrict to specific sub-matrices $D$ based on the homology dimension $p$, and so we write $D_p$ represent the $d_{p-1} \times d_p$ matrix representing the linear operator $\partial_p$ (the same notation is extended to $R$ and $V$).
-% The reduction algorithm computes the persistent homology from $D$ for all dimensions up to $\mathrm{dim}(K) - 1$.
-%  Alternatively, a single dimension $p \leq \mathrm{dim}(K) - 1$ can be computed, in which case one reduces a pair of sub-matrices $D_p$ and $ D_{p+1}$ of $D$,  where $D_p$ has dimension $d_{p-1} \times d_p$ and $D_{p+1}$ is $d_{p} \times d_{p+1}$. 
-%In some situations the description of the ensuing algorithms is simpler when considering all dimensions simultaneously, while in others it is more succinct to consider dimension-specific matrices. 
-%In what follows $D$, $R$, and $V$ will always denote square $(m \times m)$ matrices, though we note that all algorithms discussed generalize to both cases. 
- We illustrate the reduction algorithm with an example pair $(R_1, V_1)$ below. 
+We illustrate the reduction algorithm with an example pair $(R_1, V_1)$ below. 
 \\
 \\
 \noindent
 \textbf{Example 2.1: Reduction} Consider a triangle with vertices $u,v,w$, edges $a = (u,w)$, $b = (v,w)$, $c = (u, v)$,
-and whose filtration order, read as inclusions from left to right, is given as $K = (u, v, w, a, b, c)$. The reduction algorithm begins by setting $R = D$ and $V = I$, followed by left-to-right column operations until invariants I3 is satisfied.
-If the $i$-th column of $R$ is nonzero, then $\mathrm{low}_R(i)$ 
-is the row index of its lowest nonzero entry.
-Using $\mathbb{Z}_2$ coefficients and homology in dimension 1 for simplicity, the reduction proceeds as follows:
+and whose filtration order is given as $K = (u, v, w, a, b, c)$. 
+%The reduction algorithm begins by setting $R = D$ and $V = I$, followed by left-to-right column operations until invariants I3 is satisfied.
+%If the $i$-th column of $R$ is nonzero, then $\mathrm{low}_R(i)$  is the row index of its lowest nonzero entry.
+Using $\mathbb{Z}_2$ coefficients for simplicity, the reduction proceeds to compute $H_1(K)$ as follows:
 \begin{displaymath}
 	\def\rowsp{0.4em}
 	\def\arraystretch{0.95}
@@ -464,22 +471,8 @@ Using $\mathbb{Z}_2$ coefficients and homology in dimension 1 for simplicity, th
 \\
 \noindent
 Inspection of the reduction algorithm from~\cite{edelsbrunner2000topological} suggests that a loose upper bound for the reduction is $O(m^3)$, where $m$ is the number of simplices of the filtration---this bound is in fact tight~\cite{morozov2005persistence}. 
-Nonetheless, many variations and optimizations to Algorithm~\ref{alg:reduce} have been proposed over the past decade, see~\cite{bauer2017phat, bauer2021ripser, chen2011persistent} for an overview. Despite these variations in computation, the resulting decomposition must satisfy the following invariants:
-  \vspace*{0.8em}
-  \\
-  \textbf{ Decomposition Invariants:}
- \begin{enumerate}[labelsep=3pt, topsep=2pt,itemsep=-0.25ex,parsep=1.0ex]\label{inv:decomposition}
- 	\item[I1.] $R = D V$ where $D$ is the boundary matrix of the filtration $K$
- 	\item[I2.] $V$ is full-rank upper-triangular
- 	\item[l3.] $R$ is \emph{reduced}: if $\mathrm{col}_i(R) \neq 0$ and $\mathrm{col}_j(R) \neq 0$, then $\mathrm{low}_R(i) \neq \mathrm{low}_R(j)$ 
- 	\end{enumerate} 
- \vspace*{1em}
-We call the decomposition satisfying these three invariants \emph{valid}. 
-%%\begin{proposition}[Persistent Pairing~\cite{zomorodian2005computing}]
-%%	Let $R = D V$, where $R$ is in reduced form and $V$ is full-rank upper triangular (invariants (1) and (2)  hold). Then the pairing $(\sigma_i, \sigma_j)$ defined by $i = \mathrm{low}_R(j)$ is a \emph{creator/destroyer (persistent) pair}. While the matrices $R,V$ satisfying (1) and (2) are not unique in general,  the persistent pairs $(i,j)$ are unique and define the persistence diagrams of $K$.
-%%\end{proposition}
-%\noindent
-Note that though the matrices $R$ and $V$ are not unique, the collection of persistent pairings are~\cite{zomorodian2005computing}. The persistence diagram of the corresponding filtration $K$ may be read off from lowest entries in $R$, once $R$ is in reduced form.
+Despite this high algorithmic complexity, the number of column operations has been observed to be super-linear in practice, due impart to the high sparsity and structure of $D$. 
+Moreover, many variations and optimizations to Algorithm~\ref{alg:reduce} have been proposed over the past decade, see~\cite{bauer2017phat, bauer2021ripser, chen2011persistent} for an overview. 
 % Important corollaries of the persistence pairing lemma is that the 
 % The pairing given by the lowest non-zero entries of $R$ is uniqueness, even thought the decomposition itself not.  
 % \section*{Computational Perspective} To convey a meaningful computational perspective, the continuous notion of \emph{dynamic persistence} needs to be translated to a discrete, combinatorial definition. Such a description requires a few prerequisite definitions, accompanied by some simplifying assumptions. 
@@ -494,7 +487,7 @@ The original purpose of the vineyards algorithm, as described in~\cite{cohen2006
 As homological critical events only occur when the filtration order changes, detecting all such events may be reduced to computing valid decompositions at all time points interleaving  changes in the filtration order. 
 For simplexwise filtrations, these changes manifest as transpositions of adjacent simplices, and thus any fixed set of rules that maintains a valid $R = D V$ decomposition under adjacent transpositions is sufficient to simulate persistence dynamically. 
 
-These rules prescribe certain column and row operations to apply to a given matrix decomposition either before, during, or after each individual transposition to ensure it is a valid decomposition.   
+These rules prescribe certain column and row operations to apply to a given matrix decomposition either before, during, or after each transposition to ensure the decomposition is valid.   
 Formally, let $S_{i}^j$ represent the upper-triangular matrix such that $A S_{i}^j$ is equivalent to the elementary operation that adds column $i$ of $A$ to column $j$ of $A$ and $S_{i}^j A$ is equivalent to adding row $j$ of $A$ to row $i$ of $A$.
 Similarly, let $P$ denote the matrix so that $A P$ applies a fixed permutation to the columns of $A$ and $P^T A$ applied the same permutation to the rows of $A$.
 Since the columns of $P$ are orthonormal, then  $P^{-1} = P^T$, and thus one would write $P^T A P$ to denote the application of the same permutation to both the columns and rows of $A$. In the special case where $P$ represents a transposition, we have $P = P^T$ and may instead simply write $P A P$. 
@@ -1543,7 +1536,7 @@ The full algorithm is out of scope for this effort; we include supplementary det
 \\
 \\
 \noindent 
-\textbf{Example}: Consider a small set of noisy points distributed around $S^1$ containing a few strong outliers, as shown on the left side of Figure~\ref{fig:bifiltration_ex2}. Filtering this data set with respect to the Rips parameter and the complement of a kernel density estimate yields a bifiltration whose various invariants are shown in the middle figure. The gray areas indicate homology with positive dimension---the lighter gray area $\mathrm{dim}_1(M) = 1$ indicates a persistent loop was detected.
+\textbf{Example 4.1}: Consider a small set of noisy points distributed around $S^1$ containing a few strong outliers, as shown on the left side of Figure~\ref{fig:bifiltration_ex2}. Filtering this data set with respect to the Rips parameter and the complement of a kernel density estimate yields a bifiltration whose various invariants are shown in the middle figure. The gray areas indicate homology with positive dimension---the lighter gray area $\mathrm{dim}_1(M) = 1$ indicates a persistent loop was detected.
 On the right side, dual space is shown: the black lines are the critical lines that form $\mathcal{A}(M)$, the blue dashed-lines the edges of the dual graph of $\mathcal{A}(M)$, the rainbow lines overlaying the dashed-lines form the Eulerian path, and the orange barycentric points along the 2-cells of $\mathcal{A}(M)$ represent where the barcodes templates $\mathcal{T}_e$ are parameterized. 
 \begin{figure}[t]
 	\includegraphics[width=0.98\textwidth]{bifiltration_ex2}
