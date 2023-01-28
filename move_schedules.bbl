@@ -430,16 +430,17 @@ pp. \bfpage{39}--\blpage{48}
 \endbibitem
 
 %%% 29
-\bibitem{bar2004approximating}
+\bibitem{abboud2015tight}
 \begin{bchapter}
-\bauthor{\bsnm{Bar-Yossef}, \binits{Z.}},
-\bauthor{\bsnm{Jayram}, \binits{T.}},
-\bauthor{\bsnm{Krauthgamer}, \binits{R.}},
-\bauthor{\bsnm{Kumar}, \binits{R.}}:
-\bctitle{Approximating edit distance efficiently}.
-In: \bbtitle{45th Annual IEEE Symposium on Foundations of Computer Science},
-pp. \bfpage{550}--\blpage{559}
-(\byear{2004}).
+\bauthor{\bsnm{Abboud}, \binits{A.}},
+\bauthor{\bsnm{Backurs}, \binits{A.}},
+\bauthor{\bsnm{Williams}, \binits{V.V.}}:
+\bctitle{Tight hardness results for lcs and other sequence similarity
+  measures}.
+In: \bbtitle{2015 IEEE 56th Annual Symposium on Foundations of Computer
+  Science},
+pp. \bfpage{59}--\blpage{78}
+(\byear{2015}).
 \bcomment{IEEE}
 \end{bchapter}
 \endbibitem
