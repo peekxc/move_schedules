@@ -376,18 +376,6 @@ arXiv preprint arXiv:2010.05780
 \endbibitem
 
 %%% 25
-\bibitem{labarre2013lower}
-\begin{barticle}
-\bauthor{\bsnm{Labarre}, \binits{A.}}:
-\batitle{Lower bounding edit distances between permutations}.
-\bjtitle{SIAM Journal on Discrete Mathematics}
-\bvolume{27}(\bissue{3}),
-\bfpage{1410}--\blpage{1428}
-(\byear{2013})
-\end{barticle}
-\endbibitem
-
-%%% 26
 \bibitem{boissonnat2000efficient}
 \begin{barticle}
 \bauthor{\bsnm{Boissonnat}, \binits{J.-D.}},
@@ -401,7 +389,7 @@ arXiv preprint arXiv:2010.05780
 \end{barticle}
 \endbibitem
 
-%%% 27
+%%% 26
 \bibitem{diaconis1977spearman}
 \begin{barticle}
 \bauthor{\bsnm{Diaconis}, \binits{P.}},
@@ -414,7 +402,7 @@ arXiv preprint arXiv:2010.05780
 \end{barticle}
 \endbibitem
 
-%%% 28
+%%% 27
 \bibitem{bergroth2000survey}
 \begin{bchapter}
 \bauthor{\bsnm{Bergroth}, \binits{L.}},
@@ -427,6 +415,18 @@ pp. \bfpage{39}--\blpage{48}
 (\byear{2000}).
 \bcomment{IEEE}
 \end{bchapter}
+\endbibitem
+
+%%% 28
+\bibitem{labarre2013lower}
+\begin{barticle}
+\bauthor{\bsnm{Labarre}, \binits{A.}}:
+\batitle{Lower bounding edit distances between permutations}.
+\bjtitle{SIAM Journal on Discrete Mathematics}
+\bvolume{27}(\bissue{3}),
+\bfpage{1410}--\blpage{1428}
+(\byear{2013})
+\end{barticle}
 \endbibitem
 
 %%% 29

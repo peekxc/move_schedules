@@ -126,14 +126,15 @@
 % REQUIRED - "Abstracts must be able to stand alone and so cannot contain citations to the paper's references, equations, etc. .... not exceeding 250 words"
 %\begin{abstract}
 \abstract{
-	The standard procedure for computing the persistent homology of a filtered simplicial complex with $m$ simplices is the matrix reduction algorithm. Its output is a particular decomposition of the total boundary matrix, from which the persistence diagrams and generating cycles can be derived. 
+	The standard procedure for computing the persistent homology of a filtered simplicial complex with $m$ simplices is the matrix reduction algorithm. Its output is a particular decomposition of the total boundary matrix, from which the persistence diagrams and generating cycles are derived. 
 	Persistence diagrams are known to vary continuously with respect to their input, motivating the  study of their computation for time-varying filtered complexes. Computationally, simulating persistence dynamically can be reduced to maintaining a valid decomposition under adjacent transpositions in the filtration order. 
-	Since there are $O(m^2)$ such transpositions, this maintenance procedure exhibits limited scalability and often is too fine for many application contexts.
-	As our first result, we propose a coarser strategy for maintaining the decomposition over a 1-parameter family of filtrations that take $O(m^2)$ preprocessing time uses only $O(m)$ space. 
-	We also show that this maintenance procedure yields a factor-2 net reduction in column operations over the state of the art approach. 
-	By reduction to a particular longest common subsequence problem, we give a modification of this strategy that not only can be performed in $O(m \log \log m)$ time, but yields a storage bound that is actually sublinear in expectation. 
-	Finally, we show experimentally the decrease in operations to compute diagrams across a family of filtrations is proportional to the difference between the expected quadratic number of states and the proposed sublinear coarsening.
-	Applications to multi-dimensional persistence and crocker stacks are also presented.
+	Since there are $O(m^2)$ such transpositions, this maintenance procedure exhibits limited scalability and often is too fine for many applications.
+%	As our first result, we propose a coarser strategy for maintaining the decomposition over a 1-parameter family of filtrations that takes $O(m^2)$ preprocessing time uses only $O(m)$ space. 
+%	We also show that this maintenance procedure yields a factor-2 net reduction in column operations over the state of the art approach. 
+We propose a coarser strategy for maintaining the decomposition over a 1-parameter family of filtrations that requires only $O(m \log \log m)$ time and $O(m)$ space. 
+By reduction to a particular longest common subsequence problem, we show the storage needed to employ this strategy is actually sublinear in expectation. 
+	Exploiting this connection, we show experimentally the decrease in operations to compute diagrams across a family of filtrations is proportional to the difference between the expected quadratic number of states and the proposed sublinear coarsening.
+	Applications to movie data, dynamic metric spaces, and multi-parameter persistence are also presented.
 }
 %\end{abstract}
 
@@ -251,28 +252,32 @@ Given a simplicial complex $K$ with filtration function $f : K \to [m]$, denote 
  If one has a pair of filtrations $(K, f)$,  $(K, f')$ of size $m = \lvert K \rvert$ and $R = D V$ has been computed for $K$, then it may be advantageous to use the information stored in ($R$, $V$) to reduce the computation of $R' = D' V'$. 
 Given a permutation $P$ such that $D' = P^T D P$, such an update scheme has the form: 
 $$ (\ast P^T \ast R \ast P \ast) = (P^T DP)(\ast P^T \ast V \ast P \ast) $$
-where $\ast$ is substituted with elementary column operations that repair the permuted decomposition. It is known how to linearly interpolate $f \mapsto f'$ using $d \sim O(m^2)$ updates to the decomposition, where each update is comprised of at most two column operations~\cite{cohen2006vines}. Since each column operation takes $O(m)$, the complexity performing this update is $O(m^3)$, which is efficient if all $d$ decompositions are needed. Otherwise, if only $(R', V')$ is needed (and none of the $d -1$ other decomposition), updating $R \mapsto R'$ using the approach from~\cite{cohen2006vines} matches the complexity of computing $R' = D' V'$ independently. 
+where $\ast$ is substituted with elementary column operations that repair the permuted decomposition. It is known how to linearly interpolate $f \mapsto f'$ using $d \sim O(m^2)$ updates to the decomposition, where each update  requires at most two column operations~\cite{cohen2006vines}. Since each column operation takes $O(m)$, the complexity of reindexing $f \mapsto f'$ is $O(m^3)$, which is efficient if all $d$ decompositions are needed. Otherwise, if only $(R', V')$ is needed (and none of the intermediate $d -1$ decompositions), updating $R \mapsto R'$ using the approach from~\cite{cohen2006vines} matches the complexity of computing $R' = D' V'$ independently. 
 
 We now summarize the main results obtained in this effort (Theorem~\ref{prop:sparsity_result}): suppose one has a sequence of permutations $\mathcal{S} = \left( s_1, s_2, \dots, s_d \right)$ yielding a corresponding sequence of decompositions:
   \begin{equation}\label{eq:rv_seq}
    	R = R_0 = D_0 V_0 \overset{s_1}{\to} D_1 V_{1} \overset{s_2}{\to} \dots \overset{s_d}{\to} D_d V_{d} = R_d = R'
  \end{equation}
- where each permutation $s_i$ is a particular type of cyclic permutation (see section~\ref{sec:moves_setting}). If $i_\ast < j_\ast$, our first result is that this sequence can be computed in using $O(d\kappa)$ column operations, where: 
+ where each permutation $s_i$ is a particular type of cyclic permutation (see section~\ref{sec:moves_setting}). If $i_\ast < j_\ast$, our first result extends~\cite{busaryev2010tracking} by showing that~\eqref{eq:rv_seq} can be computed in using $O(\kappa)$ column operations, where: 
 \begin{equation}
-	\quad \kappa = \sum\limits_{k = 1}^d \, \lvert \mathbb{I}_{k}\rvert + \lvert \mathbb{J}_{k}\rvert
+	\quad \kappa = \sum\limits_{k = 1}^d \, \lvert \mathbb{I}_{k}\rvert + \lvert \mathbb{J}_{k}\rvert 
 \end{equation}
-where the quantities $\lvert \mathbb{I}_{k} \rvert$ and $\lvert \mathbb{J}_{k} \rvert$ depend on the sparsity of the $V_k$ and $R_k$ matrices, respectively, and $d \sim O(m)$ is a constant that depends on how similar $f$ and $f'$ are. The advantage of this result is that it depends explicitly on the sparsity pattern of the decomposition itself, which we take advantage of in Section~\ref{sec:schedule_cost}. Moreover, if the vineyards algorithm requires $C$ column operations to obtain~\eqref{eq:rv_seq}, we show (Proposition~\ref{prop:factor2}) that our approach obtains the same sequence using at most $M$ column operations, where: 
-\begin{equation}
-	M \leq \tfrac{1}{2}  C
-\end{equation}
-Our second result turns towards the computation of $\mathcal{S}$ itself, and towards bounding its size $\lvert \mathcal{S} \rvert = d$. 
-The complexity of determining $\mathcal{S}$ depends on the type of permutations considered; many edit distances exhibit tight quadratic growth rates and tend to require at least quadratic time (or worse) to compute~\cite{labarre2013lower}. 
-We consider a special set of cyclic permutations whose sequences scale linearly in $m$ for all permutations in $S_m$: surprisingly, we find that the \emph{smallest} such sequence of these permutations which map $f \mapsto f'$ has size $d$ (Proposition~\ref{prop:schedule_size}), where: 
+where the quantities $\lvert \mathbb{I}_{k} \rvert$ and $\lvert \mathbb{J}_{k} \rvert$ depend on the sparsity of the $V_k$ and $R_k$ matrices, respectively, and $d \sim O(m)$ is a constant that depends on how similar $f$ and $f'$ are. The advantage of this result is that it depends explicitly on the sparsity pattern of the decomposition itself and is thus output sensitive, which we take advantage of in Section~\ref{sec:schedule_cost}. 
+%Surprisingly, due to a refined analysis of restore subprocedure from~\cite{busaryev2010tracking} we give in section~\ref{sec:continuous_setting}, we find that move operations are actually cheaper than vineyards, see Proposition~\ref{prop:factor2}.
+%if the vineyards algorithm requires $T$ column operations to obtain~\eqref{eq:rv_seq}, we show (Proposition~\ref{prop:factor2}) that obtains the same sequence using at most $M$ column operations, where: 
+%\begin{equation}
+%	M \leq \tfrac{1}{2}  T
+%\end{equation}
+
+Our second result turns towards upper bounding $d = \lvert \mathcal{S} \rvert$ and the complexity of constructing $\mathcal{S}$ itself. 
+%The complexity of determining $\mathcal{S}$ depends on the type of permutations considered; many edit distances exhibit tight quadratic growth rates and tend to require at least quadratic time (or worse) to compute~\cite{labarre2013lower}. 
+By reinterpreting a special set of cyclic permutations as edit operations on strings, we find that the \emph{smallest} such sequence that maps $f \mapsto f'$ has size $d$ (Proposition~\ref{prop:schedule_size}), where: 
 \begin{equation}
 	d = m - \lvert \mathrm{LCS}(f, f') \rvert 
 \end{equation}
-Moreover, we also show that the information needed to construct any $\mathcal{S}$ with optimal size $\lvert \mathcal{S} \rvert = d$ can be computed in $O(m \log \log m)$ preprocessing time and $O(m)$ memory. Although $d$ clearly is $O(m)$ for pathological inputs, we show that $d \sim m - \sqrt{m}$ in expectation for random filtrations (Corollary~\ref{cor:expectation}) is not too pessimistic for truly random filtrations, and we give empirical results suggesting $d$ is tends to be much smaller for time-varying filtrations. 
-\\
+We also show that the information needed to construct any $\mathcal{S}$ with optimal size can be computed in $O(m \log \log m)$ preprocessing time and $O(m)$ memory. Although $d$ clearly is $O(m)$ for pathological inputs, we give evidence  that $d \sim m - \sqrt{m}$ in expectation for random filtrations is not too pessimistic for truly random filtrations (Corollary~\ref{cor:expectation}), and we give empirical results suggesting $d$ is tends to be much smaller for time-varying filtrations. 
+
+%Finally, we perform extensive experiments 
 % given a decomposition $R = \partial_{K} V$ of a simplicial filtration $K$, algorithm~\ref{alg:schedule} can produce such a sequence $\mathcal{S} = \left( s_1, s_2, \dots, s_d \right)$
 % 
 
@@ -296,11 +301,10 @@ Moreover, we also show that the information needed to construct any $\mathcal{S}
 %	$$ \frac{C}{2} \leq L \leq C$$ 
 %\end{proposition}
 \noindent 
-\textbf{Outline:} The remainder of the paper is organized as follows: we review and establish the notations we will use to describe simplicial complexes, persistent homology, and dynamic persistence in Section \ref{sec:background}. 
+\textbf{Outline:} The paper is organized as follows: we review and establish the notations we will use to describe simplicial complexes, persistent homology, and dynamic persistence in Section~\ref{sec:background}. 
 We also cover the reduction algorithm (designated here as \texttt{pHcol}), the vineyards algorithm, and the set of \emph{move}-related algorithms introduced in~\cite{busaryev2010tracking}, which serves as the starting point of this work. 
 In Section \ref{sec:move_schedules} we introduce our move schedules  and provide efficient algorithms to make this alternative viable. 
-In Section \ref{sec:results} we present applications of the proposed method. 
-In particular, to the computation of crocker stacks from flock simulations, and to 2-dimensional persistence on the Mumford data set of image patches from natural images. 
+In Section \ref{sec:results} we present applications of the proposed method, including the computation of crocker stacks from flock simulations and of a 2-dimensional persistence invariant on a data set of image patches derived from natural images. 
 In Section \ref{sec:conclusion} we conclude the paper by discussing other possible applications and future work. 
 
 %\section*{Outline}
@@ -988,7 +992,7 @@ If one has two distinct filtrations $K,K'$ both derived from the same underlying
 Moreover, as the application of permutations to $K$ implies additional elementary column operations to the underlying matrix decomposition, we think of the action of any set of such permutations on the initial decomposition $R=DV$ of $K$ as a \emph{schedule} with respect to the pair $K,K'$. We formalize this with a definition.
 \begin{definition}[Schedule]\label{def:schedule}
 Given a pair of filtrations $K, K'$ from an underlying complex $S$ and a fixed bijection $\rho : K \to K'$, let $\rho^\ast : [m] \to [m]$ denote its induced bijection on $S_m$. Given a decomposition $R = DV$ of $K$, a \emph{schedule}  $\mathcal{S} = (s_1, s_2, \dots, s_d )$ is a sequence of permutations mapping satisfying: 
-	\begin{equation}\label{eq:rv_seq}
+	\begin{equation}\label{eq:rv_seq_schedule}
    		R = D_0 V_0 \overset{s_1}{\to} D_1 V_{1} \overset{s_2}{\to} \dots \overset{s_d}{\to} D_d V_{d} = R'
    	\end{equation}
    	where, for each $i \in [d]$, $R_i = D_i V_i$ is a valid decomposition respecting invariants~\ref{inv:decomposition}, and $R'$ is a valid decomposition of $K'$.
@@ -1016,8 +1020,7 @@ If our goal is to decrease the size of $\lvert S_F \rvert$, one option is to \em
 We expect $\widetilde{S}_F$ to be cheaper to execute than $S_F$, with the tradeoff  that less diagrams are produced.
 We make this precise next:
 \begin{proposition}\label{prop:factor2}
-	Let $K$ denote a filtration of size $\lvert K \rvert = m$ with valid decomposition $R = D V$, $T$ the maximum number of $O(m)$ operations required to execute schedule $S_F$ using vineyards, and $M$ be the maximum number of $O(m)$ operations required to execute the coarsened schedule $\widetilde{S}_F$ with moves. Then:
-	$$ M \leq {\textstyle \frac{1}{2} \, T} $$ 
+	Let $K$ denote a filtration of size $\lvert K \rvert = m$ with decomposition $R = D V$, $T$ the maximum number of $O(m)$ operations required to execute $S_F$ via vineyards, and $M$ be the maximum number of $O(m)$ operations required to execute $\widetilde{S}_F$ with moves. Then, the inequality $ M \leq {\textstyle \frac{1}{2} \, T}$ holds.
 \end{proposition}
 \begin{proof} \normalsize
 First, consider executing the vineyards algorithm on a given schedule $S_F$. As there are at most $2$ column operations, any contiguous sequence of transpositions $(i,i+1), (i+1,i+2), \ldots (j-1,j)$ induces at most $2(\lvert i - j \rvert)$ column operations in both $R$ and $V$, giving a total of $4(\lvert i - j \rvert)$ column operations.
@@ -1044,22 +1047,22 @@ As mentioned in~\ref{sec:vineyards}, this quadratic scaling induces a number of 
 %The benefit of move operations is that one need not maintain a valid decomposition during the movement $(i,j)$, only at the end; thus, it is worth investigating whether the vineyard bounds can be improved. 
 %In the case of vineyards, the bound is clear: if $\kappa = K_\tau(K_0, K_1)$ is the Kendall-$\tau$ distance, then $\Omega(\kappa)$ adjacent transpositions are required to transform $K_0 \mapsto K_1$. 
 
-Contrasting the continuous-time setting, if we discard the use of a homotopy interpolation and allow move operations in any order, we obtain a trivial upper bound of $O(m)$ on the schedule size:  simply move each simplex in $K$ into its position in the filtration given by $K'$ in the order given by the latter---which we call \emph{naive strategy}. However, it's not immediately clear whether this bound is tight. Moreover, we expect  investigating the tightness of this bound may lead to exploitable structure. 
+Contrasting the continuous-time setting, if we discard the use of a homotopy interpolation and allow move operations in any order, we obtain a trivial upper bound of $O(m)$ on the schedule size:  simply move each simplex in $K$ into its position in the filtration given by $K'$ in the order given by the latter---which we call \emph{naive strategy}. However, it's not immediately clear whether this bound is tight. In this section, we investigate the tightness of this bound by revisiting the problem from a combinatorial perspective. 
 % or whether this strategy of generating schedules---which we call \emph{naive strategy}---is performant.  
 %Indeed, arbitrarily permuting a given filtration $K$: one must respect the face poset.
 
 
-Before proceeding, we require a few definitions. Given two fixed permutations $p, q \in S_m$ and a set allowable permutations $\Sigma \subseteq S_m$,  a common  problem is to find a sequence of permutations $s_1, s_2, \dots, s_d \in \Sigma$ whose composition satisfies:
+Let $S_m$ denote the symmetric group. Given two fixed permutations $p, q \in S_m$ and a set allowable permutations $\Sigma \subseteq S_m$,  a common  problem is to find a sequence of permutations $s_1, s_2, \dots, s_d \in \Sigma$ whose composition satisfies:
 	\begin{equation}\label{eq:sorting}
 		s_d \circ \cdots \circ s_2 \circ s_1 \circ p = q
 	\end{equation}
 Common variations of this problem include finding such a sequence of minimal length ($d$) and bounding the length $d$ as a function of $m$. In the latter case, a lower bound on $d$ is referred to as the \emph{distance} between $p$ and $q$ with respect to $\Sigma$. 
 A sequence $S = (s_1, s_2, \dots, s_d)$ of operations $s \in \Sigma \subseteq S_m$ mapping $p \mapsto q$ is sometimes called a \emph{sorting of $p$}. 
-When $p, q$ are interpreted as strings, distances defined with respect to a fixed $\Sigma \subseteq S_m$ are commonly referred to as \emph{edit distances}~\cite{bergroth2000survey}, which are denoted as $d_\Sigma(\cdot, \cdot)$, and the subsequent elementary operations on the strings are called \emph{edit operations}. 
+When $p, q$ are interpreted as strings, these operations $s \in \Sigma$ are called \emph{edit operations}. The minimal number of edit operations $d_\Sigma(p, q)$ needed to sort $p \mapsto q$ with respect to $\Sigma$ is referred to as the \emph{edit distance}~\cite{bergroth2000survey} between $p$ and $q$.
 We denote the space of sequences transforming $p \mapsto q$ using $d$ permutations in $\Sigma \subseteq S_m$ with $\Phi_\Sigma(p,q,d)$.
 Note the choice of $\Sigma$ defines the type of distance being measured---otherwise if $\Sigma = S_m$, then $d_\Sigma(p, q) = 1$ trivially for any $p\neq  q \in S_m$.
 
-Perhaps surprisingly, small changes to set of allowable edit operation $\Sigma$ can dramatically affect both the size of $d_\Sigma(p,q)$ and the difficulty of obtaining a minimal sorting. 
+Perhaps surprisingly, small changes to set of allowable edit operations $\Sigma$ dramatically affects both the size of $d_\Sigma(p,q)$ and the difficulty of obtaining a minimal sorting. 
 For example, while sorting by transpositions and reversals is NP-hard and sorting by prefix  transpositions is unknown, there are polynomial time algorithms for sorting by block interchanges, exchanges, and prefix exchanges~\cite{labarre2013lower}. Sorting by adjacent transpositions can be achieved in many ways: any sorting algorithm that exchanges two adjacent elements during its execution (e.g. bubble sort, insertion sort) yields a sorting of size $K_\tau(p, q)$.  
 
 Here we consider sorting by moves. Using permutations, a \emph{move operation} $m_{ij}$ that moves $i$ to $j$ in $[m]$, for $i < j$, corresponds to the circular rotation: 
@@ -1119,7 +1122,7 @@ where $\iota = [m]$, the identity permutation. Suppose we are given two permutat
 \noindent
 Establishing a connection between the permutation edit distance and move scheduling allows use to exploit the combinatorial structure that comes from the developed theory on both LCS's and LIS's, which are both well-studied objects. We record a single corollary to demonstrate this fact. 
 \begin{corollary}\label{cor:expectation}
-If $K, K'$ are random filtrations of a common simplicial complex $S$ of size $m$, then the size of longest common subsequence of simplices between $K,K'$ is no larger than $m - \sqrt{m}$ in expectation, with probability $1$ as $m \to \infty$.
+If $(K, f), (K,f')$ are random filtrations of a common complex $K$ of size $m$, then the size of longest common subsequence of simplices between $f,f'$ is no larger than $m - \sqrt{m}$ in expectation, with probability $1$ as $m \to \infty$.
 \end{corollary}
 \begin{proof} \normalsize
 	The proof of this result reduces to showing the average length of the LIS for random permutations. Let $L(p) \in [1,m]$ denote the maximal length of a increasing subsequence of $p \in S_m$. 
@@ -1144,11 +1147,11 @@ For example, for the complex from Section~\ref{sec:motivation} with $m=417$ simp
 We conclude this section with the main theorem of this effort: an output-sensitive bound on the simulation of persistence dynamically.
   \begin{theorem}\label{prop:sparsity_result}
    Given a pair of filtrations $(K,f), (K,f')$ and a decomposition $R = DV$ of $K$, the size of a minimal sequence $\mathcal{S} = \left( s_1, s_2, \dots, s_d \right)$ of cyclic `move' permutations $s_k = (i_k, j_k)$ satisfying: 
-   	\begin{equation}\label{eq:rv_seq}
+   	\begin{equation}\label{eq:rv_seq_theorem}
    		R = D_0 V_0 \overset{s_1}{\to} D_1 V_{1} \overset{s_2}{\to} \dots \overset{s_d}{\to} D_d V_{d} = R'
    	\end{equation}
    	can be determined in $O(m \log \log m)$ time and $O(m)$ space, where $R' = D_d V_d$ denotes a valid decomposition of $(K, f')$. 
-   	Moreover, if $i_k < j_k$ for all $k \in [d]$, then computing~\eqref{eq:rv_seq} requires $O(d\kappa)$ column operations, where:	  
+   	Moreover, if $i_k < j_k$ for all $k \in [d]$, then computing~\eqref{eq:rv_seq_theorem} requires $O(d\kappa)$ column operations, where:	  
    	$$  \quad \kappa = \sum\limits_{k = 1}^d \, (\lvert \mathbb{I}_{k} \rvert + \lvert \mathbb{J}_{k} \rvert) $$
 %	$$  \quad \kappa = \sum\limits_{k = 1}^d \, \lvert \mathbb{I}_{k}\rvert + \lvert \mathbb{J}_{k}\rvert $$
 	where the quantities $\lvert \mathbb{I}_{k} \rvert, \lvert \mathbb{J}_{k} \rvert$ of the intermediate $R_k, V_k$ are given in Proposition~\ref{prop:move_st}. Note that since $\kappa$ depends on the sparsity of the intermediate entries $V_1, V_2, \dots, V_d$ and $R_1, R_2, \dots, R_d$, the bound $O(d \kappa)$ is output-sensitive. 
@@ -1335,7 +1338,7 @@ In contrast to $K_\tau$, the Spearman can be computed in $O(m)$ time, making it 
 %For example, one of the tasks of the \emph{rank aggregation} problem is to obtain an  aggregation~\cite{} $\sigma \in S_m$ from a set of $k$ rankings $T = \{\tau_1, \tau_2, \dots, \tau_k\}$ that obeys some optimality criteria. A Kemeny optimal ranking is a permutation $\sigma^\ast$ that minimizes the sum of Kendall distances to the gievn set of rankings: 
 %$$ \argmin_{\sigma \in S_m} = \sum\limits_{i = 1}^k K_\tau(\sigma, \tau_i)$$ 
 %Computationally, obtaining a Kemeny optimal ranking is NP-hard\cite{}. In contrast, a 2-approximation may be obtained by replacing the Kendall distance with the Spearman distance, as in this case the problem reduces to finding a perfect matching in a bipartite graph, which can be accomplished in polynomial time. 
-To adapt $F(\cdot, \cdot)$ to sortings, we consider the additive minimization problem which minimizes the following upper bound on $F(p, q)$:
+To adapt $F(\cdot, \cdot)$ to sortings, we consider the additive minimization problem which minimizes the following upper bound on $F(p, \iota)$:
 \begin{equation}\label{eq:sorting_additive}
 \hat{F}_{\mathcal{S}}(p, \iota) = \sum\limits_{i=1}^{d-1} F(\hat{s}_i \circ p, \hat{s}_{i+1} \circ p) \geq F(p, \iota)
 \end{equation}
@@ -1445,7 +1448,7 @@ The heuristic is inspired by the simplicity of computing the Spearman distance b
 \end{cases}
 \]
 That is, if $s_\sigma$ represents a move permutation moving $\sigma$ from position $i$ to position $j$, then relative to the previous permutation $p$, the displacement of $\sigma$ in $s_\sigma \circ p$ changes by $\lvert i - j \rvert$ and the displacement of any symbol between $i$ and $j$ changes by $\pm 1$. 
-All other symbol displacements are unchanged. Thus, if we replace $\mathcal{A}$ with a data structure  supporting $O(\log m)$ access time to aggregate information (i.e. the sum) and $O(\log m)$ modification time ability on $\lvert i - j \vert$ entries (simultaneously), we could greedily choose the next permutation $s$ to maximize:
+All other symbols are unchanged. Thus, if we replace $\mathcal{A}$ with a data structure  supporting $O(\log m)$ access time to aggregate information (i.e. the sum) and $O(\log m)$ modification time ability on $\lvert i - j \vert$ entries (simultaneously), we could greedily choose the next permutation $s$ to maximize:
 \begin{equation}\label{eq:greedy_step}
 	s_{\text{greedy}} = \argmin_{\text{ valid } s \in \Sigma} F(s\circ p, \iota)
 \end{equation}  
@@ -1484,17 +1487,26 @@ Since single element modifications, removals, and insertions can all be achieved
 % \subsection{Empirical results}\label{sec:results}
 % \section{Applications and Discussion}\label{sec:applications}
 \section{Applications and Experiments}\label{sec:results}
-\subsection*{Movies}
-Move data description
+\subsection{Movies}
+A common application of persistence is to characterizing topological structure in image data. Since a  set of ``snapshot'' frame of a movie can be equivalently thought of as discrete 1-parameter family, our framework provides a natural extension of the typical image analysis to video data. 
+To demonstrate the benefit of using minimal sized scheduled and the scalability of the greedy approach proposed in section~\ref{sec:proxy_objective}, we re-use the movie data from~\ref{sec:motivation} as a baseline benchmark. We perform two performance tests: one to  one to test the impact of shrinking the number of permutations a given reindexing operation needs and one to test the asymptotic behavior of the greedy approach and. 
+
+ In the first test, we fix a grid size of $9 \times 9$ and record the cumulative number of column operations needed to simulate persistence dynamically across 25 evenly-spaced time points using a variety of scheduling strategies.
+ The primary three strategies we test are the greedy approach from section~\ref{sec:proxy_objective}, the ``naive'' approach which uses upwards of $O(m)$ move permutations via selection sort, and a third strategy which interpolates between the two. 
+ In particular, if $d = m - \lvert \mathrm{LCS}(f, f') \rvert$ we use a parameter $\alpha \in [0,1]$ to choose $m - \alpha \cdot d$ random symbols to move using the same construction method outlined in section~\ref{sec:schedule_construction}. When $\alpha = 0$, the strategy reduces to using selection sort to reindex $f \mapsto f'$ using a random ordering of simplices; otherwise, $\alpha = 1$ reduces to using a minimal sized schedule (with a random ordering of simplices). The results are summarized in the left graph on Figure~\ref{fig:movie_perf}. To get an idea of the variation of the random sampling, we run 10 independent iterations and shade the upper and lower bounds of the schedule costs, which is shown around the mean schedule cost depicted by the solid lines in Figure~\ref{fig:movie_perf}. 
+ As one can see from the figure, while using less move operations (lower $\alpha$) does progressively reduce column operations, constructing random schedules of minimal size is no more competitive than the naive selection sort strategy. This suggests that efficient schedule construction needs to account for the structure of performing several permutations in sequence, like the greedy heuristic we introduced, to yield a performance boost. 
+
 \begin{figure}
 	\centering
 	\includegraphics[width=0.48\textwidth]{varying_d.pdf}
 	\includegraphics[width=0.48\textwidth]{varying_nd.pdf}
-	\caption{Performance}
+	\caption{Performance data }
+	\label{fig:movie_perf}
 \end{figure}
 
+In the second test, we aim to measure the asymptotics of our greedy LCS-based approach. To do this, we generated 8 movie data sets again of the expanding annulus outlined in section~\ref{sec:motivation}, each of increasing grid sizes of $5 \times 5$, $6 \times 6$, $\dots$, $12 \times 12$. For each data set, we simulate persistence over the duration of the movie, again testing five evenly spaced settings of $\alpha \in [0,1]$---the results are shown in the right plot of Figure~\ref{fig:movie_perf}. On the vertical axis, we plot the total number of column operations needed to simulate the movie again across 25 evenly-spaced time points \emph{as a ratio} of the data set size ($m$); we also show the regression curves one obtains from considering each schedule size. As one can see from the Figure, the cost of using the greedy heuristic tends to increase sub-linearly as a function of the data set size, suggesting the move scheduling approach is indeed quite scalable. Moreover, using schedules with minimal size tended to be cheaper than otherwise, confirming our initial hypothesis that repairing the decomposition less can lead to substantial reductions at runtime.  
 
-\subsection*{Crocker stacks}
+\subsection{Crocker stacks}
 There are many challenges to characterizing topological behavior in dynamic settings. One approach is to trace out the curves constituting a continuous family of persistence diagrams in $\mathbb{R}^3$---the vineyards approach---however this visualization can be cumbersome to work with as there are potentially many such vines tangled together, making topological critical events with low persistence difficult to detect. Moreover, the vineyards visualization does not admit a natural simplification utilizing the stability properties of persistence, as individual vines are not stable: if two vines move near each other and then pull apart without touching, then a pairing in their corresponding persistence diagrams may cross under a small perturbation, signaling the presence of an erroneous topological critical event~\cite{topaz2015topological, xian2020capturing}. 
 
 \begin{figure}[t]
@@ -1507,13 +1519,6 @@ Acknowledging this, Topaz et al.~\cite{topaz2015topological} proposed the use of
 In brief, a crocker plot is a contour plot of a family of Betti curves. Formally, given a filtration $K = K_0 \subseteq K_1 \subseteq \dots \subseteq K_m$, a $p$-dimensional \emph{Betti curve} $\beta_p^{\bullet}$ is defined as the ordered sequence of $p$-th dimensional Betti numbers:
 $$ \beta_p^\bullet = \{ \, \mathrm{rank}(H_p(K_0)), \, \mathrm{rank}(H_p(K_1)), \, \dots, \, \mathrm{rank}(H_p(K_m))\, \}$$
 Given a time-varying filtration $K(\tau)$, a crocker plot displays changes to $\beta_p^\bullet(\tau)$ as a function of $\tau$. A example of a crocker plot generated from the simulation described below is given in Figure~\ref{fig:crocker1}. Since only the Betti numbers at each simplex in the filtration are needed to generate these Betti curves, the persistence diagram is not directly needed to generate a crocker plot; it is sufficient to use e.g. any of the specialized methods discussed in~\ref{sec:related_work}. This dependence only on the Betti numbers makes crocker plots easier to compute than standard persistence, however what one gains in efficiency one loses in stability; it is known that Betti curves are inherently unstable with respect to small fluctuations about the diagonal of the persistence diagram. 
-
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=\textwidth, height=16.35em]{boid_sim_results.png}
-	\caption{ One the left, the cumulative number of column operations (log-scale) of the three baseline approaches tested. On the right, the normalized $K_\tau$ between adjacent filtrations depicts the coarseness of the discretization---about $5\%$ of the $\approx O(m^2)$ simplex pairs between adjacent filtrations are discordant.}
-	\label{fig:boid_sim_results}
-\end{figure}
 
 Xian et al.~\cite{xian2020capturing} showed that crocker plots may be \emph{smoothed} to inherit the stability property of persistence diagrams and reduce noise in the visualization. That is, when applied to a time-varying persistence module $M = \{M_t\}_{t \in [0, T]}$ an $\alpha$-smoothed crocker plot for $\alpha \geq 0$ is the rank of the map $M_t(\epsilon - \alpha) \to M_t(\epsilon + \alpha)$ at time $t$ and scale $\epsilon$. For example, the standard crock plot is a $0$-smoothed crocker plot. Allowing all three parameters ($t, \epsilon, \alpha$) to vary continuously leads to 3D visualization called an $\alpha$\emph{-smoothed crocker stack}.
 \begin{definition}[crocker stack]
@@ -1531,6 +1536,13 @@ The simulation is initialized with every vertex positioned randomly in the space
 
 Given this time-evolving data set, we computed the persistence diagram of the Rips filtration up to $\epsilon = 0.30$ at 60 evenly spaced time points using three approaches: the standard algorithm \texttt{pHcol} applied naïvely at each of the 60 time steps, the vineyards algorithm applied to (linear) homotopy connecting filtrations adjacent in time, and our approach using moves.   
 The cumulative number of $O(m)$ column operations executed by three different approaches. Note again that vineyards requires generating many decompositions by design (in this case, $\approx 1.8M$). The standard algorithm \texttt{pHcol} and our move strategy were computed at 60 evenly spaced time points of the simulations. As depicted in Figure~\ref{fig:boid_sim_results}, our move strategy is far more efficient than both vineyards and the naive \texttt{pHcol} strategies. 
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth, height=16.35em]{boid_sim_results.png}
+	\caption{ One the left, the cumulative number of column operations (log-scale) of the three baseline approaches tested. On the right, the normalized $K_\tau$ between adjacent filtrations depicts the coarseness of the discretization---about $5\%$ of the $\approx O(m^2)$ simplex pairs between adjacent filtrations are discordant.}
+	\label{fig:boid_sim_results}
+\end{figure}
 
 \subsection{Multiparameter persistence}
 Given a procedure to filter a space in multiple dimensions simultaneously, a \emph{multifiltration}, the goal of multi-parameter persistence is to identify persistent features by examining the entire multifiltration. 
@@ -1691,18 +1703,21 @@ This is further reinforced by the observation that, when there is a high degree 
 \section{Conclusion and Future Work}\label{sec:conclusion}
 In conclusion, we presented a scheduling algorithm for efficiently updating a decomposition in coarse dynamic settings. Our approach is simple, relatively easy to implement, and fully general: it does not depend on the geometry of underlying space, the choice of triangulation, or the choice of homology dimension. Moreover, we supplied efficient algorithms for our scheduling strategy, provided tight bounds where applicable, and demonstrated our algorithms performance with several real world use cases.
 
-There are many possible applications of our work beyond the example application of generating crocker stacks and simulating multidimensional persistence. As discussed in sections~\ref{sec:related_work}, examples include: 
+There are many possible applications of our work beyond the ones discussed in section~\ref{sec:results}. As mentioned in section~\ref{sec:related_work}, examples include: 
 \begin{enumerate}
 	\item Accelerating PH featurization methods for time-varying systems 
 	\item Optimization procedures involving persistence diagrams
 	\item Detecting homological critical points in time-varying filtrations
 \end{enumerate}
-Indeed, we envision our approach as potentially useful to any situation where the structure of interest is a parameterized family of filtrations and the goal involves computing the persistent homology for each filtration in the family. Areas of particular interest include time-series analysis and dynamic metric spaces~\cite{kim2020spatiotemporal}. 
+Indeed, we see our approach as potentially useful to any situation where the structure of interest is a parameterized family of persistence diagrams. Areas of particular interest include time-series analysis and dynamic metric spaces~\cite{kim2020spatiotemporal}. 
 
-The simple and combinatorial nature of our approach does pose some limitations to its applicability. For example, there may be better bounds or algorithms available if stronger assumptions can be made on how the filtration is changing with time. Moreover, if the filtration $K$ shares little similarity to the ``target'' filtration $K'$, then the overhead of reducing the simplices from $K' \setminus K$ appended to the decomposition derived from $K$ may be large enough to motivate simply computing the decomposition at $K_1$ independently, especially if parallel processors are available. Indeed, in this setting the size of the LIS may very well be on the order $\sim m - \sqrt{m}  = O(m)$, rendering the efficiencies gained using our approach as negligible. 
-Thus, our approach is primarily useful if the filtrations in the parameterized family is ``nearby'' in the combinatorial sense. 
+The simple and combinatorial nature of our approach does pose some limitations to its applicability. For example, better bounds or algorithms may be obtainable if stronger assumptions can be made on how the filtration is changing with time. Moreover, if the filtration $(K, f)$ shares little similarity to the ``target'' filtration $(L,f')$, then the overhead of reducing the simplices from $L \setminus K$ appended to the decomposition derived from $K$ may be large enough to motivate simply computing the decomposition at $L$ independently, especially if parallel processors are available. 
+Our approach is primarily useful if the filtrations in the parameterized family is ``nearby'' in the combinatorial sense. 
 
-From an implementation perspective, one non-trivial complication of our approach is its heavy dependence on a particular sparse matrix data structure which permits permuting both the row and columns of a given matrix in at most $O(m)$ time. Our use of this data structure is motivated by the fact that, like vineyards and unlike the standard persistence algorithm, the $R = DV$ decomposition is permuted with every $O(m)$ operation. Indeed, as shown with the natural images example in section~\ref{sec:results}, there are often more permutation operations being applied than there are column reductions. In the more standard \emph{compressed} sparse matrix representations (i.e. CSC, CSR, etc.), permuting both the rows and columns generally takes at most $O(Z)$ time, where $Z$ is the number of non-zero entries. If the particular filtration has many cycles, permuting these compressed representations can be quite expensive. As a result, the more complex sparse matrix representation from~\cite{cohen2006vines} is necessary to be efficient in practice. 
+From an implementation perspective, one non-trivial complication of our approach is its heavy dependence on a particular sparse matrix data structure which permits permuting both the row and columns of a given matrix in at most $O(m)$ time. As shown with the natural images example in section~\ref{sec:results}, there are often more permutation operations being applied than there are column reductions. In the more standard \emph{compressed} sparse matrix representations\footnote{
+By ``standard,'' we mean any of the common sparse representations used in scientific computing packages, like SciPy's sparse module (\href{https://docs.scipy.org/doc/scipy/reference/sparse.html} 
+))
+}, permuting both the rows and columns generally takes at most $O(Z)$ time, where $Z$ is the number of non-zero entries, which can be quite expensive if the particular filtration has many cycles. As a result, the more complex sparse matrix representation from~\cite{cohen2006vines} is necessary to be efficient in practice. 
 
 Moving forward, our results suggest there are many aspects of computing persistence in dynamic settings yet to be explored. For example, it's not immediately clear whether one could adopt, for example, the twist optimization~\cite{chen2011persistent} used in the reduction algorithm to the dynamic setting. Another direction to explore would be the analysis of our approach under the cohomology computation~\cite{de2011dualities}, or the specialization of the move operations to specific types of filtrations such as Rips filtrations. Such adaptations may result in even larger reductions in the number of column operations, as have been observed in practice for the standard reduction algorithm~\cite{bauer2021ripser}. 
 
@@ -1719,7 +1734,7 @@ Moving forward, our results suggest there are many aspects of computing persiste
 \subsection{Algorithms}
 
 \subsubsection{Reduction Algorithm}
-\begin{algorithm}[t]
+\begin{algorithm}[h!]
 	\setstretch{1.15}
 	\caption{Reduction Algorithm (\texttt{pHcol}) }
 	\begin{algorithmic}[1]
