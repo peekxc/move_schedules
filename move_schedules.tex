@@ -1434,7 +1434,8 @@ The example above suggests minimizing~\eqref{eq:sorting_additive} is reminiscent
 %\\
 
 %% TODO: elaborate on monotonicity, describe segment tree
-The simplicity of both the Spearman distance and the types of permutations we consider here enables certain computational advantages. Suppose we begin with an array $\mathcal{A}$ of size $m$ which provides $O(1)$ access and modification, initialized with the (signed) \emph{displacement} of every element in $p$ to its corresponding position in $q$. Since the Spearman distance is simply the sum of the absolute value of these displacements, at any point during during the execution of Algorithm~\ref{alg:sorting} we may obtain $F(\bar{p}, q)$ simply by having access to the sum of every entry in $\mathcal{A}$. There are two degrees of freedom in   Algorithm~\ref{alg:sorting}: the first is in the choice of $\sigma \in \mathcal{D}$, and the second is in choosing $j$. If we fix a heuristic for the latter, then we have a set of possible valid moves $S_\mathcal{D}$ induced by each $\sigma \in \mathcal{D}$ to choose from. Observe that each permutation $s_\sigma \in S_\mathcal{D}$ changes the displacement of every symbol in at most three different ways: 
+We propose a heuristic strategy to minimize~\eqref{eq:sorting_additive} which we observed is both efficient to compute quite effective in practice.
+The heuristic is inspired by the simplicity of computing the Spearman distance between cyclic permutations at the schedule construction phase. Suppose we begin with an array $\mathcal{A}$ of size $m$ which provides $O(1)$ access and modification, initialized with the (signed) \emph{displacement} of every element in $p$ to its corresponding position in $q$. Since the Spearman distance is simply the sum of the absolute value of these displacements, at any point during during the execution of Algorithm~\ref{alg:sorting} we may obtain $F(\bar{p}, q)$ simply by having access to the sum of every entry in $\mathcal{A}$. There are two degrees of freedom in   Algorithm~\ref{alg:sorting}: the first is in the choice of $\sigma \in \mathcal{D}$, and the second is in choosing $j$. If we fix a heuristic for the latter, then we have a set of possible valid moves $S_\mathcal{D}$ induced by each $\sigma \in \mathcal{D}$ to choose from. Observe that each permutation $s_\sigma \in S_\mathcal{D}$ changes the displacement of every symbol in at most three different ways: 
 \[
 \mathcal{A}(s_\sigma \circ p) = 
 \begin{cases} 
@@ -1446,7 +1447,7 @@ The simplicity of both the Spearman distance and the types of permutations we co
 That is, if $s_\sigma$ represents a move permutation moving $\sigma$ from position $i$ to position $j$, then relative to the previous permutation $p$, the displacement of $\sigma$ in $s_\sigma \circ p$ changes by $\lvert i - j \rvert$ and the displacement of any symbol between $i$ and $j$ changes by $\pm 1$. 
 All other symbol displacements are unchanged. Thus, if we replace $\mathcal{A}$ with a data structure  supporting $O(\log m)$ access time to aggregate information (i.e. the sum) and $O(\log m)$ modification time ability on $\lvert i - j \vert$ entries (simultaneously), we could greedily choose the next permutation $s$ to maximize:
 \begin{equation}\label{eq:greedy_step}
-	s_{\text{greedy}} = \argmin_{\text{ valid } s \in S_\mathcal{D}} F(s\circ p, q)
+	s_{\text{greedy}} = \argmin_{\text{ valid } s \in \Sigma} F(s\circ p, \iota)
 \end{equation}  
 in $O(d\log m)$ time. 
 The former problem reduces to the problem of efficiently calculating \emph{prefix sums}, which is easily solved. 
@@ -1483,6 +1484,16 @@ Since single element modifications, removals, and insertions can all be achieved
 % \subsection{Empirical results}\label{sec:results}
 % \section{Applications and Discussion}\label{sec:applications}
 \section{Applications and Experiments}\label{sec:results}
+\subsection*{Movies}
+Move data description
+\begin{figure}
+	\centering
+	\includegraphics[width=0.48\textwidth]{varying_d.pdf}
+	\includegraphics[width=0.48\textwidth]{varying_nd.pdf}
+	\caption{Performance}
+\end{figure}
+
+
 \subsection*{Crocker stacks}
 There are many challenges to characterizing topological behavior in dynamic settings. One approach is to trace out the curves constituting a continuous family of persistence diagrams in $\mathbb{R}^3$---the vineyards approach---however this visualization can be cumbersome to work with as there are potentially many such vines tangled together, making topological critical events with low persistence difficult to detect. Moreover, the vineyards visualization does not admit a natural simplification utilizing the stability properties of persistence, as individual vines are not stable: if two vines move near each other and then pull apart without touching, then a pairing in their corresponding persistence diagrams may cross under a small perturbation, signaling the presence of an erroneous topological critical event~\cite{topaz2015topological, xian2020capturing}. 
 
