@@ -1,6 +1,6 @@
 % \documentclass[review]{siamart190516} % for SICOMP 
-%\documentclass{article} % for arxiv 
-% \usepackage{arxiv}
+%\documentclass{article} % for arxiv only
+%\usepackage{arxiv} % for arxiv only 
 %\pagestyle{plain} % arxiv only 
 \PassOptionsToPackage{noend}{algpseudocode}
 \documentclass[sn-mathphys]{sn-jnl}
@@ -13,21 +13,18 @@
 \usepackage{scalefnt}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
-% \usepackage{algorithm}
 \usepackage{bbm}
 \usepackage{dsfont}
 \usepackage{array}
-\usepackage[inkscape={/usr/local/bin/inkscape -z -C}]{svg}
-%\usepackage{algorithm2e}
-%%\usepackage{algorithmicx}
-% \usepackage[noend]{algpseudocode} % keep the noend argument
-%\usepackage{bbm}
-% \usepackage{graphicx}
-
 \usepackage{blkarray, bigstrut}
 \newcommand\topstrut[1][1.0ex]{\setlength\bigstrutjot{#1}{\bigstrut[t]}}
 \newcommand\botstrut[1][0.9ex]{\setlength\bigstrutjot{#1}{\bigstrut[b]}}
 
+\usepackage{epstopdf}
+%\epstopdfDeclareGraphicsRule{.pdf}{png}{.png}{convert #1 \OutputFile}
+%\DeclareGraphicsExtensions{.png,.pdf}
+\DeclareGraphicsExtensions{.pdf,.png}
+  
 \usepackage{caption} 
 \captionsetup[table]{skip=4pt, position=above}
 
@@ -110,14 +107,14 @@
 %\date{}
 
 % Optional PDF information
-\ifpdf
-\hypersetup{
-  pdftitle={Move Schedules},
-  pdfauthor={Matthew Piekenbrock and Jose A. Perea}
-}
-\fi
+% \ifpdf
+% \hypersetup{
+%   pdftitle={Move Schedules},
+%   pdfauthor={Matthew Piekenbrock and Jose A. Perea}
+% }
+% \fi
 
-\raggedbottom
+% \raggedbottom
 
 % ------  Begin document ------- 
 % https://github.com/peekxc/dart
@@ -215,7 +212,6 @@ Thus, in this example, only a few persistence diagrams are needed to capture the
 \begin{figure*}[t]
  	\centering
  	\includegraphics[width=0.75\textwidth]{circle_vineyards_vector.pdf}
-%	\includesvg{circle_vineyards}
  	\caption{The cumulative column operations needed to compute persistence across the time-varying filtration of grayscale images. Observe 10 independent persistence computations evenly spaced in time (green line) captures the major topological changes and is the most computationally efficient approach shown.}
  	\label{fig:vineyards}
  \end{figure*}
@@ -413,7 +409,7 @@ and whose filtration order is given as $K = (u, v, w, a, b, c)$.
 %The reduction algorithm begins by setting $R = D$ and $V = I$, followed by left-to-right column operations until invariants I3 is satisfied.
 %If the $i$-th column of $R$ is nonzero, then $\mathrm{low}_R(i)$  is the row index of its lowest nonzero entry.
 Using $\mathbb{Z}_2$ coefficients for simplicity, the reduction proceeds to compute $H_1(K)$ as follows:
-\begin{displaymath}
+$$
 	\def\rowsp{0.4em}
 	\def\arraystretch{0.95}
 	\makeatletter\setlength\BA@colsep{1.2pt}\makeatother
@@ -471,8 +467,7 @@ Using $\mathbb{Z}_2$ coefficients for simplicity, the reduction proceeds to comp
   		c \kern\rowsp & \;     &    & 1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
-	\vspace*{-1em}
-\end{displaymath}
+$$
 \noindent Since column $c$ in $R_1$ is $0$, the chain $d_1 + d_2 + d_3$ indicated by the column $c$ in $V_1$ represents a dimension $1$ cycle. Similarly, the columns at $u, v, w$ in $R_0$ (not shown) are all zero, indicating three $0$-dimensional homology classes are born, two of which are killed by the pivot entries in columns $a$ and $b$ in $R_1$.
 \\
 \\
@@ -503,7 +498,7 @@ The goal of the vineyards algorithm can now be described explicitly: to prescrib
 \\
 \noindent 
 \textbf{Example 2.2} To illustrate the basic principles on which vineyards works, we re-use the running example introduced in the previous section. Below, we illustrate the case of exchanging simplices $a$ and $b$ in the filtration order, and restoring $RV$ to a valid decomposition. 
-\begin{displaymath}
+$$
 	\def\rowsp{0.2em}
 	\def\arraystretch{0.95}
 	\makeatletter\setlength\BA@colsep{1.2pt}\makeatother
@@ -545,11 +540,11 @@ The goal of the vineyards algorithm can now be described explicitly: to prescrib
   		w \kern\rowsp & \; 1 &  &  \hphantom{1} \; \botstrut \\
 		\end{block}
 	\end{blockarray}
-\end{displaymath}
+$$
 % End R1
 \vspace{-1.8em}
 % Start V1 
-\begin{displaymath}	
+$$
 	\def\rowsp{0.2em}
 	\def\arraystretch{0.95}
 	\makeatletter\setlength\BA@colsep{1.2pt}\makeatother
@@ -591,7 +586,7 @@ The goal of the vineyards algorithm can now be described explicitly: to prescrib
   		 c \kern\rowsp & \;  &  & 1 \; \botstrut \\
 		\end{block}
 	\end{blockarray}
-\end{displaymath}
+$$
 %\begin{displaymath}
 %	\def\rowsp{0.4em}
 %	\def\arraystretch{0.95}
@@ -708,7 +703,7 @@ Repeating this process at most $j - i - 1$ times ensures $R'$ stays reduced in a
 \\
 \\
 \noindent \textbf{Example 2.3:} We re-use the running example from sections~\ref{sec:reduction} and~\ref{sec:vineyards} to illustrate moves. The donor columns of $R$ and $V$ are denoted as $d_R$ and $d_V$, respectively. Consider moving edge $a$ to the position of edge $c$ in the filtration. 
-\begin{displaymath}
+$$
 	\def\rowsp{0.4em}
 	\def\arraystretch{0.60}
 	\makeatletter\setlength\BA@colsep{0.9pt}\makeatother
@@ -800,12 +795,12 @@ Repeating this process at most $j - i - 1$ times ensures $R'$ stays reduced in a
 	\end{block}
 	% \undermat{B}{ & & }  
 \end{blockarray}
-\end{displaymath}
+$$
 
 \vspace{-3.0em}
 
 % start V example (1) 
-\begin{displaymath}
+$$
 	\def\rowsp{0.4em}
 	\def\arraystretch{0.60}
 	\makeatletter\setlength\BA@colsep{0.9pt}\makeatother
@@ -897,7 +892,8 @@ Repeating this process at most $j - i - 1$ times ensures $R'$ stays reduced in a
 	\end{block}
 	% \undermat{B}{ & & }  
 \end{blockarray}
-\end{displaymath}
+$$
+
 Note that the equivalent permutation using vineyards requires $4$ column operations on both $R_1$ and $V_1$, respectively, whereas a single move operation accomplishes using only $2$ column operations per matrix. The pseudo-code for \emph{MoveRight} is given in Algorithm~\ref{alg:mr} and for \emph{MoveLeft} in Algorithm~\ref{alg:ml}. 
 
 %\begin{remark}
@@ -1199,7 +1195,6 @@ By definition, a subsequence of symbols in $\mathcal{L}$ common to both $p$ and 
  %for every pair of elements $\sigma, \tau \in \mathcal{L}$, if $p_{\sigma} < p_{\tau}$ where $p_{\sigma}$ denotes the the position of $\sigma$ in $p$, then $q_{\sigma} < q_{\tau}$ must also be true. 
  %under certain insertion and deletion operations. 
  
- %We know that 
  
 \subsection{Minimizing schedule cost}\label{sec:schedule_cost}
 The algorithm outlined in section~\ref{sec:schedule_construction} is a sufficient for generating move schedules of minimal cardinality: any schedule of moves $S$ sorting $f \mapsto f'$ above is guaranteed to have size $\lvert S \rvert = m - \lvert \mathrm{LCS}(f, f') \rvert$, and the reduction to the permutation edit distance problem ensures this size is optimal. 
@@ -1838,8 +1833,6 @@ Here we record explicitly the simple schedule construction algorithm outlined in
 The high level idea of the algorithm is to first construct the LCS between two permutations $p,q \in S_m$. To do this efficiently, one re-labels $q \mapsto \iota$ to the identity permutation $\iota = [m]$ and applies a consistent re-labeling $p \mapsto \bar{p}$. This relabeling preserves the LCS distance and has the additional advantage that $\bar{q} = \iota = [m]$ is a strictly increasing subsequence, and thus computing the LCS between $p,q \in S_m$ reduces to computing the LIS $\mathcal{L}$ of $\bar{p}$. 
 By sorting $\bar{p} \mapsto p$ via operations which (strictly) increase the size of $\mathcal{L}$, we ensure that the size of the set of corresponding permutations is exactly $m - \lvert \mathcal{L} \rvert$. 
 
- \algnewcommand{\IfThenElse}[3]{% \IfThenElse{<if>}{<then>}{<else>}
-  \State \algorithmicif\ #1\ \algorithmicthen\ #2\ \algorithmicelse\ #3}
   \begin{algorithm}[h!]
 	\caption{Sorting algorithm}\label{alg:sorting}
 	\setstretch{1.05}
