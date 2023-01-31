@@ -21,51 +21,51 @@ Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: move_schedules.bib
 Warning--entry type for "rivet" isn't style-file defined
---line 445 of file move_schedules.bib
+--line 461 of file move_schedules.bib
 Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
-You've used 44 entries,
+You've used 47 entries,
             7385 wiz_defined-function locations,
-            1435 strings with 17420 characters,
-and the built_in function-call counts, 679985 in all, are:
-= -- 126267
-> -- 1462
-< -- 739
-+ -- 77900
-- -- 395
-* -- 15236
-:= -- 118427
-add.period$ -- 52
-call.type$ -- 44
-change.case$ -- 376
-chr.to.int$ -- 1934
-cite$ -- 44
-duplicate$ -- 1957
-empty$ -- 8990
-format.name$ -- 932
-if$ -- 176394
+            1451 strings with 17821 characters,
+and the built_in function-call counts, 689181 in all, are:
+= -- 127507
+> -- 1546
+< -- 784
++ -- 78246
+- -- 413
+* -- 15706
+:= -- 120298
+add.period$ -- 55
+call.type$ -- 47
+change.case$ -- 394
+chr.to.int$ -- 2045
+cite$ -- 47
+duplicate$ -- 2076
+empty$ -- 9465
+format.name$ -- 986
+if$ -- 178629
 int.to.chr$ -- 1
-int.to.str$ -- 87
+int.to.str$ -- 93
 missing$ -- 0
-newline$ -- 633
-num.names$ -- 176
-pop$ -- 959
+newline$ -- 670
+num.names$ -- 188
+pop$ -- 1013
 preamble$ -- 1
-purify$ -- 218
+purify$ -- 233
 quote$ -- 0
-skip$ -- 78206
+skip$ -- 78970
 stack$ -- 0
-substring$ -- 62790
-swap$ -- 1135
-text.length$ -- 693
+substring$ -- 63656
+swap$ -- 1200
+text.length$ -- 734
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 1805
+type$ -- 1921
 warning$ -- 0
-while$ -- 1413
+while$ -- 1495
 width$ -- 0
-write$ -- 719
+write$ -- 762
 (There was 1 warning)
