@@ -1019,7 +1019,7 @@ If our goal is to decrease the size of $\lvert S_F \rvert$, one option is to \em
 We expect $\widetilde{S}_F$ to be cheaper to execute than $S_F$, with the tradeoff  that less diagrams are produced.
 We make this precise next:
 \begin{proposition}\label{prop:factor2}
-	Let $K$ denote a filtration of size $\lvert K \rvert = m$ with decomposition $R = D V$, $T$ the maximum number of $O(m)$ operations required to execute $S_F$ via vineyards, and $M$ be the maximum number of $O(m)$ operations required to execute $\widetilde{S}_F$ with moves. Then, the inequality $ M \leq {\textstyle \frac{1}{2} \, T}$ holds.
+	Let $K$ denote a filtration of size $\lvert K \rvert = m$ with decomposition $R = D V$, $T$ the maximum number of $O(m)$ operations required to execute $S_F$ via vineyards, and $M$ be the maximum number of $O(m)$ operations required to execute $\widetilde{S}_F$ with moves. Then, if all pairs $(i, j) \in \tilde{S}_F$ satisfy $i < j$ and $\lvert i - j \rvert > 1$, the inequality $ M \leq {\textstyle \frac{1}{2} \, T}$ holds.
 \end{proposition}
 \begin{proof} \normalsize
 First, consider executing the vineyards algorithm on a given schedule $S_F$. As there are at most $2$ column operations, any contiguous sequence of transpositions $(i,i+1), (i+1,i+2), \ldots (j-1,j)$ induces at most $2(\lvert i - j \rvert)$ column operations in both $R$ and $V$, giving a total of $4(\lvert i - j \rvert)$ column operations.
