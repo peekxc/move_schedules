@@ -1016,7 +1016,7 @@ If our goal is to decrease the size of $\lvert S_F \rvert$, one option is to \em
 \begin{equation}\label{eq:tr_to_mv}
 	 (i, i+1)(i+1, i+2)\cdots(j-1, j) \mapsto (j, i+1, \cdots, j-1, i)  \quad \text{ if } i < j
 \end{equation}
-We expect $\widetilde{S}_F$ to be cheaper to execute than $S_F$, with the tradeoff  that less diagrams are produced.
+We expect $\widetilde{S}_F$ to be cheaper to execute using move operations than $S_F$, with the tradeoff  that less diagrams are produced.
 We make this precise next:
 \begin{proposition}\label{prop:factor2}
 	Let $K$ denote a filtration of size $\lvert K \rvert = m$ with decomposition $R = D V$, $T$ the maximum number of $O(m)$ operations required to execute $S_F$ via vineyards, and $M$ be the maximum number of $O(m)$ operations required to execute $\widetilde{S}_F$ with moves. Then, if all pairs $(i, j) \in \tilde{S}_F$ satisfy $i < j$ and $\lvert i - j \rvert > 1$, the inequality $ M \leq {\textstyle \frac{1}{2} \, T}$ holds.
