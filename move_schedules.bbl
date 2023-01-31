@@ -1,6 +1,6 @@
 %% BioMed_Central_Bib_Style_v1.01
 
-\begin{thebibliography}{45}
+\begin{thebibliography}{44}
 % BibTex style file: bmc-mathphys.bst (version 2.1), 2014-07-24
 \ifx \bisbn   \undefined \def \bisbn  #1{ISBN #1}\fi
 \ifx \binits  \undefined \def \binits#1{#1}\fi
@@ -608,19 +608,6 @@ arXiv preprint arXiv:1412.3374
 \endbibitem
 
 %%% 42
-\bibitem{carlsson2009theory}
-\begin{barticle}
-\bauthor{\bsnm{Carlsson}, \binits{G.}},
-\bauthor{\bsnm{Zomorodian}, \binits{A.}}:
-\batitle{The theory of multidimensional persistence}.
-\bjtitle{Discrete \& Computational Geometry}
-\bvolume{42}(\bissue{1}),
-\bfpage{71}--\blpage{93}
-(\byear{2009})
-\end{barticle}
-\endbibitem
-
-%%% 43
 \bibitem{lesnick2019computing}
 \begin{botherref}
 \oauthor{\bsnm{Lesnick}, \binits{M.}},
@@ -632,7 +619,7 @@ arXiv preprint arXiv:1902.05708
 \end{botherref}
 \endbibitem
 
-%%% 44
+%%% 43
 \bibitem{boissonnat2000robust}
 \begin{barticle}
 \bauthor{\bsnm{Boissonnat}, \binits{J.-D.}},
@@ -645,7 +632,7 @@ arXiv preprint arXiv:1902.05708
 \end{barticle}
 \endbibitem
 
-%%% 45
+%%% 44
 \bibitem{christofides2022worst}
 \begin{bchapter}
 \bauthor{\bsnm{Christofides}, \binits{N.}}:

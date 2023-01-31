@@ -981,17 +981,19 @@ It was hypothesized that the reason the vineyards algorithm was more expensive t
 Thus, in theory, decreasing the number of times the decomposition is restored to a valid state ought to reduce the total number of column operations needed to update a decomposition. This motivates the question: can one simultaneously minimize the number of times the decomposition is restored to a valid state and retain an efficient update scheme for \emph{arbitrary} permutations? 
 
 \subsection{Continuous setting}\label{sec:continuous_setting}
-In the continuous time case (i.e., vineyards), we are given a homotopy $F : K \times [0,1] \to \mathbb{R}$ interpolating between  a pair of filtrations $K, K'$ from some underlying complex $S$, with simplices ordered according to $f = F(\cdot, 0)$ and $f' = F(\cdot, 1)$, respectively. 
-As the choice of homotopy $F$ determines the number of transpositions that transform $K$ into $K$ via $F$, bounding this number requires assumptions on $F$. 
+In the continuous time case, we are given a homotopy $F : K \times [0,1] \to \mathbb{R}$ interpolating between  a pair of filtrations $(K, f), (K,f')$ satisfying $f = F(\cdot, 0)$ and $f' = F(\cdot, 1)$, respectively. 
+As the choice of homotopy $F$ determines the number of transpositions that transform $f$ into $f'$ via $F$, bounding this number requires assumptions on $F$. 
 If we assume the curves $\tau \mapsto F(\cdot, \tau)$ are in general position in $[0,1]\times \mathbb{R}$ and that each pair of curves cross  at most once, then the  functions $\tau\mapsto F(\cdot, \tau)$ belong to a class of $x$-monotone curves called \emph{pseudo-segments}.
 %, i.e. parameterized curves whose behavior with respect to a certain restricted set of geometric predicates is invariant. 
 This family includes the straight-line homotopy $F(\sigma, \tau) = (1 - \tau) f(\sigma) + \tau f'(\sigma)$,  studied in the original vineyards paper~\cite{cohen2006vines}. 
 Detecting all $k$ intersections of $m$ pseudo-segments is a well-studied problem in computational geometry that can be optimally solved in output-sensitive $O(m \log m + k)$ time by several algorithms~\cite{boissonnat2000efficient}, where $k$ is the output-sensitive term. 
 
-If one has two distinct filtrations $K,K'$ both derived from the same underlying complex $S$ of size $m = \lvert S \rvert$, observe the simplexwise representations of both $K$ and $K'$ can be thought of as elements of the symmetric group $S_m$.
-Moreover, as the application of permutations to $K$ implies additional elementary column operations to the underlying matrix decomposition, we think of the action of any set of such permutations on the initial decomposition $R=DV$ of $K$ as a \emph{schedule} with respect to the pair $K,K'$. We formalize this with a definition.
+Given two filtrations $(K,f), (K,f')$, observe their simplexwise representations induced by $f$ and $f'$ can be thought of as elements of the symmetric group $S_m$.
+As applying permutations to $K$ implies additional column operations on the underlying matrix decomposition, we think of any set of such permutations acting on the initial decomposition $R=DV$ of $(K,f)$ as a \emph{schedule} with respect to the pair $f,f'$. We formalize this with a definition.
 \begin{definition}[Schedule]\label{def:schedule}
-Given a pair of filtrations $K, K'$ from an underlying complex $S$ and a fixed bijection $\rho : K \to K'$, let $\rho^\ast : [m] \to [m]$ denote its induced bijection on $S_m$. Given a decomposition $R = DV$ of $K$, a \emph{schedule}  $\mathcal{S} = (s_1, s_2, \dots, s_d )$ is a sequence of permutations mapping satisfying: 
+Given a pair of filtrations $(K, f), (K,f)$ 
+%and a fixed bijection $\rho : f \to f'$, let $\rho^\ast : [m] \to [m]$ denote its induced bijection on $S_m$ 
+and $R = DV$ the initial decomposition of $(K, f)$, a \emph{schedule}  $\mathcal{S} = (s_1, s_2, \dots, s_d )$ is a sequence of permutations  satisfying: 
 	\begin{equation}\label{eq:rv_seq_schedule}
    		R = D_0 V_0 \overset{s_1}{\to} D_1 V_{1} \overset{s_2}{\to} \dots \overset{s_d}{\to} D_d V_{d} = R'
    	\end{equation}
@@ -1539,7 +1541,7 @@ The cumulative number of $O(m)$ column operations executed by three different ap
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=\textwidth, height=16.35em]{boid_sim_results.png}
+	\includegraphics[width=\textwidth, height=16.15em]{boid_sim_results.png}
 	\caption{ One the left, the cumulative number of column operations (log-scale) of the three baseline approaches tested. On the right, the normalized $K_\tau$ between adjacent filtrations depicts the coarseness of the discretization---about $5\%$ of the $\approx O(m^2)$ simplex pairs between adjacent filtrations are discordant.}
 	\label{fig:boid_sim_results}
 \end{figure}
@@ -1633,14 +1635,14 @@ From the bigraded Betti number and the dimension function, one finds that a larg
 Projecting the image data onto the first two basis vectors of leads to the projection shown in the top left of Figure~\ref{fig:patch_data_dgm}, of which 15 landmark points are also shown. Observe the data are distributed well around three ``circles''---the outside circle capturing the rotation gradient of the image patches ($S_{\mathrm{lin}}$), and the other two capturing the vertical and horizontal gradients ($S_v$ and $S_h$, respectively). Since the three circle model is the 1-skeleton of the Klein bottle, one may concur with Carlssons analysis~\cite{carlsson2008local} that the Klein bottle may be a reasonable candidate upon which the image data are distributed. 
 % This can be further verified empirically by e.g. using the iterative, meanshift-like procedure described in~\cite{carlsson2008local} to fit a parameterization of the model in question to the data. 
 The degree to which multi-parameter persistence simplifies this exploratory phase cannot be understated: we believe multi-parameter persistence has a larger role to play in manifold learning. 
-Unfortunately, as mentioned prior, the compute barriers effective bar its use in practice. 
+Unfortunately, as mentioned prior, the compute barriers effectively bar its use in practice. 
 
 \subsubsection{Accelerating 2D persistence}\label{sec:empirical_klein}
 As we have outlined the computational theory of 2-parameter persistence and elucidated its relevance to our proposed move scheduling approach, we now demonstrate the efficiency of scheduling using the same high-contrast patch data set studied in~\cite{lee2003nonlinear} by evaluating the performance of various methods at computing the fibered barcode invariant via the parameterization from~\ref{sec:fibered_barcode_reparam}. 
 
 Due to the aforementioned high complexity of the fibered barcode computation, we begin by working with a subset of the image patch data $\mathcal{X}$. 
-In particular, we combine the use of furthest-point sampling and proportionate allocation (stratified) sampling to sample landmarks $X \subset \mathcal{X}$ distributed within $n = 25$ strata. Each strata consists of the $(1/n)$-thick level set given by $\rho_{15}$, the density estimator. The use of furthest-point sampling gives us certain coverage guarantees that the geometry is approximately preserved within each level set, whereas the stratification ensures the original density of is approximated preserved as well. 
-From this data set, we construct a Rips-(co)density bifiltration using $\rho_{15}$ equipped with the geodesic metric computed over the same $k = 15$ k-nearest neighbor graph on $X$. 
+In particular, we combine the use of furthest-point sampling and proportionate allocation (stratified) sampling to sample landmarks $X \subset \mathcal{X}$ distributed within $n = 25$ strata. Each strata consists of the $(1/n)$-thick level set given the $k$-nearest neighbor density estimator $\rho_{15}$ with $k = 15$. The use of furthest-point sampling gives us certain coverage guarantees that the geometry is approximately preserved within each level set, whereas the stratification ensures the original density of is approximated preserved as well. 
+From this data set, we construct a Rips-(co)density bifiltration using $\rho_{15}$ equipped with the geodesic metric computed over the same k-nearest neighbor graph on $X$. 
 Finally, we record the number of column reductions needed to compute the fibered barcode at a variety of levels of coarsening using $\mathtt{pHcol}$, vineyards, and our moves approach. The results are summarized in Table~\ref{tab:barcode_templates}. We also record the number of 2-cells in $\mathcal{A}(M)$ and the number of permutations applied throughout the encountered along the traversal of the dual graph for both vineyards and moves, denoted in the table as $d_K$ and $d_{\mathrm{LCS}}$, respectively. 
 %Specifically, we begin by extracting a representative subset of the set $X \subset \mathcal{X}$ of patches representing the top 30\% densest patches of the space of all patches $\mathcal{X}$, where the notion of density is approximated with a k-nearest neighbor (knn) density estimator $\rho$. Carlsson et al.~\cite{carlsson2008local} studied a variety of choices of $k$ in order to understand how localized the data were distributed around the Klein bottle model. He determined empirically that when $k \approx 15$, the top 30\% captures three types of directional shifts in the grayscale gradients of the image patches. These three gradients were shown to be captured well by the three-circle model $C_3$---the 1-skeleton of the Klein bottle.  One of the circles, $S_{\mathrm{lin}}$, parameterizes a the rotational gradient, whereas the other two $S_v$ and $S_h$ parameterize vertical and horizontal gradients.  
 %It was shown in~\cite{carlsson2008local} that when $k \approx 300$, the top 30\% of data extracted from the knn density estimator $\rho_{300}$ `fills out' the two-manifold, yielding Betti numbers $\beta_0 = \beta_1 = 1$, whereas when $k$ is decreases to a more localized estimate, the three-circle model is recovered, which has Betti numbers $\beta_0 = 1, \beta_1 = 5$.
@@ -1734,6 +1736,8 @@ Moving forward, our results suggest there are many aspects of computing persiste
 \subsection{Algorithms}
 
 \subsubsection{Reduction Algorithm}
+The reduction algorithm, also called the ``standard algorithm,'' is the most often used modality  for computing persistence. While there exists other algorithms for computing persistence, they are typically not competitive with the reduction algorithm in practice. 
+We outline the reduction algorithm below in Algorithm~\ref{alg:reduce}.
 \begin{algorithm}[h!]
 	\setstretch{1.15}
 	\caption{Reduction Algorithm (\texttt{pHcol}) }
@@ -1752,10 +1756,13 @@ Moving forward, our results suggest there are many aspects of computing persiste
 		\EndFunction
 	\end{algorithmic}	\label{alg:reduce}
 \end{algorithm}
+The algorithm begins by copying $D$ to a new matrix $R$, to be subsequently modified in-place. After setting $V$ is set to the identity, the algorithm proceeds with column operations on both $R$ and $V$, left to right, until the decomposition invariants are satisfied. Since each column operation takes $O(m)$ and there are potentially $O(k)$ columns in $D$ with identical low entries (line 4 in ~\ref{alg:reduce}, observe the reduction algorithm below clearly takes $O(m^2 k)$ time. Since there exists complexes where $k \sim O(m)$, one concludes the bound of $O(m^3)$ is tight~\cite{morozov2005persistence}, though this seems to only be true on pathological inputs. Indeed, a more refined analysis by Edelsbrunner et al.~\cite{edelsbrunner2000topological} shows the reduction algorithm scales by the sum of squares of the cycle persistences, which is an output-sensitive bound. 
 
 \subsubsection*{Move Algorithms}
-Although conceptually similar, there is an asymmetry between \emph{MoveRight} and \emph{MoveLeft}. Moving a simplex upwards in the filtration requires removing non-zero entries along several columns of a particular row in $V$ so that the corresponding permutation does not render $V$ non-upper triangular. The key insight of the algorithm presented in~\cite{busaryev2010tracking} is that $R$ can actually be maintained in all but one column during this procedure (by employing the \emph{donor} column). In contrast, moving a simplex to an earlier time in the filtration requires removing non-zero entries along several rows of a particular column of $V$. As before, $R$ stays reduced during this cancellation procedure in all but one column, however the subsequent permutation to $R$ requires reducing a pair of columns which may cascade into a larger chain of column operations to keep $R$ reduced. Since these operations always occur in a left-to-right fashion, its not immediately clear how to apply a donor column kind of concept. Fortunately, we can still separate  these two stages. 
-
+As we've covered the moves algorithm extensively in section~\ref{sec:moves}, we now record the algorithmic components of both \emph{MoveRight} and \emph{MoveLeft}.
+Though conceptually similar, note that there is an asymmetry between \emph{MoveRight} and \emph{MoveLeft}: moving a simplex upwards in the filtration requires removing non-zero entries along several columns of a particular row in $V$ so that the corresponding permutation does not render $V$ non-upper triangular. The key insight of the algorithm presented in~\cite{busaryev2010tracking} is that $R$ can actually be maintained in all but one column during this procedure (by employing the \emph{donor} column). In contrast, moving a simplex to an earlier time in the filtration requires removing non-zero entries along several rows of a particular column of $V$. As before, though $R$ stays reduced during this cancellation procedure in all but one column, the subsequent permutation to $R$ requires reducing a pair of columns which may cascade into a larger chain of column operations to keep $R$ reduced. 
+This is due to the fact that higher entries in columns in $R$ (above the pivot entry) may very well introduce additional non-reduced columns after $R$ is permuted. 
+Since these operations always occur in a left-to-right fashion, its not immediately clear how to apply a donor column kind of concept. Fortunately, like move right, we can still separate the algorithm into a reduction and restoration phase---see Algorithm~\ref{alg:ml}. Moreover, since $R$ is reduced in all but one column by line 6 in~Algorithm~\ref{alg:ml}, we can still guarantee the number of column operations in $R$ will scale with $\lvert i - j \rvert$. For a supplementary description of the move algorithm, see~\cite{busaryev2010tracking}.
 \begin{algorithm}[!htb]
 	\caption{Move Right Algorithm}\label{alg:mr}
 	\setstretch{1.15}
@@ -1806,7 +1813,7 @@ Although conceptually similar, there is an asymmetry between \emph{MoveRight} an
     
     \begin{algorithmic}[1]
         \Function{MoveLeft}{$R$, $V$, $i$, $j$} 
-        	\State $\mathbb{I} \gets \{ j \}$
+        	\State $\mathbb{I} \gets \emptyset$
             % \State $(\mathbb{K}, d_R, d_V) \gets (\emptyset, \mathrm{col}_R(i), \mathrm{col}_V(i))$
             \While{$V(k, i) \neq 0 $\textbf{ for }$ k = \mathrm{low}_V(i)$\textbf{ where }$j \leq k < i$}
             	\State $(\mathrm{col}_R(i), \mathrm{col}_V(i)) \mathrel{+}= (\mathrm{col}_R(k), \mathrm{col}_V(k))$
@@ -1830,10 +1837,13 @@ We recall an important claim given in~\cite{busaryev2010tracking} on the effect 
 \noindent The effect of the movement on intermediate simplices depends on the direction of the movement. If $i < j$ (respectively, $j < i$), all simplices at positions $k \in [i+1\;:\;j] $ are shifted down (respectively, up) by $1$. 
 
 \subsubsection{LCS-Sort}
+Here we record explicitly the simple schedule construction algorithm outlined in section~\ref{sec:schedule_construction}. The algorithm is simple enough to derive using the rules discussed in section~\ref{sec:schedule_construction} (namely, equation~\eqref{eq:valid_move}, but nonetheless for posterity sake we record it here for the curious reader; it is given in Algorithm~\ref{alg:sorting}.
+The high level idea of the algorithm is to first construct the LCS between two permutations $p,q \in S_m$. To do this efficiently, one re-labels $q \mapsto \iota$ to the identity permutation $\iota = [m]$ and applies a consistent re-labeling $p \mapsto \bar{p}$. This relabeling preserves the LCS distance and has the additional advantage that $\bar{q} = \iota = [m]$ is a strictly increasing subsequence, and thus computing the LCS between $p,q \in S_m$ reduces to computing the LIS $\mathcal{L}$ of $\bar{p}$. 
+By sorting $\bar{p} \mapsto p$ via operations which (strictly) increase the size of $\mathcal{L}$, we ensure that the size of the set of corresponding permutations is exactly $m - \lvert \mathcal{L} \rvert$. 
 
  \algnewcommand{\IfThenElse}[3]{% \IfThenElse{<if>}{<then>}{<else>}
   \State \algorithmicif\ #1\ \algorithmicthen\ #2\ \algorithmicelse\ #3}
-  \begin{algorithm}[h]
+  \begin{algorithm}[h!]
 	\caption{Sorting algorithm}\label{alg:sorting}
 	\setstretch{1.05}
     \begin{algorithmic}[1]
@@ -1867,16 +1877,19 @@ We recall an important claim given in~\cite{busaryev2010tracking} on the effect 
     	\EndFunction
 	\end{algorithmic}
 \end{algorithm}
+Suppose $\mathcal{L}$ has been computed from $\bar{p}$. Since $\mathcal{L}$ is strictly increasing, the only symbols left to permute are in $\mathcal{L} \setminus \bar{p}$, which we denote with $\mathcal{D}$.
+After choosing any symbol $\sigma \in \mathcal{D}$, one then applies a cyclic permutation to $\bar{p}$ that moves $\sigma$ into any position that increases the size of $\mathcal{L}$. To do this efficiently, we maintain a data structure $\mathcal{T}$ which enables us to query the successor and predecessor of any given symbol $s \in \bar{p}$ \emph{in} $\mathcal{L}$. 
+We also require a data structure to query the position of a given element $\sigma \in \bar{p}$, which for now we simply use the inverse permutation $\bar{p}$ (though a more efficient representation can be used based off of symbol \emph{displacements}, see section~\ref{sec:proxy_objective}.
+After the symbol is inserted into $\mathcal{L}$, we update $\bar{p}$, its inverse permutations $\bar{p}^{-1}$, $\mathcal{D}$ and $\mathcal{T}$ prior to the next move. The final set of permutations which sort $p \mapsto q$ (or equivalently, $\bar{p} \to \iota$ are stored in an array $\mathcal{S}$, which is then returned for further use. 
 
-\subsection{2D Persistence}\label{app:2d_pers}
-Indeed, one of the often noted drawbacks of persistence is its instability with respect to strong outliers. 
-Although persistence diagrams are stable with respect to their input---in the Hausdorff sense---and thus are robust to Hausdorff noise, the presence of strong outliers can artificially modify the connectivity of the underlying filtration, obscuring the detection of what would otherwise be significant topological structures~\cite{buchet2015topological}. 
-
-The dimension function is simply the the function which maps every point $a \in \mathbb{R}^2$ to $\mathrm{dim}(M_a)$. It is a simple and easy to visualize invariant, but is unstable and yields no information about the persistent features of $M$. 
-The multigraded Betti numbers constitute a natural and important class of invariants often studied in algebraic geometry and commutative algebra, though both their theory and computation is beyond the scope of this effort---the interested reader is referred to~\cite{lesnick2015interactive, carlsson2009theory} for more details. For our purposes, the $i^{\text{th}}$-graded Betti number of $M$ is simply a function $\beta_i(M): \mathbb{R}^2 \to \mathbb{N}$ whose values indicate the the number of elements at  each degree in a basis of the $i^{\text{th}}$ module in a free resolution for $M$. 
-
-\subsubsection*{Reparameterization using point-line duality}\label{sec:fibered_barcode_reparam}
-Let $\overline{\mathcal{L}}$ denote the collection of all lines in $\mathbb{R}^2$ with non-negative slope, $\mathcal{L} \subset \overline{\mathcal{L}}$ the collection of all lines in $\mathbb{R}^2$ with non-negative, finite slope, and $\mathcal{L}^\circ$ the collection of all affine lines in $\mathbb{R}^2$ with positive, finite slope. There is a standard point-line duality that gives a parameterization of $\mathcal{L}$ with the half-plane $[0, \infty) \times \mathbb{R}$ that is convenient to work with here. Define the \emph{line} and \emph{point} dual transforms $\mathcal{D}_{\ell}$ and $\mathcal{D}_p$, respectively, as follows: 
+\subsection{2-parameter persistence}\label{app:2d_pers}\label{sec:fibered_barcode_reparam}
+We now describe the reparameterization between the bigraded Betti numbers and the set of ``critical lines'' Lesnick and Wright~\cite{lesnick2012multidimensional} used to create their interactive 2d persistence algorithm, beginning with point-line duality.
+%One of the often noted drawbacks of persistence is its instability with respect to strong outliers. 
+%Although persistence diagrams are stable with respect to their input---in the Hausdorff sense---and thus are robust to Hausdorff noise, the presence of strong outliers can artificially modify the connectivity of the underlying filtration, obscuring the detection of what would otherwise be significant topological structures~\cite{buchet2015topological}. 
+%The dimension function is simply the the function which maps every point $a \in \mathbb{R}^2$ to $\mathrm{dim}(M_a)$. It is a simple and easy to visualize invariant, but is unstable and yields no information about the persistent features of $M$. 
+Let $\overline{\mathcal{L}}$ denote the collection of all lines in $\mathbb{R}^2$ with non-negative slope, $\mathcal{L} \subset \overline{\mathcal{L}}$ the collection of all lines with non-negative finite slope, and $\mathcal{L}^\circ$ the collection of all affine lines with positive finite slope. 
+%There is a standard point-line duality that gives a parameterization of $\mathcal{L}$ with the half-plane $[0, \infty) \times \mathbb{R}$ that is convenient to work with here. 
+Define the \emph{line} and \emph{point} dual transforms $\mathcal{D}_{\ell}$ and $\mathcal{D}_p$, respectively, as follows: 
 \begin{equation}
 	\begin{aligned}
 \mathcal{D}_{\ell}: \mathcal{L} \rightarrow[0, \infty) \times \mathbb{R} & \quad \hfill \quad & \mathcal{D}_{p}:[0, \infty) \times \mathbb{R} \rightarrow \mathcal{L} \\
@@ -1900,7 +1913,7 @@ The push map satisfies a number of useful properties. Namely:
 	\item For each $a \in \mathbb{R}^2$, $\mathrm{push}_L(a)$ is continuous on $\mathcal{L}^\circ$
 	\item For $L \in \mathcal{L}^\circ$ and $S \subset \mathbb{R}^2$, $\mathrm{push}_L$ induces an ordered partition $S_L$ on $S$ 
 \end{enumerate}
-Property (1) asserts that for any $L \in \overline{\mathcal{L}}$, the standard partial order on $\mathbb{R}^2$ restricts to a total order on $L$. Properties (2) and (3) qualify the following definition:
+Property (1) elucidates how the standard partial order on $\mathbb{R}^2$ restricts to a total order on $L$ for any $L \in \overline{\mathcal{L}}$, whereas Properties (2) and (3) qualify the following definition:
 \begin{definition}[Critical Lines]
 	For some fixed $S \subset \mathbb{R}^2$, a line $L \in L^\circ$ is defined to be \emph{regular} if there is an open ball $B \in L^\circ$ containing $L$ such that $S_L = S_{L'}$ for all $L' \in B$. Otherwise, the line $L$ is defined as \emph{critical}. 
 \end{definition}
@@ -1916,6 +1929,10 @@ This planar subdivision, denoted by $\mathcal{A}(M)$, is thus entirely determine
 A corollary from~\cite{lesnick2015interactive} shows that if the duals of two lines $L, L' \in \mathcal{L}$ are contained in the same $2$-cell in $\mathcal{A}(M)$, then $S_L = S_{L'}$, i.e. the partitions induced by $\mathrm{push}_L$ are equivalent. Indeed, the total order on $S_L$ is simply the pullback of the total order on $L$ with respect to the push map.
 Since $\mathcal{A}(M)$ partitions the entire half-plane, the dual to every line $L \in \mathcal{L}$ is contained within $\mathcal{A}(M)$---the desired reparameterization. 
 
+%To connect this construction back to persistence, one requires the definition of bigraded Betti numbers. 
+%In general, the multigraded Betti numbers constitute a natural and important class of invariants often studied in algebraic geometry and commutative algebra, though both their theory and computation is beyond the scope of this effort---the interested reader is referred to~\cite{lesnick2015interactive, carlsson2009theory} for more details. 
+
+For our purposes, the $i^{\text{th}}$-graded Betti number of $M$ is simply a function $\beta_i(M): \mathbb{R}^2 \to \mathbb{N}$ whose values indicate the the number of elements at  each degree in a basis of the $i^{\text{th}}$ module in a free resolution for $M$. 
 Let $S = \mathrm{supp}\,\beta_0(M) \, \cup \, \mathrm{supp}\,\beta_1(M)$, where the functions $\beta_0(M), \beta_1(M)$ are $0^{\text{th}}$ and $1^{\text{st}}$ bigraded Betti numbers of $M$, respectively. 
 The main mathematical result from~\cite{lesnick2015interactive} is a characterization of the barcodes $\mathcal{B}_L(M)$, for any $L \in \mathcal{L}$, in terms of a set of \emph{barcode templates} $\mathcal{T}$ computed at every 2-cell in $\mathcal{A}(M)$.
  More formally, for any line $L \in \overline{\mathcal{L}}$ and $e$ any 2-cell in $\mathcal{A}(M)$ whose closure contains the dual of $L$ under point-line duality, the 1-parameter restriction of the persistence module $M$ induced by $L$ is given by: 
@@ -1925,12 +1942,12 @@ The main mathematical result from~\cite{lesnick2015interactive} is a characteriz
 Minor additional conditions are needed for handling completely horizontal and vertical lines. 
 The importance of this theorem lies in the fact that the fibered barcodes are completely defined from the precomputed barcode templates $\mathcal{T}$---once every barcode template $\mathcal{T}^e$ has been computed and augmented onto $\mathcal{A}(M)$, $\mathcal{B}(M)$ is completely characterized, and the barcodes $\mathcal{B}_L(M)$ associated to a 1-D filtration induced by \emph{any} choice of $L$ can be efficiently computed via a point-location query on $\mathcal{A}(M)$ and a $O(\lvert \mathcal{B}_L(M) \rvert)$ application of the push map.
 
-\subsection{Computation}
-Computationally, the algorithm can be summarized into three core steps: 
+\subsubsection{Invariant computation}
+Computationally, the algorithm from~\cite{lesnick2019computing} can be summarized into three steps: 
 \begin{enumerate}
-	\item Computing the bigraded Betti numbers $\beta(M)$ of $M$
-	\item Constructing a line arrangement $\mathcal{A}(M)$ induced by critical lines from (1) 
-	\item Augmenting $\mathcal{A}(M)$ with a \emph{barcode template} $\mathcal{T}_e$ at every 2-cell $e \in \mathcal{A}(M)$
+	\item Compute the bigraded Betti numbers $\beta(M)$ of $M$
+	\item Construct a line arrangement $\mathcal{A}(M)$ induced by critical lines from (1) 
+	\item Augment $\mathcal{A}(M)$ with \emph{barcode templates} $\mathcal{T}_e$ at every 2-cell $e \in \mathcal{A}(M)$
 	%, yielding the \emph{augmented arrangement} $\mathcal{A}^{\sbullet}(M)$ 
 \end{enumerate}
 Computing (1) takes approximately $\approx O(m^3)$ using a matrix algorithm similar to Algorithm~\ref{alg:reduce}~\cite{lesnick2019computing}. Constructing and storing the line arrangement $\mathcal{A}(M)$ with $n$ lines and $k$ vertices is related to the \emph{line segment intersection problem}, which known algorithms in computational geometry can solve in (optimal) output-sensitive $O((n+k) \log n)$ time~\cite{boissonnat2000robust}. 
