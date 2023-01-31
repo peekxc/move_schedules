@@ -678,11 +678,11 @@ Starting with a valid reduction $R = DV$ and prior to performing the exchange, o
  The time complexity of vineyards is determined entirely by the complexity of performing a single adjacent transposition.
 Formally, since column operations are the largest complexity operations needed and each column can have potentially $O(m)$ entries, the complexity of vineyards is $O(m)$ per transposition. 
 Inspection of the individual cases of the algorithm from~\cite{cohen2006vines} shows that any single transposition requires at most two such operations on both $R$ and $V$.
-However, there are a number of factors that affect the runtime efficiency of the algorithm as a whole. 
+However, a host of other factors affect the runtime efficiency of the vineyards algorithm. 
 On the positive side, as both the $V$ and $R$ matrices tend to be quite sparse, the cost of a given column operation is proportional the number of non-zero field coefficients in the two columns being modified. As a rule of thumb, most transpositions require no column operations~\cite{edelsbrunner2000topological}. 
-On the negative side, one needs to constantly query the non-zero status of various entries in $R$ and $V$, which has a non-trivial runtime cost (consider evaluating e.g. Case 1.1 in~\cite{cohen2006vines}).   
- Moreover, an efficient implementation of the vineyards algorithm requires a non-standard sparse matrix representation that allows swapping any two rows and columns in $O(1)$, as described in Figure 5 in~\cite{cohen2006vines}. 
- Though these minor operations do not affect the asymptotic complexity of the vineyards algorithm, they collectively accrue a non-trivial runtime cost due to the quadratic scaling in how often they need to be performed.   
+On the negative side, one needs to frequently query the non-zero status of various entries in $R$ and $V$ (consider evaluating e.g. Case 1.1 in~\cite{cohen2006vines}), which accrues a non-trivial runtime cost due to the quadratic frequency with which they are required.   
+% Moreover, an efficient implementation of the vineyards algorithm requires a non-standard sparse matrix representation that allows swapping any two rows and columns in $O(1)$, as described in Figure 5 in~\cite{cohen2006vines}. 
+% Though these minor operations do not affect the asymptotic complexity of the vineyards algorithm, they collectively accrue a non-trivial runtime cost 
  
  % As a rule of thumb, due to the sparsity of both $R$ and $V$, most transpositions actually require no $O(m)$ operations. For example, exchanging two simplices of differing dimensions never requires column operations. A simple analysis given by Chen et al.~\cite{chen2013output} quantifies the order of magnitude we can expect the sparsity of these matrices to be.  
 
