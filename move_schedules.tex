@@ -1165,10 +1165,10 @@ We conclude this section with the main theorem of this effort: an output-sensiti
    		R = D_0 V_0 \overset{s_1}{\to} D_1 V_{1} \overset{s_2}{\to} \dots \overset{s_d}{\to} D_d V_{d} = R'
    	\end{equation}
    	can be determined in $O(m \log \log m)$ time and $O(m)$ space, where $R' = D_d V_d$ denotes a valid decomposition of $(K, f')$. 
-   	Moreover, if $i_k < j_k$ for all $k \in [d]$, then computing~\eqref{eq:rv_seq_theorem} requires $O(d\kappa)$ column operations, where:	  
+   	Moreover, if $i_k < j_k$ for all $k \in [d]$, then computing~\eqref{eq:rv_seq_theorem} requires $O(\kappa)$ column operations, where:	  
    	$$  \quad \kappa = \sum\limits_{k = 1}^d \, (\lvert \mathbb{I}_{k} \rvert + \lvert \mathbb{J}_{k} \rvert) $$
 %	$$  \quad \kappa = \sum\limits_{k = 1}^d \, \lvert \mathbb{I}_{k}\rvert + \lvert \mathbb{J}_{k}\rvert $$
-	where the quantities $\lvert \mathbb{I}_{k} \rvert, \lvert \mathbb{J}_{k} \rvert$ of the intermediate $R_k, V_k$ are given in Proposition~\ref{prop:move_st}. Note that since $\kappa$ depends on the sparsity of the intermediate entries $V_1, V_2, \dots, V_d$ and $R_1, R_2, \dots, R_d$, the bound $O(d \kappa)$ is output-sensitive. 
+	where the quantities $\lvert \mathbb{I}_{k} \rvert, \lvert \mathbb{J}_{k} \rvert$ of the intermediate $R_k, V_k$ are given in Proposition~\ref{prop:move_st}. Note that since $\kappa$ depends on the sparsity of the intermediate entries $V_1, V_2, \dots, V_d$ and $R_1, R_2, \dots, R_d$, the bound $O(\kappa)$ is output-sensitive. 
 %	and where $\lvert \mathbb{I}_{k} \rvert$ denotes the number of non-zero entries $V_k[i_k, i_k:j_k]$, $\lvert \mathbb{J}_{k}\rvert$ the number of columns satisfying $\mathrm{low}_{R_k} \in [i_k:j_k]$ and $\mathrm{row}_{R_k}(i_k) \neq 0$, and $d = m - \lvert \mathrm{LCS}(K, K') \rvert$.
 \end{theorem}
 \begin{proof} \normalsize
@@ -1179,8 +1179,7 @@ We conclude this section with the main theorem of this effort: an output-sensiti
  %% New section
 \subsection{Constructing schedules}\label{sec:schedule_construction}
 It is clear from Corollary~\ref{cor:expectation} that one may compute the LCS between two permutations $p, q \in S_m$ via the LIS of a single permutation $p^\ast$, and that computation may be carried out in $O(m \log \log m)$ time. 
-It is not immediately clear, however, how to obtain a sorting $p \mapsto q$ from a given $\mathcal{L} = \mathrm{LIS}(p')$ in an efficient way. We outline below a simple procedure which constructs such a sorting $\mathcal{S} = (s_1, \dots, s_d)$ in $O(dm\log m)$ time and $O(m)$ space. 
-%Alternatively, given $\mathcal{L}$, the algorithm may be executed online (up to $d$ times) in $O(m \log m)$ time and $O(m)$ space.
+It is not immediately clear, however, how to obtain a sorting $p \mapsto q$ from a given $\mathcal{L} = \mathrm{LIS}(p')$ in an efficient way. We outline below a simple procedure which constructs such a sorting $\mathcal{S} = (s_1, \dots, s_d)$ in $O(dm\log m)$ time and $O(m)$ space, or $O(m \log m)$ time and $O(m)$ space per update in the online setting.
  
 First, we require a few definitions. Recall that a \emph{sorting} $\mathcal{S}$ with respect to two permutations $p, q \in S_m$ is an ordered sequence of permutations $\mathcal{S} = (s_1, s_2, \dots, s_d)$ satisfying $q = s_d \circ \dots s_1 \circ p$.
 By definition, a subsequence of symbols in $\mathcal{L}$ common to both $p$ and $q$ satisfies:
@@ -1345,13 +1344,13 @@ Indeed, Diaconis et al.~\cite{diaconis1977spearman} showed the Spearman distance
 \begin{equation}\label{eq:diaconis_inequality}
 K_\tau(p, q) \leq F(p, q) \leq 2 K_\tau(p, q)
 \end{equation}
-Moreover, in contrast to $K_\tau$, the Spearman distance can be computed in $O(m)$ time, has a $\ell_1$ interpretation between ranking, and is often used in the well-known \emph{rank aggregation problem}: whereas obtaining a Kemeni optimal aggregation with respect to $K_\tau$ is NP-hard, the optimal such aggregation with respect to $F$ is obtainable in polynomial time~\cite{dinu2006efficient}. 
+Moreover, in contrast to $K_\tau$, the Spearman distance can be computed in $O(m)$ time and is often used in the well-known \emph{rank aggregation problem}. Indeed, whereas obtaining a Kemeni optimal aggregation with respect to $K_\tau$ is NP-hard, the optimal such aggregation with respect to $F$ is obtainable in polynomial time~\cite{dinu2006efficient}. 
 % Indeed, it is used...
 %, and 
 %For example, one of the tasks of the \emph{rank aggregation} problem is to obtain an  aggregation~\cite{} $\sigma \in S_m$ from a set of $k$ rankings $T = \{\tau_1, \tau_2, \dots, \tau_k\}$ that obeys some optimality criteria. A Kemeny optimal ranking is a permutation $\sigma^\ast$ that minimizes the sum of Kendall distances to the gievn set of rankings: 
 %$$ \argmin_{\sigma \in S_m} = \sum\limits_{i = 1}^k K_\tau(\sigma, \tau_i)$$ 
 %Computationally, obtaining a Kemeny optimal ranking is NP-hard\cite{}. In contrast, a 2-approximation may be obtained by replacing the Kendall distance with the Spearman distance, as in this case the problem reduces to finding a perfect matching in a bipartite graph, which can be accomplished in polynomial time. 
-To adapt $F(\cdot, \cdot)$ to sortings, we decompose the footrule distance additively via the bound:
+To adapt $F(\cdot, \cdot)$ to sortings, we decompose the Spearman distance additively via the bound:
 \begin{equation}\label{eq:sorting_additive}
 \hat{F}_{\mathcal{S}}(p, \iota) = \sum\limits_{i=1}^{d-1} F(\hat{s}_i \circ p, \hat{s}_{i+1} \circ p) \geq F(p, \iota)
 \end{equation}
@@ -1445,9 +1444,9 @@ In this example, $S_1$ matches the minimal number of crossings amongst all possi
 
 %% TODO: elaborate on monotonicity, describe segment tree
 In light of the discussion above, we propose a heuristic strategy to minimize~\eqref{eq:sorting_additive} which we observed is both efficient to compute and effective in practice.
-The heuristic is inspired by the simplicity of computing the Spearman distance between cyclic permutations at the schedule construction phase. Suppose we begin with an array $\mathcal{A}$ of size $m$ which provides $O(1)$ access and modification, initialized with the (signed) \emph{displacement} of every element in $p$ to its corresponding position in $q$. Since the Spearman distance is simply the sum of the absolute value of these displacements, at any point during during the execution of Algorithm~\ref{alg:sorting} we may obtain $F(\bar{p}, q)$ simply by having access to the sum of every entry in $\mathcal{A}$. There are two degrees of freedom in   Algorithm~\ref{alg:sorting}: the first is in the choice of $\sigma \in \mathcal{D}$, and the second is in choosing $j$. If we fix a heuristic for the latter, then we have a set of possible valid moves $S_\mathcal{D}$ induced by each $\sigma \in \mathcal{D}$ to choose from. Observe that each permutation $s_\sigma \in S_\mathcal{D}$ changes the displacement of every symbol in at most three different ways: 
+The heuristic is inspired by the simplicity of computing the Spearman distance between cyclic permutations at the schedule construction phase. Suppose we begin with an array $\mathcal{A}$ of size $m$ which provides $O(1)$ access and modification, initialized with the (signed) \emph{displacement} of every element in $p$ to its corresponding position in $q$. Since the Spearman distance is simply the sum of the absolute value of these displacements, at any point during during the execution of Algorithm~\ref{alg:sorting} we may obtain $F(\cdot, q)$ simply by having access to the sum of every entry in $\mathcal{A}$. At every step, there are only two degrees of freedom in Algorithm~\ref{alg:sorting}: the choice of $\sigma \in \mathcal{D}$ to move, and choice of the target index $j$ to move $\sigma$ to. If we fix a heuristic for the latter, then each $\sigma \in \mathcal{D}$ induces a set of possible valid moves satisfying~\eqref{eq:valid_move}, which we denote as $S_\mathcal{D}(\sigma)$. Now, observe that each permutation $s \in S_\mathcal{D}(\sigma)$ changes the displacement of every symbol in at most three different ways: 
 \[
-\mathcal{A}(s_\sigma \circ p) = 
+\mathcal{A}(s \circ p) = 
 \begin{cases} 
 	 \mathcal{A}(\sigma) \pm \lvert i - j \rvert & p^{-1}(\sigma) = i \\
 	 \mathcal{A}(\sigma) \pm 1 & i < p^{-1}(\sigma) \leq j \\
@@ -1458,13 +1457,13 @@ The heuristic is inspired by the simplicity of computing the Spearman distance b
 %All other symbols are unchanged. 
 Thus, if we replace $\mathcal{A}$ with a data structure  supporting $O(\log m)$ access time to aggregate information and $O(\log m)$ modification time ability on $\lvert i - j \vert$ entries simultaneously, we could greedily choose the next permutation $s$ to minimize:
 \begin{equation}\label{eq:greedy_step}
-	s_{\text{greedy}} = \argmin_{\text{ valid } s_{\sigma \in S_{\mathcal{D}}}} F(s\circ p, \iota)
+	s_{\text{greedy}} = \argmin_{s \in S_{\mathcal{D}}(\sigma)} F(s\circ p, \iota)
 \end{equation}  
 in $O(d\log m)$ time. 
-The former problem reduces to the problem of efficiently calculating \emph{prefix sums}, which is easily solved. 
-It is not immediately clear how to achieve the latter modification complexity in $O(\log m)$ time, since $\lvert i - j \rvert \leq m$ is potentially larger than $O(\log m)$---to handle this, note that one can apply constant-factor updates to multiple values in a \emph{implicit treap} data structure in $O(\log m)$ time via \emph{range updates}. 
+The former problem of accessing aggregate information reduces to the problem of efficiently calculating \emph{prefix sums}, which is easily solved. 
+It is not immediately clear how to achieve the latter modification complexity in $O(\log m)$ time, since $\lvert i - j \rvert \leq m$ is potentially larger than $O(\log m)$---however, because we are working with displacements, note the additive modification to each entry in $\lvert i - j \rvert$ is a constant. It is known that one can apply constant-factor updates to multiple values in a \emph{implicit treap} data structure in $O(\log m)$ time via \emph{range updates}~\cite{blelloch1998fast}. 
  % Can actually only achieve O(d^2 log m) it seems
-Since single element modifications, removals, and insertions can all be achieved in $O(\log m)$ expected time with such a data structure, we conclude that the greedy approach solving equation~\eqref{eq:greedy_step} requires just $O(d^2 \log m)$ time. 
+Since single element modifications, removals, and insertions can all be achieved in $O(\log m)$ expected time with such a data structure, we conclude that equation~\eqref{eq:greedy_step} may solved in just $O(d^2 \log m)$ time. 
 %Since single element prefix sum modifications can also be achieved $O(\log m)$ time with these data structures, the time to compute $F(\hat{s}_i, \hat{s}_{i+1})$ is bounded above by $O(\log m)$, 
 %thus the greedy solution to equation~\ref{eq:schedule_opt_succ} can be computed in $O(d^2 \log m)$ time. 
 
