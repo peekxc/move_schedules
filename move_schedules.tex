@@ -1,11 +1,11 @@
-% \documentclass[review]{siamart190516} % for SICOMP 
 %\documentclass{article} % for arxiv only
 %\usepackage{arxiv} % for arxiv only 
 %\pagestyle{plain} % arxiv only 
-\PassOptionsToPackage{noend}{algpseudocode}
+
 \documentclass[sn-mathphys]{sn-jnl}
 
-\usepackage{amsmath, amssymb}
+% --- Packages ---
+\usepackage{amsmath, amssymb, amsthm}
 \usepackage{mathtools}
 \usepackage{url}
 \usepackage{enumitem}
@@ -17,34 +17,20 @@
 \usepackage{dsfont}
 \usepackage{array}
 \usepackage{blkarray, bigstrut}
-\newcommand\topstrut[1][1.0ex]{\setlength\bigstrutjot{#1}{\bigstrut[t]}}
-\newcommand\botstrut[1][0.9ex]{\setlength\bigstrutjot{#1}{\bigstrut[b]}}
-
-\usepackage{epstopdf}
-%\epstopdfDeclareGraphicsRule{.pdf}{png}{.png}{convert #1 \OutputFile}
-%\DeclareGraphicsExtensions{.png,.pdf}
-\DeclareGraphicsExtensions{.pdf,.png}
- 
-%\usepackage[nodisplayskipstretch]{setspace}
-%\setstretch{1.5}
-
+\usepackage{epstopdf} % \DeclareGraphicsExtensions{.pdf,.png} % for pdf 
 \usepackage{caption} 
-\captionsetup[table]{skip=4pt, position=above}
-
-\makeatletter
-\newcommand{\customlabel}[2]{%
-   \protected@write \@auxout {}{\string \newlabel {#1}{{#2}{\thepage}{#2}{#1}{}} }%
-   \hypertarget{#1}{#2}
-}
-\makeatother
-
-\newcommand\undermat[2]{%
-  	\makebox[0pt][l]{$\smash{\underbrace{\phantom{%
-    \begin{matrix}#2\end{matrix}}}_{\text{$#1$}}}$}#2}
-
+\include{commands.tex}
+\usepackage{outlines}
+\usepackage{enumitem}
 \usepackage{hyperref} % load hyperref last
 
-% For arxiv; comment out for SICOMP
+% --- arxiv only ---- 
+%\usepackage{xcolor}
+%\usepackage{algorithm}% http://ctan.org/pkg/algorithms
+%\PassOptionsToPackage{noend}{algpseudocode}
+%\usepackage{algpseudocode}% http://ctan.org/pkg/algorithmicx
+
+% --- Customizations --- 
 \newtheorem{theorem}{Theorem}
 \newtheorem{definition}{Definition}
 \newtheorem{proposition}{Proposition}
@@ -52,15 +38,13 @@
 \newtheorem{corollary}{Corollary}
 \newtheorem{remark}{Remark}
 
-%\newsiamremark{remark}{Remark}
+\captionsetup[table]{skip=4pt, position=above}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 
-\usepackage{outlines}
-\usepackage{enumitem}
 \setenumerate[1]{label=\arabic*}
 \setenumerate[2]{label*=.\arabic*}
 \setenumerate[3]{label*=.\arabic*}
@@ -68,17 +52,9 @@
 
 \usepackage{setspace}
 \setstretch{1}
-%\setlength{\abovedisplayskip}{0pt}
-%\setlength{\belowdisplayskip}{0pt}
-%\setlength{\abovedisplayshortskip}{0pt}
-%\setlength{\belowdisplayshortskip}{0pt}
 
 
-% Sets running headers as well as PDF title and authors
-% \headers{Fast Persistence Computations}{M. Piekenbrock and J. Perea}
-
-% Title. If the supplement option is on, then "Supplementary Material"
-% is automatically inserted before the title.
+% --- Springer only ---
 \title[Fast Persistence Computations in Dynamic Settings]{
 	\vspace{-2.0em} Move Schedules: Fast persistence computations in coarse dynamic settings
 	\footnote{
@@ -86,23 +62,20 @@
 	}
 }
 
+% --- Arxiv only --- 
+%\title{\vspace{-0.0em} Move Schedules: Fast persistence \\ computations  in coarse dynamic settings\thanks{This work was partially supported by the National Science Foundation through grants CCF-2006661 and CAREER award DMS-1943758.}\vspace{-0.5em}}
+%\author{Matt Piekenbrock\thanks{Khoury College of Computer Sciences, Northeastern University.}\;\; and Jose A. Perea$^\dagger$\thanks{Department of Mathematics and Khoury College of Computer Sciences, Northeastern University.}}
+%\date{}
 
-% Authors: full names plus addresses.
-%\author{
-%	Matthew Piekenbrock\thanks{Khoury College of Computer Sciences, Northeastern University.} and Jose A. Perea\thanks{
-%	Department of Mathematics and Khoury College of Computer Sciences, Northeastern University.}
-%}
-
-
-% Spring format
+% --- Springer only ---
 \author[1]{\fnm{Matthew} \sur{Piekenbrock}}\email{piekenbrock.m@northeastern.edu}
 \affil[1]{
 	\orgdiv{Khoury College of Computer Sciences}, 
-	\orgname{Northeastern University}}
-	%\orgaddress{\street{360 Huntington Ave}, \city{Boston}, \postcode{02115}, \state{MA}%\country{United States}}
-% }
-% , ,  
+	\orgname{Northeastern University}
+}
 
+
+% --- Springer only --- 
 \author[2]{\fnm{Jose} \sur{A. Perea}}\email{j.pereabenitez@northeastern.edu}
 \affil[2]{
 	\orgdiv{Department of Mathematics and Khoury College of Computer Sciences},
@@ -110,54 +83,31 @@
 	% \orgaddress{\street{360 Huntington Ave}, \city{Boston}, \postcode{02115}, \state{MA}}
 }
 
-%\title{\vspace{-2.0em} Move Schedules: \\ Fast persistence computations in sparse dynamic settings\thanks{This work was partially supported by the National Science Foundation through grants CCF-2006661 and CAREER award DMS-1943758.}\vspace{-0.5em}}
-%\author{Matt Piekenbrock\thanks{Department of Computational Mathematics, Science \& Engineering, Michigan State University}\;\; and Jose A. Perea$^\dagger$\thanks{Department of Mathematics, Michigan State University}}
-%\date{}
-
-% Optional PDF information
-% \ifpdf
-% \hypersetup{
-%   pdftitle={Move Schedules},
-%   pdfauthor={Matthew Piekenbrock and Jose A. Perea}
-% }
-% \fi
-
-% \raggedbottom
-
 % ------  Begin document ------- 
-% https://github.com/peekxc/dart
 \begin{document}
 
+%\maketitle  % arxiv only, ensures abstract follows title 
+
 % REQUIRED - "Abstracts must be able to stand alone and so cannot contain citations to the paper's references, equations, etc. .... not exceeding 250 words"
-%\begin{abstract}
-\abstract{
+%\begin{abstract} % arxiv only 
+\abstract{ % springer only
 Matrix reduction is the standard procedure for computing the persistent homology of a filtered simplicial complex with $m$ simplices. Its output is a particular decomposition of the total boundary matrix, from which the persistence diagrams and generating cycles are derived. 
 	Persistence diagrams are known to vary continuously with respect to their input, motivating the  study of their computation for time-varying filtered complexes. Computationally, simulating persistence dynamically can be reduced to maintaining a valid decomposition under adjacent transpositions in the filtration order. 
-	Since there are $O(m^2)$ such transpositions, this maintenance procedure exhibits limited scalability and often is too fine for many applications.
-%	As our first result, we propose a coarser strategy for maintaining the decomposition over a 1-parameter family of filtrations that takes $O(m^2)$ preprocessing time uses only $O(m)$ space. 
-%	We also show that this maintenance procedure yields a factor-2 net reduction in column operations over the state of the art approach. 
+	Since there are $O(m^2)$ such transpositions, this maintenance procedure exhibits limited scalability and often is too fine for many applications. 
 We propose a coarser strategy for maintaining the decomposition over a 1-parameter family of filtrations that requires only $O(m \log \log m)$ time and $O(m)$ space to construct. 
 By reduction to a particular longest common subsequence problem, we show the storage needed to employ this strategy is actually sublinear in expectation. 
 Exploiting this connection, we show experimentally that the decrease in operations to compute diagrams across a family of filtrations, is proportional to the difference between the expected quadratic number of states and the proposed sublinear coarsening.
 Applications to video data, dynamic metric space data, and multi-parameter persistence are also presented.
-}
-%\end{abstract}
+} % springer only
+%\end{abstract} % arxiv only 
+
+\maketitle %  Springer only, ensures abstract follows title 
 
 % Keywords and MSC codes must accompany all articles. A list of the subject classifications can be accessed or searched online in the Annual Index of Mathematical Reviews.
-% REQUIRED
-%\begin{keywords}
-%  {Computational topology, Persistent homology, Topological data analysis}
-%\end{keywords}
 \keywords{Computational topology, Persistent homology, Topological data analysis}
 
-% REQUIRED
-% See: https://mathscinet.ams.org/mathscinet/msc/msc2020.html?t=68T09&btn=Current
-%\begin{AMS}
-%  68T09, 55N31, 62R40
-%\end{AMS}
+% --- Springer only (REQUIRED) ---
 \pacs[MSC Classification]{68T09, 55N31, 62R40}
-
-\maketitle
 
 \section{Introduction} 
 \subsection{Overview}\label{sec:overview} 
@@ -479,6 +429,7 @@ Moreover, many variations and optimizations to Algorithm~\ref{alg:reduce} have b
 % \section*{Computational Perspective} To convey a meaningful computational perspective, the continuous notion of \emph{dynamic persistence} needs to be translated to a discrete, combinatorial definition. Such a description requires a few prerequisite definitions, accompanied by some simplifying assumptions. 
 %\subsection*{A General Matrix Framework} Perhaps the most frequently used approach to computing the persistence diagram of a given filtration $K$ is with the \emph{reduction} algorithm. There have been many advancements in the past decade in improving the reduction algorithm---a comprehensive overview is beyond the scope of this effort. The majority of these computational improvements were developed to improve the efficiency of performing the \emph{initial} reduction. A concise summary of these advancements can be found in~\cite{bauer2019ripser}. In contrast, we focus here on improving the efficiency of maintaining a \emph{given} decomposition under an arbitrary reordering.  
 \subsection{Vineyards}\label{sec:vineyards}
+\vspace{-0.5em}
 Consider a homotopy $F(x,t) : \mathbb{X} \times [0,1] \to \mathbb{R}$ on a triangulable topological space $\mathbb{X}$, and denote its ``snapshot'' at a given time-point $t$ by $f_t(x) = F(x,t)$.
 The snapshot $f_0$ denotes the initial function at time $t = 0$ and $f_1$ denotes the function at the last time step. 
 As $t$ varies in $[0,1]$, the points in $\mathrm{dgm}_p(f_t)$ trace curves in $\mathbb{R}^3$ which, by the stability of persistence, will be continuous if $F$ is continuous and the $f_t$'s are tame.
