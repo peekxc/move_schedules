@@ -441,6 +441,19 @@ pp. \bfpage{39}--\blpage{48}
 \endbibitem
 
 %%% 30
+\bibitem{kumar1987linear}
+\begin{barticle}
+\bauthor{\bsnm{Kumar}, \binits{S.K.}},
+\bauthor{\bsnm{Rangan}, \binits{C.P.}}:
+\batitle{A linear space algorithm for the lcs problem}.
+\bjtitle{Acta Informatica}
+\bvolume{24}(\bissue{3}),
+\bfpage{353}--\blpage{362}
+(\byear{1987})
+\end{barticle}
+\endbibitem
+
+%%% 31
 \bibitem{abboud2015tight}
 \begin{bchapter}
 \bauthor{\bsnm{Abboud}, \binits{A.}},
@@ -456,7 +469,7 @@ pp. \bfpage{59}--\blpage{78}
 \end{bchapter}
 \endbibitem
 
-%%% 31
+%%% 32
 \bibitem{bespamyatnikh2000enumerating}
 \begin{barticle}
 \bauthor{\bsnm{Bespamyatnikh}, \binits{S.}},
@@ -466,19 +479,6 @@ pp. \bfpage{59}--\blpage{78}
 \bvolume{76}(\bissue{1-2}),
 \bfpage{7}--\blpage{11}
 (\byear{2000})
-\end{barticle}
-\endbibitem
-
-%%% 32
-\bibitem{kumar1987linear}
-\begin{barticle}
-\bauthor{\bsnm{Kumar}, \binits{S.K.}},
-\bauthor{\bsnm{Rangan}, \binits{C.P.}}:
-\batitle{A linear space algorithm for the lcs problem}.
-\bjtitle{Acta Informatica}
-\bvolume{24}(\bissue{3}),
-\bfpage{353}--\blpage{362}
-(\byear{1987})
 \end{barticle}
 \endbibitem
 

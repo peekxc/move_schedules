@@ -4,17 +4,54 @@
 
 ## Overall changes: 
 
-The paper is largely still the same paper. The main edits we have made: 
+In this iteration, we've revised the paper to improve readability, streamline the presentation further, and address the concerns of the reviewers. *Overall*, the paper has not been altered dramatically in content or formatting---sections 1, 2, 4, and 5 have only had minor edits to incorporate reviewer feedback. In particular, the main changes we have made include: 
 
-- Move algorithms pseudocode moved up from the appendix into the paper
-- Scheduling algorithm pseudocode simplified into "online" form, notation has also been simplified 
+- Pseudocode for moves has been re-included into the paper from the appendix 
+- Scheduling algorithm pseudocode simplified into "online" form & its notation has also been simplified
+- 
+- Part of proposition 3 has been split into an additional result (corollary 2) for clarity.
 - All known grammatical errors have been fixed.
+
+We hope that. 
 
 
 
 ## Reviewer 1
 
+> As a reader with a TDA background, I find the notation and terminology used to describe permutations in the paper quite challenging to comprehend. For example, at page 15, the concept of the LCS of two filtrations is introduced... but later, the
+> LCS of two permutations is extensively discussed in section 3.3.
 
+- We have re-written the first outline section in Section 3 to make it clear that we are indeed working with a representation of the symmetric group induced from the subgroup of permutations of simplexwise filtrations.
+
+>  Additionally, I encountered confusion regarding the term "symbols in L" mentioned on page 22, as well as the discussion of array A on page 26.
+
+- The use of "symbols" terminology was motivated by its widespread use in the context of edit operations on strings (see, for example, the paper we cite on the complexity of the LCS problem (ref. 31); we agree that its use in this paper is superfluous, . and thus we've have removed its usage throughout, preferring pure set-theoretic terminology. 
+
+>  Considering the authors' great examples for Vineyard algorithm 2.2 and 2.3, and that scheduling is the main contribution of this paper, I would love to see some examples. specifically:
+>
+> - In section 3.3, providing step-by-step demonstrations of constructing a schedule would be highly beneficial for readers seeking a more comprehensive understanding. 
+> - In section 3.4.2, offering examples illustrating the selection of move operations by the proxy objective would be immensely helpful in clarifying this process.
+>
+> By incorporating these practical examples, the paper's accessibility and value to a broader audience would be substantially enhanced.
+
+- Thank you for 
+
+> On page 14, about the querying of non-zeros in Vineyard, I believe Move algorithm also needs to search for non-zeros to get list J. In my mind, it can take O(m log m) with a sparse matrix structure. Then in section 3.4.1, the authors state that
+> "can be determined efficiently prior to any column operations- no more than O(m) time with row-oriented sparse matrices." Based on my experience, when computing the decomposition R = DV, the matrix structure used is often represented as lists of columns with sparse entries. This choice is typically made to reduce overheads during column operations. Therefore, if querying non-zeros is indeed as cheap as O(m) as stated by the authors, it would be highly beneficial to include a clear and detailed explanation about the specific matrix data structure employed.
+
+- We've removed the comment about "row-oriented" sparse 
+
+>  Secondly, for the experiment section, all figures that compares the performance of different algorithms like pHcol, Vineyards and Schedule are in terms of time index and number of column operations... it would be highly beneficial to include the results of the total time spent by each algorithm. This would involve considering the time taken for all necessary operations, including the construction of permutations and schedule. By doing so, readers will obtain a more accurate understanding of the practical efficiency of each algorithm in real-world scenarios.
+
+Thank you again for this detailed comment about improving the comparison. We agree that, for both vineyards and moves there is a non-trivial cost associated with , however we feel that 
+
+> As the paper is based on the Move algorithm from Busaryev et al, the authors are suggested to give a clearer explanation about the move framework. For example, the Move algorithm restores V first and then R, but in the middle of page 13, the authors describe it as a single one step restoration.
+
+We've relocated the pseudocode for the move algorithms into the main content of the paper, per the recommendation of the other reviewer. 
+
+> In Section 3.2, using Spearman's Footrule Distance is clearer because Spearman Distance sometimes can be referred to 1 minus the Spearman rank correlation coefficient.
+
+Changed for readability. As an aside, the spearman correlation coefficient effectively uses the footrule distance as an intermediate computation when the computed ranks between the observations are distinct. 
 
 ## Reviewer 2
 
@@ -147,38 +184,52 @@ See the comment above.
 
 > As for the second test (page 28): was the Algorithm 1 used verbatim, or was the scheduling performed to move from one snapshot to the next one?
 
-In practice we used a batch implementation, such that given an initial filtration $(K, f_0)$ and some number $b > 0$, we construct the  schedules for $(f_0, f_1)$, $(f_1, f_2)$, ..., $(f_{b-1}, f_b)$ in advance and concatenate them. The scheduling is still performed pairwise, but performed in a batch-wise manner to amortize the overhead associated with switching between scheduling and performing column operations. This was motivated by the observationt that in practice the column operations always dominated the compute time, so to maximize cache efficiency we collect as many move operations ahead of time as space allows. 
+In practice we used a batch implementation, such that given an initial filtration $(K, f_0)$ and some number $b > 0$, we construct the  schedules for $(f_0, f_1)$, $(f_1, f_2)$, ..., $(f_{b-1}, f_b)$ in advance and concatenate them. The *scheduling* is still performed pairwise, but performed in a batch-wise manner to amortize the overhead associated with switching between scheduling and performing column operations. This was motivated by the observation that in practice the column operations always dominate the compute time, so to maximize cache efficiency we collect as many move operations ahead of time as space allows. 
 
 > Page 32, 4.3.1:  Is  \kappa from [10] the same as defined in Theorem 1? I suspect not, [10] says it’s coarseness. Please clarify.
 
-
+- Fixed; apologies, they are not the same quantities (though they are related in a non-trivial way, which is what may have caused the confusion). 
 
 >  Page 34: ‘they a convenient basis for D may be obtained’ - is this supposed to be ‘they prove that a convenient basis …’ ?voronoi  -> Voronoi
 > 7-spheres volume -> 7-sphere’s volume
 > In order reveal -> In order to reveal
 
-All fixed. 
+- All fixed. 
 
 > Page 35: ‘Projecting the image data onto the first two basis vectors of leads’ - basis vectors of what?
 
-Fixed. 
+- Fixed. 
 
 > Page 36: ‘the number of permutations applied throughout the encountered along the traversal of the dual graph’ - please fix this sentence.
+
+- Fixed. 
+
 > vineyards is, moves requires -> either ‘vineyards/moves algorithm/approach is/requires’, or ‘vineyards are/moves require’. Or make vineyards and moves boldface or italics, then they are visually perceived as names.
+
+- All references to vineyards and moves as methodologies have been refactored with italics to address this.
+
 > that naively computing -> than naively computing
 
-Page 37: if the filtrations in the parameterization family is nearby -> are nearby
+- Fixed
+
+> Page 37: if the filtrations in the parameterization family is nearby -> are nearby
+
+- Fixed. 
 
 Page 43 , A1.1.1 'After setting V is set' -> After setting V
 'Since there exists complexes' -> Since there exists a complex / there exist complexes
 
-Page 45. We recall an important claim .. - What is the claim? Seems to be missing, it should say something about positive/negative simplices.
+> Page 45. We recall an important claim .. - What is the claim? Seems to be missing, it should say something about positive/negative simplices.
 
-Page 48. Well, in A.2.1 the authors mention \kappa as coarseness parameter! Also, the naming clash between the structure T used to compute the sorting and the barcode template T is unfortunate.
+- Removed.
 
-kendall -> Kendall
+> Page 48. Well, in A.2.1 the authors mention \kappa as coarseness parameter! Also, the naming clash between the structure T used to compute the sorting and the barcode template T is unfortunate.
 
+- 
 
+> kendall -> Kendall
+
+Fixed. 
 
 
 
