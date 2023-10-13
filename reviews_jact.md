@@ -107,7 +107,7 @@ Thank for you the constructive review. We believe we've addressed the main conce
 
 >  Page 8: Although $d$ can be  $O(m)$, we provide evidence that $d ~ m - sqrt(m)$. Well, $m - \sqrt(m)  = O(m)$, why ‘although’? Should it be ‘Although d can be O(m) and we provide evidence that d ~ m - sqrt(m), d is much smaller in practice’?
 
-- We aware that $m - \sqrt m  = O(m)$, which is why we omitted the big-O in the notation $d ~ m - \sqrt m$. We amended the ordering the statements to clarify this;  it now states "We provide evidence that $d \sim m - \sqrt{m}$ in expectation for random filtrations...although this implies $d$ can be $O(m)$ for pathological inputs, we give empirical results suggesting $d$  can be much smaller in practice." 
+- We aware that $m - \sqrt m  = O(m)$, which is why we omitted the big-O in the notation $d ~ m - \sqrt m$. We amended the ordering of the statements to clarify this;  it now states "We provide evidence that $d \sim m - \sqrt{m}$ in expectation for random filtrations...although this implies $d$ can be $O(m)$ for pathological inputs, we give empirical results suggesting $d$  can be much smaller in practice." 
 
 > Page 8: ‘an simplexwise’ -> a simplexwise
 
@@ -117,9 +117,13 @@ Thank for you the constructive review. We believe we've addressed the main conce
 
 - This statement has been removed. 
 
-> Sec. 2.3, Moves. Sorry, it might be my fault but I had difficulty understanding the procedure from the description. I believe having the pseudocode right here will be helpful (after I read it in the appendix, I was happy with the algorithm). Especially since the algorithm is needed in the proof of Prop. 2, too.
+> Sec. 2.3, Moves. Sorry, it might be my fault but I had difficulty understanding the procedure from the description. 
 
-- We previously moved much of pseudocode to the appendix in order to streamline the presentation of the concepts, as the pseudocode for both algorithms takes up an entire page, and the pseudocode for MoveRight is also available in Busaryev's paper. We have moved them back. 
+- The description of the algorithm (section 2.3) has been simplified. 
+
+> I believe having the pseudocode right here will be helpful (after I read it in the appendix, I was happy with the algorithm). Especially since the algorithm is needed in the proof of Prop. 2, too.
+
+- We previously moved much of pseudocode to the appendix in order to streamline the presentation of the concepts, as the pseudocode for both algorithms takes up an entire page, and the pseudocode for MoveRight is also available in Busaryev's paper; however, we agree that their inclusion may help readers understand the algorithm, so we have moved them back. 
 
 
 > Page 16, Alg. 1. a) The authors say ‘Algorithm 1 may be easily modified to be completely online, keeping at most two filtrations and one decomposition in memory’. I agree, but I believe it would be equally easy and more natural to state it in this form immediately. The change is in modifying the meaning of \rho_i: while now it is the permutation taking f_1 to f_i, it should be replaced with the permutation taking f_{i-1} to f_i.
@@ -132,7 +136,7 @@ Thank for you the constructive review. We believe we've addressed the main conce
 
 > c) Line 6 calls the function GreedySchedule. There is no such algorithm in the paper. There is Alg. 5 in the appendix, LCS-sort, but there is no greedy heuristic in it. Also, it computes the LIS internally, while GreedySchedule takes the longest increasing sequence as a second argument. Please fix this.
 
-- TODO: The GreedySchedule algorithm wasn't included in part because it corresponded to simply modifying line 6 in Alg. 5 (choosing the next 'symbol' / simplex to move) with equation (22). In this revision, we've not only made this much more explicit, but we've also simplified the notation of the inner schedule construction algorithm.  
+- The "GreedySchedule" algorithm wasn't included in part because it corresponded to simply modifying line 6 in Alg. 5 (choosing the next 'symbol' / simplex to move) with equation (22). In this revision, we've not only made this much more explicit, but we've also simplified the notation of the inner schedule construction algorithm.  
 
 >  Page 17, the paragraph after Def. 1: ‘the former can be that can be solved optimally’ - this sentence should be fixed.
 
@@ -176,21 +180,28 @@ Thank for you the constructive review. We believe we've addressed the main conce
 
   * > "does most of the reasoning ... apply to the case of MoveRight only?"
 
-  	- Yes, due to theoretical limitations / the lack of a donor concept, the statement only holds for MoveRight. 
-
-
+    - Yes, due to theoretical limitations / the lack of a donor concept, the statement only holds for MoveRight. 
+  
   * > "What about the MoveLeft? Can it be analyzed theoretically?"
 
-  	- We have a small discussion of MoveLeft in the appendix, which was moved to shorten the paper. 
+    - We have a small discussion of MoveLeft in the appendix, which was moved to shorten the paper. The pseudocode for MoveLeft has been relocated along with MoveRight for transparency. We made several attempts at analyzing the move left action (since its not included in Busaryev's paper) and we found it could be expressed in a similar way as MoveRight in the sense of restoring columns; however, the notion of the donor concept seems unique to MoveRight. There is no way we know of, using either row or column operations, the symmetrically translate the notion of moving a simplex later in the filtration to moving it earlier. 
+  
+  * > Does it occur frequently in the authors’ experiments?
+  
+    - Though this depends greatly on the filtrations being compared, in general we didnt notice any large discrepencies between the frequency with which the heuristic chooses to move right or left
+  
+  * > Can the freedom that the authors have in choosing the schedule of the optimal length be used to minimize the number of left moves and, if I want to implement this approach, should I do that or would it only harm me?
+    
+    - We originally performed many experiments attempting to validate exactly this; that is, we tried to empirically measure the number of columns operations move left (ML) incurred vs move right (MR), seeking to improve the heuristic by preferring one or the other. Surprisingly, we found that it wasn't the discrepancy between balancing MR vs ML that heavily influenced the number of operations but rather it was the quality of the heuristic at getting close to the Kendall distance (in terms of crossings), which we tried to demonstrate in the performance comparison in the Figure from section 3.1 (left side). Intuitively, one could use only MR to update filtration via selection sort (at the expense of requiring more than $d$ moves)---this is what Busaryev did actually, which we show with the dotted red line in the figure. We observed that, since $R$ is typically quite sparse, the additional cost of ML was not large (say no more than 2.5x that of MR). To keep the paper at a reasonable length, we did not include this comparison. 
 
 
 > Sec. 4.1: I find the phrase ‘simulate persistence’ unusual. Does it just mean ‘compute persistent homology’? 
 
-See the comment above. 
+- See the comment above; we've removed the work simulate. 
 
 > As for the second test (page 28): was the Algorithm 1 used verbatim, or was the scheduling performed to move from one snapshot to the next one?
 
-In practice we used a batch implementation, such that given an initial filtration $(K, f_0)$ and some number $b > 0$, we construct the  schedules for $(f_0, f_1)$, $(f_1, f_2)$, ..., $(f_{b-1}, f_b)$ in advance and concatenate them. The *scheduling* is still performed pairwise, but performed in a batch-wise manner to amortize the overhead associated with switching between scheduling and performing column operations. This was motivated by the observation that in practice the column operations always dominate the compute time, so to maximize cache efficiency we collect as many move operations ahead of time as space allows. 
+- In practice we used a batch implementation, such that given an initial filtration $(K, f_0)$ and some number $b > 0$, we construct the  schedules for $(f_0, f_1)$, $(f_1, f_2)$, ..., $(f_{b-1}, f_b)$ in advance and concatenate them. The *scheduling* is still performed pairwise, but performed in a batch-wise manner to amortize the overhead associated with switching between scheduling and performing column operations. This was motivated by the observation that in practice the column operations always dominate the compute time, so to maximize cache efficiency we collect as many move operations ahead of time as space allowed. 
 
 > Page 32, 4.3.1:  Is  \kappa from [10] the same as defined in Theorem 1? I suspect not, [10] says it’s coarseness. Please clarify.
 
@@ -237,13 +248,7 @@ Page 43 , A1.1.1 'After setting V is set' -> After setting V
 
 Fixed. 
 
------
 
-readability - We switched the notation from symbol to permutations / indices in section 3.4, and we've reworked the pseudocode ; symbols 
-on the overhead of moves - we agree that the figures may seem misleading; future work, output / geometry sensitive . Talk about balance the fraction  of kendall distances
-assessment - talk abotu vineyards and non-trivial implementation details; it woudl portray vineyards inaccuractely 
-
-Figure 1 - fixed with upper level set filtration or equiv lower filtatratin with 1 - intensity 
 
 
 

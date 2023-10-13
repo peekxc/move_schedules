@@ -2,7 +2,7 @@ This is BibTeX, Version 0.99d (TeX Live 2021)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: /Users/mpiekenbrock/move_schedules/move_schedules.aux
 The style file: sn-mathphys.bst
-Illegal, another \bibstyle command---line 214 of file /Users/mpiekenbrock/move_schedules/move_schedules.aux
+Illegal, another \bibstyle command---line 212 of file /Users/mpiekenbrock/move_schedules/move_schedules.aux
  : \bibstyle
  :          {plain}
 I'm skipping whatever remains of this command

@@ -643,21 +643,32 @@ On the negative side, one needs to frequently query the non-zero status of vario
 However, the move framework presented by Busaryev is actually distinct in that it exhibits several attractive qualities not inherited by the \emph{vineyards} approach that warrants further study.  
 
 For completeness, we recapitulate the motivation of the moves algorithm from~\cite{busaryev2010tracking}. 
-Let $f: K \rightarrow [m]$ denote a filtration of size $m = \lvert K \rvert$ and $R = DV$ its decomposition, where $R = [r_1, r_2, \dots, r_m]$ and $V = [v_1, v_2, \dots, v_m]$ denote the columns of $R$ and $V$, respectively. By definition, if $r_j = D v_j = 0$, then the inclusion $K_{j-1} \hookrightarrow K_{j}$ introduced a new cycle whose generator is given by:
-%the non-zero coefficients $(\alpha_i^{(j)}, \alpha_{i+1}^{(j)}, \dots, \alpha_j^{(j)})$ via the combination: 
-\begin{equation}\label{eq:coefficients}
-	r_j = D v_j = \alpha_j^{(1)} \cdot \partial(\sigma_{1}) + \alpha_{j}^{(2)} \cdot \partial(\sigma_{2}) + \dots + \alpha_{j}^{(j)} \cdot \partial(\sigma_{j}) = 0
-\end{equation}
-Now, consider the permutation $P$ that moves a simplex $\sigma_i$ in $K$ to position $j$, shifting all intermediate simplices $\sigma_{i+1}, \dots, \sigma_{j}$ down by one ($i < j$). 
-To perform this shift, all of the non-zero coefficients $\alpha_k^{(i)}$ contributing to $Dv_k$ for $k \in [i+1, j]$ must be set to zero, as otherwise $\partial(\sigma_i)$ may participate in boundary chains earlier than its own birth in the permuted filtration. 
-Setting these coefficients to zero amounts to setting row entries $v_k(i) = 0$ for all $k \in [i+1,j]$---these cancellations manifest as column operations $(\ast)$ used to ensure $P V(\ast)$ is upper-triangular, thus maintaining invariant I2.
-Notice that these operations may yield an unreduced $R' = P R(\ast) P^T$, breaking invariant I3.
-We could reduce $R'$ with an additional column operations, but the number of such operation scales $O(\lvert i - j\rvert^2)$, which no more efficient than simply performing the permutation and re-reducing the columns $[i,j]$ in $R$. 
+Let $f: K \rightarrow [m]$ denote a filtration of size $m = \lvert K \rvert$ and $R = DV$ its decomposition. 
+%For any given matrix $A$, we denote its $i$th row (column) with $\mathrm{row}_A(i)$ ($\mathrm{col}_A(i)$, respectively).
+Consider the permutation $P$ that moves a simplex $\sigma_i$ in $K$ to position $j$, shifting all intermediate simplices $\sigma_{i+1}, \dots, \sigma_{j}$ down by one ($i < j$). 
+To perform this shift, all entries $V_{ik} \neq 0$ with column positions $k \in [i+1,j]$ need to set to zero, otherwise $PV$ is not upper-triangular. 
+We may zero these entries in $V$ using column operations $V(\ast)$, ensuring invariant I2~\eqref{inv:decomposition} is maintained, however these operations may render $R' = P R(\ast) P^T$ unreduced, breaking invariant I3.
+Of course, we could then reduce $R'$ with additional column operations, but the number of such operations scales $O(\lvert i - j\rvert^2)$, which no more efficient than simply performing the permutation and applying the reduction algorithm to columns $[i,j]$ in $R$. 
 
-To bypass this difficulty, Busaryev et al. observed that since the initial $R$ is reduced, if it contains $s$ pivot entries in the columns $[i,j]$ of $R$, then $R'$ must also have $s$ pivots. 
-Thus, if during the cancellation  of $v_{i+1}(i) = v_{i+2}(i) = 0$ the column $r_{i+2} \mapsto r_{i+2}'$ becomes unreduced, then the pivot $\mathrm{low}_R(i+2)$ becomes \emph{free}, possibly becoming a pivot later in $r_{i+3}', \dots, r_j'$.  
-If $r_{i+2}$ is copied prior to modification to a \emph{donor column}, it may re-use or \emph{donate} its pivot entry to a later column $r_{i+3}, \dots, r_j$. 
-Repeating this process at most $j - i - 1$ times ensures $R'$ stays reduced in all except possibly for the $i$-th column---and since the $k$-th such operation simultaneously sets $v_{k}(i) = 0$ without creating non-zeros at indices $v_{k}(j)$ for $j > k$, $V'$ retains its upper-triangularity. 
+% in $\mathrm{row}_V(i)$. 
+
+%where $R = [r_1, r_2, \dots, r_m]$ and $V = [v_1, v_2, \dots, v_m]$ denote the columns of $R$ and $V$, respectively, and $D = [\partial(\sigma_i)]_{i=1}^m$. By definition, if $r_j = D v_j = 0$, then the inclusion $K_{j-1} \hookrightarrow K_{j}$ introduced a new cycle whose generator is given by a linear combination of boundary chains:
+%%the non-zero coefficients $(\alpha_i^{(j)}, \alpha_{i+1}^{(j)}, \dots, \alpha_j^{(j)})$ via the combination: 
+%\begin{equation}\label{eq:coefficients}
+%	r_j = D v_j = \alpha_{(1)} \cdot \partial(\sigma_{1}) + \alpha_{(2)} \cdot \partial(\sigma_{2}) + \dots + \alpha_{(j)} \cdot \partial(\sigma_{j}) = 0
+%\end{equation}
+%Now, consider the permutation $P$ that moves a simplex $\sigma_i$ in $K$ to position $j$, shifting all intermediate simplices $\sigma_{i+1}, \dots, \sigma_{j}$ down by one ($i < j$). 
+%To perform this shift, all of the non-zero coefficients $\alpha_{(i)}$ for $k \in [i+1, j]$ must be set to zero, as otherwise $\partial(\sigma_i)$ may participate in boundary chains earlier than its own birth in the permuted filtration. 
+%Observe these coefficients ${\alpha_{i}}_{i=1}^j$ corresponds exactly to non-zero entries in...Setting these coefficients to zero amounts to setting row entries $v_k(i) = 0$ for all $k \in [i+1,j]$---these cancellations manifest as column operations $(\ast)$ used to ensure $P V(\ast)$ is upper-triangular, thus maintaining invariant I2.
+%Notice that these operations may yield an unreduced $R' = P R(\ast) P^T$, breaking invariant I3.
+%We could reduce $R'$ with an additional column operations, but the number of such operation scales $O(\lvert i - j\rvert^2)$, which no more efficient than simply performing the permutation and re-reducing the columns $[i,j]$ in $R$. 
+
+To bypass this difficulty, Busaryev et al. observed that since $R$ is reduced, if it contains $s$ pivot entries in the columns $[i,j]$ of $R$, then $R'$ must also have $s$ pivots. 
+Thus, if column operations render some pivot-column $r_k$ of $R$ unreduced, then its pivot entry $\mathrm{low}_R(k)$ becomes \emph{free}\footnote{The process of donating pivot columns using $O(1)$ auxiliary storage is similar in spirit to the in-place sorting algorithm \emph{cycle sort}, which is often used to sort permutations in $O(n)$ time.}---if $r_{k}$ is copied prior to its modification, we may re-use or \emph{donate} its pivot entry to a later column $r_{k+1}, \dots, r_j$. 
+%possibly appearing as a pivot entry in some later column $r_{k+1}$.
+%one adds column $v_i$ to $v_{k}$ and $r_i$ to $r_{k}$, for some $i < k$, and $r_{k}$ becomes unreduced
+%during the cancellation of $v_{i, i+1} = v_{i, i+2} = 0$ the column $r_{i+2} \mapsto r_{i+2}'$ becomes unreduced, then the pivot $\mathrm{low}_R(i+2)$ becomes \emph{free}, possibly becoming a pivot later in $r_{i+3}', \dots, r_j'$.  
+Repeating this process at most $j - i - 1$ times ensures $R'$ stays reduced in all except possibly at its  $i$-th column. Moreover, since the $k$-th such operation simultaneously sets $v_{ik} = 0$, $V'$ retains its upper-triangularity. 
 \\
 \\
 \noindent \textbf{Example 2.3:} We re-use the running example from sections~\ref{sec:reduction} and~\ref{sec:vineyards} to illustrate \emph{moves}. The donor columns of $R$ and $V$ are denoted as $d_R$ and $d_V$, respectively. Consider moving edge $a$ to the position of edge $c$ in the filtration. 
