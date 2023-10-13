@@ -56,9 +56,9 @@
 \citation{chen2011persistent}
 \citation{topaz2015topological,xian2020capturing,lesnick2015interactive,kim2020spatiotemporal}
 \citation{busaryev2010tracking}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Top: A video of an expanding annulus. Bottom: Sublevel-set filtrations, via pixel intensity, of a Freudenthal triangulation of the plane.\relax }}{5}{figure.caption.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Top: A video of an expanding annulus. Bottom: Sublevel-set filtrations, via (negative) pixel intensity, of a Freudenthal triangulation of the plane.\relax }}{5}{figure.caption.2}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:vidExample}{{1}{5}{Top: A video of an expanding annulus. Bottom: Sublevel-set filtrations, via pixel intensity, of a Freudenthal triangulation of the plane.\relax }{figure.caption.2}{}}
+\newlabel{fig:vidExample}{{1}{5}{Top: A video of an expanding annulus. Bottom: Sublevel-set filtrations, via (negative) pixel intensity, of a Freudenthal triangulation of the plane.\relax }{figure.caption.2}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces The cumulative column operations needed to compute persistence across the time-varying filtration of grayscale images. Observe 10 independent persistence computations evenly spaced in time (green line) captures the major topological changes and is the most computationally efficient approach shown.\relax }}{6}{figure.caption.3}\protected@file@percent }
 \newlabel{fig:vineyards}{{2}{6}{The cumulative column operations needed to compute persistence across the time-varying filtration of grayscale images. Observe 10 independent persistence computations evenly spaced in time (green line) captures the major topological changes and is the most computationally efficient approach shown.\relax }{figure.caption.3}{}}
 \citation{cohen2006vines}
@@ -136,80 +136,81 @@
 \newlabel{eq:valid_move}{{15}{23}{Constructing schedules}{equation.3.15}{}}
 \newlabel{eq:valid_move_ineq}{{16}{23}{Constructing schedules}{equation.3.16}{}}
 \citation{cohen2006vines}
+\citation{biedl2009complexity}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Minimizing schedule cost}{24}{subsection.3.4}\protected@file@percent }
 \newlabel{sec:schedule_cost}{{3.4}{24}{Minimizing schedule cost}{subsection.3.4}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.1}Greedy approach}{24}{subsubsection.3.4.1}\protected@file@percent }
 \newlabel{sec:greedy}{{3.4.1}{24}{Greedy approach}{subsubsection.3.4.1}{}}
 \newlabel{eq:schedule_cost}{{17}{24}{Greedy approach}{equation.3.17}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Move schedule costs\relax }}{25}{table.caption.4}\protected@file@percent }
-\newlabel{table:move_costs}{{1}{25}{Move schedule costs\relax }{table.caption.4}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.2}Proxy objective}{25}{subsubsection.3.4.2}\protected@file@percent }
-\newlabel{sec:proxy_objective}{{3.4.2}{25}{Proxy objective}{subsubsection.3.4.2}{}}
-\newlabel{eq:upper_bound_move_cost}{{18}{25}{Proxy objective}{equation.3.18}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.2}Proxy objective}{24}{subsubsection.3.4.2}\protected@file@percent }
+\newlabel{sec:proxy_objective}{{3.4.2}{24}{Proxy objective}{subsubsection.3.4.2}{}}
+\newlabel{eq:upper_bound_move_cost}{{18}{24}{Proxy objective}{equation.3.18}{}}
 \citation{diaconis1977spearman}
 \citation{dinu2006efficient}
-\citation{biedl2009complexity}
-\newlabel{eq:spearman_dist}{{19}{26}{Proxy objective}{equation.3.19}{}}
-\newlabel{eq:diaconis_inequality}{{20}{26}{Proxy objective}{equation.3.20}{}}
-\newlabel{eq:sorting_additive}{{21}{26}{Proxy objective}{equation.3.21}{}}
+\citation{diaconis1977spearman}
+\newlabel{eq:spearman_dist}{{19}{25}{Proxy objective}{equation.3.19}{}}
+\newlabel{eq:sorting_additive}{{20}{25}{Proxy objective}{equation.3.20}{}}
+\newlabel{eq:greedy_step}{{21}{25}{Proxy objective}{equation.3.21}{}}
 \citation{blelloch1998fast}
-\newlabel{fig:crossings}{{\caption@xref {fig:crossings}{ on input line 1435}}{27}{Proxy objective}{figure.caption.5}{}}
-\newlabel{eq:greedy_step}{{22}{27}{Proxy objective}{equation.3.22}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Applications and Experiments}{28}{section.4}\protected@file@percent }
-\newlabel{sec:results}{{4}{28}{Applications and Experiments}{section.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Video data}{28}{subsection.4.1}\protected@file@percent }
+\newlabel{fig:schedule_construct}{{\caption@xref {fig:schedule_construct}{ on input line 1390}}{26}{Proxy objective}{figure.caption.4}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.3}Heuristic Computation}{26}{subsubsection.3.4.3}\protected@file@percent }
+\newlabel{fig:schedule_construct}{{\caption@xref {fig:schedule_construct}{ on input line 1438}}{27}{Heuristic Computation}{figure.caption.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Applications and Experiments}{27}{section.4}\protected@file@percent }
+\newlabel{sec:results}{{4}{27}{Applications and Experiments}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Video data}{27}{subsection.4.1}\protected@file@percent }
 \citation{topaz2015topological,xian2020capturing}
 \citation{topaz2015topological}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Performance comparison between various scheduling strategies. On the left, the cumulative column operations required to compute the 1-parameter family is shown for varying schedule sizes ($d$) and strategies. On the right, both the size of the schedule and the data set $(m)$ are varied. \relax }}{29}{figure.caption.6}\protected@file@percent }
-\newlabel{fig:movie_perf}{{3}{29}{Performance comparison between various scheduling strategies. On the left, the cumulative column operations required to compute the 1-parameter family is shown for varying schedule sizes ($d$) and strategies. On the right, both the size of the schedule and the data set $(m)$ are varied. \relax }{figure.caption.6}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Crocker stacks}{29}{subsection.4.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Performance comparison between various scheduling strategies. On the left, the cumulative column operations required to compute the 1-parameter family is shown for varying schedule sizes ($d$) and strategies. On the right, both the size of the schedule and the data set $(m)$ are varied. \relax }}{28}{figure.caption.6}\protected@file@percent }
+\newlabel{fig:movie_perf}{{3}{28}{Performance comparison between various scheduling strategies. On the left, the cumulative column operations required to compute the 1-parameter family is shown for varying schedule sizes ($d$) and strategies. On the right, both the size of the schedule and the data set $(m)$ are varied. \relax }{figure.caption.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Crocker stacks}{28}{subsection.4.2}\protected@file@percent }
 \citation{xian2020capturing}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces A crocker plot (right) depicts the evolution of dimension $p = 1$ Betti curves over time. The green $\mathrm  {X}$ marks correspond chronologically to the complexes (left), in row-major order. The large orange and purple areas depict $1$-cycles persisting in both space (y-axis) and time (x-axis).\relax }}{29}{figure.caption.7}\protected@file@percent }
+\newlabel{fig:crocker1}{{4}{29}{A crocker plot (right) depicts the evolution of dimension $p = 1$ Betti curves over time. The green $\mathrm {X}$ marks correspond chronologically to the complexes (left), in row-major order. The large orange and purple areas depict $1$-cycles persisting in both space (y-axis) and time (x-axis).\relax }{figure.caption.7}{}}
 \citation{xian2020capturing}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces A crocker plot (right) depicts the evolution of dimension $p = 1$ Betti curves over time. The green $\mathrm  {X}$ marks correspond chronologically to the complexes (left), in row-major order. The large orange and purple areas depict $1$-cycles persisting in both space (y-axis) and time (x-axis).\relax }}{30}{figure.caption.7}\protected@file@percent }
-\newlabel{fig:crocker1}{{4}{30}{A crocker plot (right) depicts the evolution of dimension $p = 1$ Betti curves over time. The green $\mathrm {X}$ marks correspond chronologically to the complexes (left), in row-major order. The large orange and purple areas depict $1$-cycles persisting in both space (y-axis) and time (x-axis).\relax }{figure.caption.7}{}}
 \citation{topaz2015topological}
 \citation{lesnick2012multidimensional}
 \citation{buchet2015topological}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Multiparameter persistence}{31}{subsection.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Multiparameter persistence}{30}{subsection.4.3}\protected@file@percent }
+\citation{lesnick2015interactive}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces  One the left, the cumulative number of column operations (log-scale) of the three baseline approaches tested. On the right, the normalized $K_\tau $ between adjacent filtrations depicts the coarseness of the discretization---about $5\%$ of the $\approx O(m^2)$ simplex pairs between adjacent filtrations are discordant.\relax }}{31}{figure.caption.8}\protected@file@percent }
+\newlabel{fig:boid_sim_results}{{5}{31}{One the left, the cumulative number of column operations (log-scale) of the three baseline approaches tested. On the right, the normalized $K_\tau $ between adjacent filtrations depicts the coarseness of the discretization---about $5\%$ of the $\approx O(m^2)$ simplex pairs between adjacent filtrations are discordant.\relax }{figure.caption.8}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}Fibered barcode}{31}{subsubsection.4.3.1}\protected@file@percent }
+\newlabel{sec:fibered_barcode}{{4.3.1}{31}{Fibered barcode}{subsubsection.4.3.1}{}}
 \citation{lesnick2015interactive}
 \citation{lesnick2015interactive}
-\citation{lesnick2015interactive}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces  One the left, the cumulative number of column operations (log-scale) of the three baseline approaches tested. On the right, the normalized $K_\tau $ between adjacent filtrations depicts the coarseness of the discretization---about $5\%$ of the $\approx O(m^2)$ simplex pairs between adjacent filtrations are discordant.\relax }}{32}{figure.caption.8}\protected@file@percent }
-\newlabel{fig:boid_sim_results}{{5}{32}{One the left, the cumulative number of column operations (log-scale) of the three baseline approaches tested. On the right, the normalized $K_\tau $ between adjacent filtrations depicts the coarseness of the discretization---about $5\%$ of the $\approx O(m^2)$ simplex pairs between adjacent filtrations are discordant.\relax }{figure.caption.8}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}Fibered barcode}{32}{subsubsection.4.3.1}\protected@file@percent }
-\newlabel{sec:fibered_barcode}{{4.3.1}{32}{Fibered barcode}{subsubsection.4.3.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Bipersistence example on an $8 \times 8$ coarsened grid. On left, the input data, colored by density. In the middle, the bigraded Betti numbers $\beta _0(M)$ and $\beta _1(M)$ (green and red, respectively), the dimension function (gray), and a line $L$ emphasizing the persistence of features with high density. On the right, the line arrangement $\mathcal  {A}(M)$ lying in the dual space derived from the $\beta (M)$. \relax }}{32}{figure.caption.9}\protected@file@percent }
+\newlabel{fig:bifiltration_ex2}{{6}{32}{Bipersistence example on an $8 \times 8$ coarsened grid. On left, the input data, colored by density. In the middle, the bigraded Betti numbers $\beta _0(M)$ and $\beta _1(M)$ (green and red, respectively), the dimension function (gray), and a line $L$ emphasizing the persistence of features with high density. On the right, the line arrangement $\mathcal {A}(M)$ lying in the dual space derived from the $\beta (M)$. \relax }{figure.caption.9}{}}
 \citation{lesnick2015interactive}
 \citation{rivet}
 \citation{landi2014rank}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Bipersistence example on an $8 \times 8$ coarsened grid. On left, the input data, colored by density. In the middle, the bigraded Betti numbers $\beta _0(M)$ and $\beta _1(M)$ (green and red, respectively), the dimension function (gray), and a line $L$ emphasizing the persistence of features with high density. On the right, the line arrangement $\mathcal  {A}(M)$ lying in the dual space derived from the $\beta (M)$. \relax }}{33}{figure.caption.9}\protected@file@percent }
-\newlabel{fig:bifiltration_ex2}{{6}{33}{Bipersistence example on an $8 \times 8$ coarsened grid. On left, the input data, colored by density. In the middle, the bigraded Betti numbers $\beta _0(M)$ and $\beta _1(M)$ (green and red, respectively), the dimension function (gray), and a line $L$ emphasizing the persistence of features with high density. On the right, the line arrangement $\mathcal {A}(M)$ lying in the dual space derived from the $\beta (M)$. \relax }{figure.caption.9}{}}
 \citation{lee2003nonlinear}
 \citation{hateren_schaaf_1998}
 \citation{lee2003nonlinear}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}Natural images dataset}{34}{subsubsection.4.3.2}\protected@file@percent }
-\newlabel{sec:natural_images}{{4.3.2}{34}{Natural images dataset}{subsubsection.4.3.2}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}Natural images dataset}{33}{subsubsection.4.3.2}\protected@file@percent }
+\newlabel{sec:natural_images}{{4.3.2}{33}{Natural images dataset}{subsubsection.4.3.2}{}}
 \citation{carlsson2008local}
 \citation{perea2014klein}
 \citation{lee2003nonlinear,hateren_schaaf_1998,carlsson2008local,perea2014klein}
 \citation{carlsson2008local}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Bipersistence example of natural images data set on an $12 \times 16$ coarsened grid. On the left, a projection the full data set is shown, along with the 15 landmark patches. (Middle) the bigraded Betti numbers and a fixed line $L$ over parameter space. As before, the $0/1/2$ dimension bigraded Betti numbers are shown in green/red/yellow, respectively, with the blue region highlighting where $\mathrm  {dim}(M) = 5$. (Right) five persistent features representing $B_L(M)$ are revealed from the middle, matching $\beta _1$ of the three-circle model. \relax }}{34}{figure.caption.10}\protected@file@percent }
+\newlabel{fig:patch_data_dgm}{{7}{34}{Bipersistence example of natural images data set on an $12 \times 16$ coarsened grid. On the left, a projection the full data set is shown, along with the 15 landmark patches. (Middle) the bigraded Betti numbers and a fixed line $L$ over parameter space. As before, the $0/1/2$ dimension bigraded Betti numbers are shown in green/red/yellow, respectively, with the blue region highlighting where $\mathrm {dim}(M) = 5$. (Right) five persistent features representing $B_L(M)$ are revealed from the middle, matching $\beta _1$ of the three-circle model. \relax }{figure.caption.10}{}}
 \citation{hateren_schaaf_1998}
 \citation{carlsson2008local}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Bipersistence example of natural images data set on an $12 \times 16$ coarsened grid. On the left, a projection the full data set is shown, along with the 15 landmark patches. (Middle) the bigraded Betti numbers and a fixed line $L$ over parameter space. As before, the $0/1/2$ dimension bigraded Betti numbers are shown in green/red/yellow, respectively, with the blue region highlighting where $\mathrm  {dim}(M) = 5$. (Right) five persistent features representing $B_L(M)$ are revealed from the middle, matching $\beta _1$ of the three-circle model. \relax }}{35}{figure.caption.10}\protected@file@percent }
-\newlabel{fig:patch_data_dgm}{{7}{35}{Bipersistence example of natural images data set on an $12 \times 16$ coarsened grid. On the left, a projection the full data set is shown, along with the 15 landmark patches. (Middle) the bigraded Betti numbers and a fixed line $L$ over parameter space. As before, the $0/1/2$ dimension bigraded Betti numbers are shown in green/red/yellow, respectively, with the blue region highlighting where $\mathrm {dim}(M) = 5$. (Right) five persistent features representing $B_L(M)$ are revealed from the middle, matching $\beta _1$ of the three-circle model. \relax }{figure.caption.10}{}}
 \citation{lee2003nonlinear}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.3}Accelerating 2D persistence}{36}{subsubsection.4.3.3}\protected@file@percent }
-\newlabel{sec:empirical_klein}{{4.3.3}{36}{Accelerating 2D persistence}{subsubsection.4.3.3}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.3}Accelerating 2D persistence}{35}{subsubsection.4.3.3}\protected@file@percent }
+\newlabel{sec:empirical_klein}{{4.3.3}{35}{Accelerating 2D persistence}{subsubsection.4.3.3}{}}
 \citation{kim2020spatiotemporal}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Cost to computing $\mathcal  {T}$ for various coarsening choices of $\beta (M)$.\relax }}{36}{table.caption.11}\protected@file@percent }
+\newlabel{tab:barcode_templates}{{1}{36}{Cost to computing $\mathcal {T}$ for various coarsening choices of $\beta (M)$.\relax }{table.caption.11}{}}
+\newlabel{table:dual_graph_costs}{{1}{36}{Cost to computing $\mathcal {T}$ for various coarsening choices of $\beta (M)$.\relax }{table.caption.11}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusion and Future Work}{36}{section.5}\protected@file@percent }
+\newlabel{sec:conclusion}{{5}{36}{Conclusion and Future Work}{section.5}{}}
 \citation{cohen2006vines}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Cost to computing $\mathcal  {T}$ for various coarsening choices of $\beta (M)$.\relax }}{37}{table.caption.11}\protected@file@percent }
-\newlabel{tab:barcode_templates}{{2}{37}{Cost to computing $\mathcal {T}$ for various coarsening choices of $\beta (M)$.\relax }{table.caption.11}{}}
-\newlabel{table:dual_graph_costs}{{2}{37}{Cost to computing $\mathcal {T}$ for various coarsening choices of $\beta (M)$.\relax }{table.caption.11}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusion and Future Work}{37}{section.5}\protected@file@percent }
-\newlabel{sec:conclusion}{{5}{37}{Conclusion and Future Work}{section.5}{}}
+\citation{cohen2006vines}
 \citation{chen2011persistent}
 \citation{de2011dualities}
 \citation{bauer2021ripser}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Declarations}{38}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Declarations}{37}{section.6}\protected@file@percent }
 \bibstyle{plain}
 \bibdata{move_schedules}
 \bibcite{cohen2007stability}{{1}{}{{}}{{}}}
@@ -246,8 +247,8 @@
 \bibcite{bespamyatnikh2000enumerating}{{32}{}{{}}{{}}}
 \bibcite{baik1999distribution}{{33}{}{{}}{{}}}
 \bibcite{boissonnat2018efficient}{{34}{}{{}}{{}}}
-\bibcite{dinu2006efficient}{{35}{}{{}}{{}}}
-\bibcite{biedl2009complexity}{{36}{}{{}}{{}}}
+\bibcite{biedl2009complexity}{{35}{}{{}}{{}}}
+\bibcite{dinu2006efficient}{{36}{}{{}}{{}}}
 \bibcite{blelloch1998fast}{{37}{}{{}}{{}}}
 \bibcite{lesnick2012multidimensional}{{38}{}{{}}{{}}}
 \bibcite{buchet2015topological}{{39}{}{{}}{{}}}
@@ -272,11 +273,18 @@
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {A.1.2}LCS-Sort}{44}{subsubsection.A.1.2}\protected@file@percent }
 \@writefile{loa}{\contentsline {algorithm}{\numberline {5}{\ignorespaces Schedule construction algorithm\relax }}{44}{algorithm.5}\protected@file@percent }
 \newlabel{alg:sorting}{{5}{44}{Schedule construction algorithm\relax }{algorithm.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.2}Greedy Counter Example}{45}{subsection.A.2}\protected@file@percent }
+\newlabel{sec:greedy_counter_ex}{{A.2}{45}{Greedy Counter Example}{subsection.A.2}{}}
 \citation{lesnick2012multidimensional}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Move schedule costs\relax }}{46}{table.caption.14}\protected@file@percent }
+\newlabel{table:move_costs}{{2}{46}{Move schedule costs\relax }{table.caption.14}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.3}Crossing minimization}{46}{subsection.A.3}\protected@file@percent }
+\newlabel{sec:cross_minimization}{{A.3}{46}{Crossing minimization}{subsection.A.3}{}}
+\newlabel{fig:crossings}{{\caption@xref {fig:crossings}{ on input line 1897}}{46}{Crossing minimization}{figure.caption.15}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.4}2-parameter persistence}{46}{subsection.A.4}\protected@file@percent }
+\newlabel{app:2d_pers}{{A.4}{46}{2-parameter persistence}{subsection.A.4}{}}
+\newlabel{sec:fibered_barcode_reparam}{{A.4}{46}{2-parameter persistence}{subsection.A.4}{}}
 \citation{lesnick2015interactive}
-\@writefile{toc}{\contentsline {subsection}{\numberline {A.2}2-parameter persistence}{45}{subsection.A.2}\protected@file@percent }
-\newlabel{app:2d_pers}{{A.2}{45}{2-parameter persistence}{subsection.A.2}{}}
-\newlabel{sec:fibered_barcode_reparam}{{A.2}{45}{2-parameter persistence}{subsection.A.2}{}}
 \citation{lesnick2015interactive,carlsson2009theory}
 \citation{lesnick2015interactive}
 \citation{lesnick2019computing}
@@ -285,6 +293,6 @@
 \citation{lesnick2015interactive}
 \citation{christofides2022worst}
 \citation{lesnick2012multidimensional}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {A.2.1}Invariant computation}{46}{subsubsection.A.2.1}\protected@file@percent }
 \providecommand\NAT@force@numbers{}\NAT@force@numbers
-\gdef \@abspage@last{47}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {A.4.1}Invariant computation}{48}{subsubsection.A.4.1}\protected@file@percent }
+\gdef \@abspage@last{49}

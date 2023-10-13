@@ -511,19 +511,6 @@ pp. \bfpage{59}--\blpage{78}
 \endbibitem
 
 %%% 35
-\bibitem{dinu2006efficient}
-\begin{barticle}
-\bauthor{\bsnm{Dinu}, \binits{L.P.}},
-\bauthor{\bsnm{Manea}, \binits{F.}}:
-\batitle{An efficient approach for the rank aggregation problem}.
-\bjtitle{Theoretical Computer Science}
-\bvolume{359}(\bissue{1-3}),
-\bfpage{455}--\blpage{461}
-(\byear{2006})
-\end{barticle}
-\endbibitem
-
-%%% 36
 \bibitem{biedl2009complexity}
 \begin{barticle}
 \bauthor{\bsnm{Biedl}, \binits{T.}},
@@ -534,6 +521,19 @@ pp. \bfpage{59}--\blpage{78}
 \bvolume{309}(\bissue{7}),
 \bfpage{1813}--\blpage{1823}
 (\byear{2009})
+\end{barticle}
+\endbibitem
+
+%%% 36
+\bibitem{dinu2006efficient}
+\begin{barticle}
+\bauthor{\bsnm{Dinu}, \binits{L.P.}},
+\bauthor{\bsnm{Manea}, \binits{F.}}:
+\batitle{An efficient approach for the rank aggregation problem}.
+\bjtitle{Theoretical Computer Science}
+\bvolume{359}(\bissue{1-3}),
+\bfpage{455}--\blpage{461}
+(\byear{2006})
 \end{barticle}
 \endbibitem
 

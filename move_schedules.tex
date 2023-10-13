@@ -165,7 +165,7 @@ Consider a series of grayscale images (i.e. a video) depicting a fixed-width ann
 \begin{figure}[!htb]
     \centering
     \includegraphics[height=1.25in]{circle_complex.png}
-    \caption{Top: A video of an expanding annulus. Bottom: Sublevel-set filtrations, via pixel intensity, of a Freudenthal triangulation of the plane.}
+    \caption{Top: A video of an expanding annulus. Bottom: Sublevel-set filtrations, via (negative) pixel intensity, of a Freudenthal triangulation of the plane.}
     \label{fig:vidExample}
 \end{figure}
 
@@ -222,7 +222,7 @@ Given a permutation $P$ such that $D' = P D P^T$, such an update scheme has the 
 $$ (\ast P \ast R \ast P^T \ast) = (P DP^T)(\ast P \ast V \ast P^T \ast) $$
 where $\ast$ is substituted with elementary column operations that repair the permuted decomposition. It is known how to linearly interpolate $f \mapsto f'$ using $d \sim O(m^2)$ updates to the decomposition, where each update  requires at most two column operations~\cite{cohen2006vines}. Since each column operation takes $O(m)$, the complexity of reindexing $f \mapsto f'$ is $O(m^3)$, which is efficient if all $d$ decompositions are needed. Otherwise, if only $(R', V')$ is needed, updating $R \mapsto R'$ using the approach from~\cite{cohen2006vines} matches the complexity of computing $R' = D' V'$ independently. 
 
-We now summarize our main results  (Theorem~\ref{prop:sparsity_result}): suppose one has a  schedule  $\mathcal{S} = \left( s_1, s_2, \dots, s_d \right)$ yielding a corresponding sequence of decompositions:
+We now summarize our main results (Theorem~\ref{prop:sparsity_result}): suppose one has a  schedule  $\mathcal{S} = \left( s_1, s_2, \dots, s_d \right)$ yielding a corresponding sequence of decompositions:
   \begin{equation}\label{eq:rv_seq}
    	R = R_0 = D_0 V_0 \overset{s_1}{\to} D_1 V_{1} \overset{s_2}{\to} \dots \overset{s_d}{\to} D_d V_{d} = R_d = R'
  \end{equation}
@@ -940,13 +940,13 @@ Regarding the complexity of move operations, which clearly depend on the sparsit
  \end{enumerate} 
  \vspace*{1em}
 First, consider property M1. Prior to applying any permutation $P$ to the decomposition, it is necessary to remove non-zero entries in $V$ which render $P^TVP$ non-upper triangular, to maintain invariant I2. 
-Using \emph{vineyards}, one must consistently perform $\lvert i - j \rvert - 1$ non-zero status queries interleaved between repairing column operations. A move operation, on the other hand, groups these status queries into a single pass prior to performing any modifying operations. 
+Using \emph{vineyards}, one must consistently perform $\lvert i - j \rvert - 1$ non-zero status queries interleaved between repairing column operations. A move operation groups these status queries into a single pass prior to performing any modifying operations. 
 
 Property M2 implies that the decomposition is not fully maintained during the execution of \textit{RestoreRight} and \textit{RestoreLeft} below, which starkly contrasts the \emph{vineyards} algorithm. 
 In this way, we interpret move operations as making a tradeoff in granularity: whereas a sequence of adjacent transpositions $(i, i{+}1), (i{+}1, i{+}2), \dots, (j{-}1, j)$ generates $\lvert i - j \rvert $ valid decompositions in \emph{vineyards}, an equivalent move operation $\mathrm{Move}(i,j)$ generates only one.
 Indeed, Property M3 directly follows from this fact, as one may simply move each simplex $\sigma \in K$ into its new order $f'(\sigma)$ via insertion sort. Note that the number of valid decompositions produced by \emph{vineyards} is bounded above by $O(m^2)$, as each pair of simplices $\sigma_i, \sigma_j \in K$ may switch its relative ordering at most once during the interpolation from $f$ to $f'$.
 
-As shown by example 2.3, \emph{moves} can be cheaper than \emph{vineyards} in terms of column operations. However, it is not immediately clear that this is always the case upon inspection of~\ref{alg:mr}, as the usage of a donor column seemingly implies that many $O(m)$ copy operations need to be performed. 
+As shown by example 2.3, \emph{moves} can be cheaper than \emph{vineyards} in terms of column operations. However, it is not clear that this is always the case upon inspection of~\ref{alg:mr}, as the usage of a donor column seemingly implies that many $O(m)$ copy operations need to be performed. 
 It turns out that we may handle all such operations except the first in $O(1)$ time, which we formalize below.
 \begin{proposition}\label{prop:factor2}
 	Let $(K,f)$ denote a filtration of size $\lvert K \rvert = m$ with decomposition $R = D V$ and let $T$ denote the number of column operations needed by the vineyards algorithm to perform the sequence of transpositions:
@@ -962,8 +962,7 @@ Since at most one $O(m)$ column operation is required for each index in $[i, j]$
 %since although permutations take $O(\lvert i - j\rvert)$ time we require only $1$ such permutation per movement. 
 	%Identifying non-zero entries in the matrix occurs once, which takes $O(\lvert i - j \rvert \log(m))$ time.
 \end{proof}
-
-As a final remark, we note that the combination of \emph{MoveRight} and \emph{MoveLeft} enable efficient simplex additions or deletions to the underlying complex. In particular, given $K$ and a decomposition $R = DV$, obtaining a valid decomposition $R' = D' V'$ of $K' = K \cup \{\sigma\}$ can be achieved by appending its requisite elementary chains to $D$ and $V$, reducing them, and then executing \emph{MoveLeft}$(m+1, i)$, where $i = f'(\sigma)$. Dually, deleting a simplex $\sigma_i$ may be achieved via \emph{MoveRight} by moving $i$-th to the end of the decomposition and dropping the corresponding columns. 
+As a final remark, we note that the combination of \emph{MoveRight} and \emph{MoveLeft} enable efficient simplex additions or deletions to the underlying complex. In particular, given $K$ and a decomposition $R = DV$, obtaining a valid decomposition $R' = D' V'$ of $K' = K \cup \{\sigma\}$ can be achieved by appending its requisite elementary chains to $D$ and $V$, reducing them, and then executing \emph{MoveLeft}$(m+1, i)$ with $i = f'(\sigma)$. Dually, deleting a simplex $\sigma_i$ may be achieved via \emph{MoveRight} by moving $i$-th to the end of the decomposition and dropping the corresponding columns. 
 % with a logarithmic loss in efficiency, although executing the movement has a higher constant factor. Nonetheless, we can still move a simplex arbitrarily within the given filtration with such a procedure,  which when paired with the augmented sparse matrix structure from~\cite{} implies one can move simplices within the filtration with just O(|i - j|) time permutation, as opposed the |i - j| separate O(1) permutations. Moreover, the ability to move a simplex earlier in the filtration enables a key preprocessing step which we introduce next which, as we shall prove, may greatly reduce the number of times the decomposition need be maintained. 
 
 %% TODO: prove R stays reduced by re-reducing only columns in K: should be easy, first show that $R$ is reduced un until time T = i - delta, where delta = | i - j |. Then show that that the only columns in [ j, j + delta ] which have low entries that change are precisely the ones in R[i:j, i]
@@ -983,7 +982,7 @@ We begin with a brief overview of the pipeline to compute the persistence diagra
 Without loss of generality, assume each filtration $f_i : K \rightarrow [m]$ is a simplexwise filtration of a fixed simplicial complex $K$ with $\lvert K \rvert =m$, and let $(f, f')$ denote any pair of such filtrations.  
 %or equivalently, permutations of the index set $[m]$. For each $\rho_i$ we let  .
 %a discrete $1$-parameter family $\mathcal{F} = (f_1, f_2, \dots, f_n)$ of filtrations $f_i : K \rightarrow [m]$ of a simplicial complex $K$ with $\lvert K \rvert =m$, and the goal being to compute the  persistence diagrams of each $(K,f_i)$.
-Our strategy to efficiently obtain a valid $RV$ decomposition of the filtration $(K,f')$ from a given decomposition of $(K, f)$ is to decompose a fixed bijection $\rho : f \to f'$ satisfying $f' = \rho \circ f$ into a \emph{schedule} of updates: 
+Our strategy to efficiently obtain a valid $RV$ decomposition of the filtration $(K,f')$ from a given decomposition of $(K, f)$ is to decompose a fixed bijection $\rho : [m] \to [m]$ satisfying $f' = \rho \circ f$ into a \emph{schedule} of updates: 
 \begin{definition}[Schedule]\label{def:schedule}
 Given a pair of filtrations $(K, f), (K,f')$ 
 %and a fixed bijection $\rho : f \to f'$, let $\rho^\ast : [m] \to [m]$ denote its induced bijection on $S_m$ 
@@ -994,9 +993,9 @@ and $R = DV$ the initial decomposition of $(K, f)$, a \emph{schedule}  $\mathcal
    	where, for each $i \in [d]$, $R_i = D_i V_i$ is a valid decomposition respecting invariants~\ref{inv:decomposition}, and $R'$ is a valid decomposition for $(K,f')$.
 \end{definition}
 \noindent
-To produce this sequence of permutations $\mathcal{S} = (s_1, \dots, s_d)$ from $\rho$, our approach is as follows: let $\rho^\ast : [m] \to [m]$ denote its \emph{induced}
+To produce this sequence of permutations $\mathcal{S} = (s_1, \dots, s_d)$ from $\rho$, our approach is as follows:
 %\footnote{Recall that an induced representation...} 
-bijection on $S_m$, and define $q = (\rho^\ast(1), \rho^\ast(2), \ldots, \rho^\ast(m) )$. 
+define $q = (\rho(1), \rho(2), \ldots, \rho(m) )$. 
 We compute a longest increasing subsequence $\mathrm{LIS}(q)$, and then use this subsequence to recover a longest common subsequence (LCS) between $f$ and $f'$, which we denote later with $\mathrm{LCS}(f, f')$. 
 We pass $q$, $\mathrm{LIS}(q)$, and a ``greedy'' heuristic for picking moves $h$ to our scheduling algorithm (to be defined later), which returns as output an ordered set of move permutations  $\mathcal{S}$ of minimum size satisfying~\eqref{eq:rv_seq_schedule}---a \emph{schedule} for the pair $(f, f')$.
 These sequence of steps is outlined in Algorithm~\ref{alg:schedule} below.
@@ -1012,7 +1011,7 @@ These sequence of steps is outlined in Algorithm~\ref{alg:schedule} below.
     	\Ensure Valid $R = D V$ is computed for $(K, f_1)$
     	\Procedure{MoveSchedule}{$\mathcal{F} = ( f_0, f_1 )$, $R$, $V$} 
     		\State Fix $\rho \in S_m$ such that $f_1 = \rho \circ f_0$ \Comment{$O(m)$} 
-    		\State $q \gets  (\rho^\ast(1), \rho^\ast(2), \ldots, \rho^\ast(m) )$ \Comment{$O(m)$}
+    		\State $q \gets  (\rho(1), \rho(2), \ldots, \rho(m) )$ \Comment{$O(m)$}
     		\State $\mathrm{lis}_{q} \gets \mathrm{LIS}(q)$ \Comment{$O(m \log \log m)$}
 %    		\State $\bar{p} \gets q^{-1} \circ p$
 %    		\State $\mathcal{L} \gets \mathrm{LCS}(p,q) = \mathrm{LIS}(\bar{p})$ \Comment{$O(m\log \log m)$}
@@ -1193,7 +1192,7 @@ This special type of edit distance has additional structure to it, which we demo
 \begin{corollary}\label{cor:lis_schedule_complexity}
 Let $(K, f), (K, f')$ denote two filtrations of size $\lvert K \rvert = m$, and let $S^*$ denote schedule of minimal size reindexing $f \mapsto f'$. Then $\lvert S^\ast \rvert = d$ can be determined in $O(m \log \log m)$ time. 
 \end{corollary}
-\begin{proof}
+\begin{proof} \normalsize
 	By the same reduction from Proposition~\ref{prop:schedule_size}, the problem of computing $\mathrm{LCS}(f, f')$ reduces to the problem of computing the \emph{longest increasing subsequence} (LIS) of a particular permutation $p' \in S_m$, which can done in $O( m \log \log m)$ time using van Emde Boas trees~\cite{bespamyatnikh2000enumerating}
 \end{proof}
 \noindent 
@@ -1223,16 +1222,15 @@ For example, for the complex from Section~\ref{sec:motivation} with $m=417$ simp
  
 We conclude this section with the main theorem of this effort: an output-sensitive bound on the computation of persistence dynamically.
   \begin{theorem}\label{prop:sparsity_result}
-   Given a pair of filtrations $(K,f), (K,f')$ and a decomposition $R = DV$ of $K$, the size of a minimal sequence $\mathcal{S} = \left( s_1, s_2, \dots, s_d \right)$ of cyclic `move' permutations $s_k = (i_k, j_k)$ satisfying: 
-   	\begin{equation}\label{eq:rv_seq_theorem}
+   Given a pair of filtrations $(K,f), (K,f')$, a decomposition $R = DV$ of $K$, and a sequence $\mathcal{S} = \left( s_1, s_2, \dots, s_d \right)$ of cyclic `move' permutations $s_k = (i_k, j_k)$ satisfying $i_k < j_k$ for all $k \in [d]$, computing the updates:
+   \begin{equation}\label{eq:rv_seq_theorem}
    		R = D_0 V_0 \overset{s_1}{\to} D_1 V_{1} \overset{s_2}{\to} \dots \overset{s_d}{\to} D_d V_{d} = R'
    	\end{equation}
-   	can be determined in $O(m \log \log m)$ time and $O(m)$ space, where $R' = D_d V_d$ denotes a valid decomposition of $(K, f')$. 
-   	Moreover, if $i_k < j_k$ for all $k \in [d]$, then computing~\eqref{eq:rv_seq_theorem} requires $O(\\nu)$ column operations, where:	  
-   	$$  \quad \nu = \sum\limits_{k = 1}^d \, (\lvert \mathbb{I}_{k} \rvert + \lvert \mathbb{J}_{k} \rvert) $$
+   	where $R' = D_d V_d$ denotes a valid decomposition of $(K, f')$ requires $O(\nu)$ column operations, where $\nu$ depends on the sparsity of the intermediate entries $V_1, V_2, \dots, V_d$ and $R_1, R_2, \dots, R_d$:	  
+   	$$  \quad \nu = \sum\limits_{k = 1}^d \, (\lvert \mathbb{I}_{k} \rvert + \lvert \mathbb{J}_{k} \rvert), \quad \text{ where }  \lvert \mathbb{I}_{k} \rvert, \lvert \mathbb{J}_{k} \rvert \text{are given in Proposition~\ref{prop:move_st} } $$ 
+   	Moreover, the size of a minimal such $\mathcal{S}$ can be determined in $O(m \log \log m)$ time and $O(m)$ space. 
 %	$$  \quad \kappa = \sum\limits_{k = 1}^d \, \lvert \mathbb{I}_{k}\rvert + \lvert \mathbb{J}_{k}\rvert $$
-	where the quantities $\lvert \mathbb{I}_{k} \rvert, \lvert \mathbb{J}_{k} \rvert$ of the intermediate $R_k, V_k$ are given in Proposition~\ref{prop:move_st}. Note that since $\nu$ depends on the sparsity of the intermediate entries $V_1, V_2, \dots, V_d$ and $R_1, R_2, \dots, R_d$, the bound $O(\nu)$ is output-sensitive. 
-%	and where $\lvert \mathbb{I}_{k} \rvert$ denotes the number of non-zero entries $V_k[i_k, i_k:j_k]$, $\lvert \mathbb{J}_{k}\rvert$ the number of columns satisfying $\mathrm{low}_{R_k} \in [i_k:j_k]$ and $\mathrm{row}_{R_k}(i_k) \neq 0$, and $d = m - \lvert \mathrm{LCS}(K, K') \rvert$.
+	%	and where $\lvert \mathbb{I}_{k} \rvert$ denotes the number of non-zero entries $V_k[i_k, i_k:j_k]$, $\lvert \mathbb{J}_{k}\rvert$ the number of columns satisfying $\mathrm{low}_{R_k} \in [i_k:j_k]$ and $\mathrm{row}_{R_k}(i_k) \neq 0$, and $d = m - \lvert \mathrm{LCS}(K, K') \rvert$.
 \end{theorem}
 \begin{proof} \normalsize
 	Proposition~\ref{prop:schedule_size} yields the necessary conditions for constructing $\mathcal{S}$  with optimal size $d$ in $O(m \log \log m)$ time and $O(m)$. The definition of $\nu$ follows directly from Algorithm~\ref{alg:mr}. 
@@ -1253,18 +1251,19 @@ By definition, a subsequence in $\mathcal{L}$ common to both $p$ and $q$ satisfi
  \begin{equation}\label{eq:valid_move}
  	\lvert \mathrm{LCS}(s \circ p, q) \rvert = \lvert \mathrm{LCS}(p,q) \rvert + 1
  \end{equation}
-  The problem of constructing a sorting $\mathcal{S}$ of size $d$ thus reduces to the problem of choosing a sequence of $d$ valid moves, which we call a \emph{valid sorting}. To do this efficiently, let $\mathcal{T}$ denote an ordered set-like data structure that supports the following operations on elements $\sigma \in M$ from the set $M = \{0, 1, \dots, m+1\}$:
+  The problem of constructing a sorting $\mathcal{S}$ of size $d$ thus reduces to the problem of choosing a sequence of $d$ valid moves, which we call a \emph{valid sorting}. 
+  To do this efficiently, let $\mathcal{U}$ denote an ordered set-like data structure that supports the following operations on elements $\sigma \in M$ from the set $M = \{0, 1, \dots, m+1\}$:
   \begin{enumerate}
-  	\item $\mathcal{T} \cup \sigma$---inserts $\sigma$ into $\mathcal{T}$,
-  	\item $\mathcal{T} \setminus \sigma$---removes $\sigma$ from $\mathcal{T}$,
-  	\item $\mathcal{T}_{\mathrm{succ}}(\sigma)$---obtain the successor of $\sigma$ in $\mathcal{T}$, if it exists, otherwise return $m+1$
-  	\item $\mathcal{T}_{\mathrm{pred}}(\sigma)$---obtain the predecessor of $\sigma$ in $\mathcal{T}$, if it exists, otherwise return $0$
+  	\item $\mathcal{U} \cup \sigma$---inserts $\sigma$ into $\mathcal{U}$,
+  	\item $\mathcal{U} \setminus \sigma$---removes $\sigma$ from $\mathcal{U}$,
+  	\item $\mathcal{U}_{\mathrm{succ}}(\sigma)$---obtain the successor of $\sigma$ in $\mathcal{U}$, if it exists, otherwise return $m+1$
+  	\item $\mathcal{U}_{\mathrm{pred}}(\sigma)$---obtain the predecessor of $\sigma$ in $\mathcal{U}$, if it exists, otherwise return $0$
   \end{enumerate}
-  Given such a $\mathcal{T}$, an arbitrary valid sorting can be constructed by repeatedly querying and maintaining information about the $\mathrm{LCS}$ in $\mathcal{T}$. To see this, suppose $\mathcal{T}$ contains the current $\mathrm{LCS}$ between two permutations $p$ and $q$. By definition of the LCS, we have:
+  Given $\mathcal{U}$, a valid sorting can be constructed by querying and maintaining information about the $\mathrm{LCS}$ in $\mathcal{U}$. To see this, suppose $\mathcal{U}$ contains the current $\mathrm{LCS}$ between two permutations $p$ and $q$. By definition of the LCS, we have:
  \begin{equation}\label{eq:valid_move_ineq}
- 	p^{-1}(\mathcal{T}_{\mathrm{pred}}(\sigma)) < p^{-1}(\sigma) < p^{-1}(\mathcal{T}_{\mathrm{succ}}(\sigma))
+ 	p^{-1}(\mathcal{U}_{\mathrm{pred}}(\sigma)) < p^{-1}(\sigma) < p^{-1}(\mathcal{U}_{\mathrm{succ}}(\sigma))
  \end{equation}
-  for every $\sigma \in \mathcal{T}$. Now, suppose we choose some element $\sigma \notin \mathcal{T}$ which we would like to add to the LCS. If $p^{-1}(\sigma) < p^{-1}(\mathcal{T}_{\mathrm{pred}}(\sigma))$, then we must move $\sigma$ to the right of its predecessor in $p$ such that~\eqref{eq:valid_move_ineq} holds. Similarly, if  $p^{-1}(\mathcal{T}_{\mathrm{succ}}(\sigma)) < p^{-1}(\sigma)$, then we must move $\sigma$ left of its successor in $p$. Assuming the structure $\mathcal{T}$ supports all of the above operations in $O(\log m)$ time, we easily deduce a $O(d m\log m)$ algorithm for obtaining a valid sorting.
+  for every $\sigma \in \mathcal{U}$. Now, suppose we choose some element $\sigma \notin \mathcal{U}$ which we would like to add to the LCS. If $p^{-1}(\sigma) < p^{-1}(\mathcal{U}_{\mathrm{pred}}(\sigma))$, then we must move $\sigma$ to the right of its predecessor in $p$ such that~\eqref{eq:valid_move_ineq} holds. Similarly, if  $p^{-1}(\mathcal{U}_{\mathrm{succ}}(\sigma)) < p^{-1}(\sigma)$, then we must move $\sigma$ left of its successor in $p$. Assuming the structure $\mathcal{U}$ supports all of the above operations in $O(\log m)$ time, we easily deduce a $O(d m\log m)$ algorithm for obtaining a valid sorting.
 %  which for completeness is shown via Algorithm~\ref{alg:sorting} in the appendix. 
   % one can incrementally build a valid sorting of size $d$ by arbitrarily choosing valid move operations . all elements in $\mathrm{LCS}(p,q)$ into $\mathcal{T}$
 %  incrementally updating the inverse permutation $p^{-1}$ of $p$. Note that   
@@ -1317,54 +1316,17 @@ Ideally, we would like to minimize the cost of a schedule $\mathcal{S} \in \Phi_
 \begin{equation}\label{eq:schedule_cost}
 \mathrm{cost}(\mathcal{S}) = \sum\limits_{k=1}^d \lvert \mathbb{I}_k \rvert + \lvert \mathbb{J}_k\rvert
 \end{equation}
-where $\lvert \mathbb{I}\rvert + \lvert \mathbb{J}\rvert$ are the quantities from Proposition~\ref{prop:move_st}. One advantage of the \emph{moves} framework is that the cost of a single move on a given $R = D V$ decomposition can be determined efficiently prior to any column operations---no more than $O(m)$ time with row-oriented sparse matrices. 
-It is natural to consider whether a greedy-type solution which chooses the minimal cost choice at every step yields an efficient strategy. We give a counter-example below demonstrating that a greedy procedure may lead to arbitrarily bad behavior. 
-\\
-\\
-\textbf{Counter-Example:} A pair of filtrations is given below, each comprising the $1$-skeleton of a $3$-simplex. Relabeling $(K, f)$ to the index set $f : K \to [m]$ and modifying $(K, f')$ accordingly yields the permutations given below: 
-%$$ K_0 = \{ {\color{red} (1) (2) (3) (4) (1,4) (2,4) (3,4) } (1,2) (2,3) (1,3) \} $$ 
-%$$ K_1 = \{ {\color{red} (1) (2) (3) (4) } (1,2) (2,3) (1,3) {\color{red} (1,4) (2,4) (3,4) }\} $$ 
-$$ (K, f) = \{ {\color{red} a \; b \; c \; d \; u \; v \; w} \; x \; y \; z  \} = { {\color{red} 1 \; 2 \; 3 \; 4 \; 5 \; 6 \; 7 } \; 8 \; 9 \; 10 } $$
-$$ (K, f') = \{ {\color{red} a \; b \; c \; d } \; x \; y \; z \; {\color{red} u \; v \; w } \}  = { {\color{red} 1 \; 2 \; 3 \; 4 } \;8 \; 9 \; 10 \; {\color{red} 5 \; 6 \; 7 } }$$
-The subset of the filtration which corresponds to the simplices which lie in the LCS between these permutations is colored in red. For this example, the edit distance is 
-$d = m - \lvert \mathrm{LCS}(f, f') \rvert$, implying exactly $3$ moves are needed to map $f \mapsto f'$. There are six possible valid schedules of moves: 
-\begin{alignat*}{3}
-	S_1 = m_{x u}, m_{y u}, m_{z u} \quad & S_3 = m_{y u}, m_{x y}, m_{z u} \quad  & S_5 = m_{z u}, m_{x z}, m_{y z} \\
-	S_2 = m_{x u}, m_{z u}, m_{y z} \quad  & S_4 = m_{y u}, m_{z u}, m_{x y} \quad  & S_6 = m_{z u}, m_{y z}, m_{x z} 
-\end{alignat*}
-where the notation $m_{x y}$ represents the move permutation that moves $x$ to the position of $y$. The cost of each  move operation and each schedule is recorded in Table~\ref{table:move_costs}.
-\begin{table}[h]
-\caption{Move schedule costs}
-\centering
-\begin{tabular}{ m{0.4cm} m{0.8cm} m{0.8cm} m{0.8cm} m{0.8cm}  }
- \hline
- \multicolumn{5}{c}{Cost of each permutation} \\
- \hline
- & 1st & 2nd & 3rd & Total\\
- \hline
- $S_1$ & 2 & 3 & 1 & 6 \\
- \hline 
- $S_2$ & 2 & 2 & 4 & 8 \\
-  \hline 
- $S_3$ & 4 & 2 & 2 & 8 \\
-  \hline 
- $S_4$ & 4 & 3 & 3 & 10 \\
-  \hline 
- $S_5$ & 2 & 2 & 4 & 8  \\
-  \hline 
- $S_6$ & 2 & 5 & 3 & 10\\
- \hline
-\end{tabular}
-\label{table:move_costs}
-\end{table}
-Note the greedy strategy which always selects the cheapest move in succession would begin by moving $x$ or $z$ first, since these are the cheapest moves available, which implies one of $S_1, S_2, S_5, S_6$ would be picked on the first iteration. While the cheapest schedule $S_1$ is in this candidate set, an iterative greedy procedure would pick either $S_2$ or $S_5$, depending on the tie-breaker---thus, a greedy approach picking the lowest-cost move may not yield an optimal schedule. 
-	Indeed, as the most expensive schedule $S_6$ is in initial iterations candidate set, we see that a greedy-procedure with an arbitrary tie-breaker could potentially yield a \emph{maximal-cost} schedule.  
+where $\lvert \mathbb{I}\rvert + \lvert \mathbb{J}\rvert$ are the quantities from Proposition~\ref{prop:move_st}. 
+Globally minimizing the objective~\eqref{eq:schedule_cost} directly is difficult due to the changing sparsity of the intermediate matrices $R_k, V_k$. 
+One advantage of the \emph{moves} framework is that the cost of a single move on a given $R = D V$ decomposition can be determined efficiently prior to any column operations. Thus, it is natural to consider whether one could minimize~\eqref{eq:schedule_cost} by greedily choosing the lowest cost move each step. Unfortunately, not only does this approach does not yield a minimal cost solution, we give a counter-example in the appendix (\ref{sec:greedy_counter_ex}) demonstrating such a greedy procedure may lead to arbitrarily bad behavior. 
+%---no more than $O(m)$ time with row-oriented sparse matrices. 
 %Moreover, any reasonable tie-breaker that keeps track of previous cheapest moves would end up picking either schedule $S_2$ or $S_5$ as the final greedy schedule, both of which are suboptimal cost-wise.  
 
 \subsubsection{Proxy objective}\label{sec:proxy_objective}
-Although the greedy approach from the last section can lead to arbitrarily high cost schedules, we find similar greedy-like strategies can yield computationally efficient heuristics in practice, even if they are suboptimal. 
+%Although the greedy approach from the last section can lead to arbitrarily high cost schedules, we find similar greedy-like strategies can yield computationally efficient heuristics in practice, even if they are suboptimal. 
+%We seek a fast procedure for generating schedules that is not only substantially better than a random or simple schedule strategy in term of column reductions, but has a low enough time and storage complexity to be practical for larger data sets.
+
 %Choosing the lowest-cost move takes $\approx O(dm)$---implying a greedy strategy would require $O(d^2 m)$ time---which is computationally viable as a heuristic when $d << m$. 
-We seek a fast procedure for generating schedules that is not only substantially better than a random or simple schedule strategy in term of column reductions, but has a low enough time and storage complexity to be practical for larger data sets.
 %For example, the vineyards algorithm requires $O(m \log m + k)$ preprocessing time to compute a schedule of size $k \sim O(m^2)$ transpositions, thus for Algorithm~\ref{alg:schedule} to be considered a more efficient alternative to vineyards, a solution subquadratic in $m$ is desirable. 
 %In what follows, we present such an objective, showing its relation to the problem at hand as well its use in other known computational problems. 
 % We show empirical results demonstrating its practical effectiveness as a heuristic in section~\ref{sec:results}.
@@ -1391,127 +1353,69 @@ We seek a fast procedure for generating schedules that is not only substantially
 %\end{equation}
 %where now $\mathrm{cost}(\cdot)$ is to be replaced by a proxy objective function. There are exponentially many ways to choose $\sigma \in S_d$, so we opt for a greedy strategy as before, which takes $O(d \, C(m))$ time where $C(m)$ denotes the cost of evaluating the greedy step. For this minimization to be subquadratic in $m$, we need $C(m) \sim O(\log m)$ at each of the $d$ steps of the greedy optimization, and for the minimization to yield an efficient solution in practice, $\mathrm{cost}(\cdot)$ must be related to the problem of minimizing move costs.
 
-We seek a \emph{proxy objective} that correlates with~\eqref{eq:schedule_cost} and does not explicitly depend on the entries in the decomposition, as minimizing these terms directly is difficult due to  the changing sparsity of the intermediate matrices $R_k, V_k$,  
-Given a pair of filtrations $(K, f), (K,f')$, consider a schedule $\mathcal{S} \in \Phi(f,f',d)$ of cyclic permutations $(i_1, j_1), (i_2, j_2), \dots, (i_d, j_d)$ minimizing:
+In light of section~\ref{sec:greedy}, we seek an alternative objective that correlates with~\eqref{eq:schedule_cost} and does not depend on the entries in the decomposition.
+Given a pair of filtrations $(K, f), (K,f')$, a natural schedule $\mathcal{S} \in \Phi(f,f',d)$ of cyclic permutations $(i_1, j_1), (i_2, j_2), \dots, (i_d, j_d)$ is one minimizing the upper bound:
 \begin{equation}\label{eq:upper_bound_move_cost}
 \mathrm{\widetilde{cost}}(\mathcal{S}) = \sum\limits_{k=1}^d 2 \lvert i_k - j_k \rvert \geq \sum\limits_{k=1}^d ( \lvert \mathbb{I}_k \rvert + \lvert \mathbb{J}_k\rvert )
 \end{equation}
-In practice, this bound is very loose due to the sparsity of both $R$ and $V$. Nonetheless, the complexities of the move operations discussed in Section~\ref{sec:moves} depend on $\lvert i - j \rvert$, and minimizing~\eqref{eq:upper_bound_move_cost} has the intuitive interpretation as minimizing \emph{net displacement}. 
-%The Kendall-$\tau$ distance yields an upper bound on the number of column reductions needed to perform any schedule. 
-A similar $\ell_1$-type distance for measuring the disarrangement between permutations is the \emph{Spearman footrule distance}, defined as:
+%In practice, this bound is very loose due to the sparsity of both $R$ and $V$. Nonetheless, the objective is intuitive, and the complexities of the move operations discussed in Section~\ref{sec:moves} depend on $\lvert i - j \rvert$. 
+%and minimizing~\eqref{eq:upper_bound_move_cost} has the intuitive interpretation as minimizing \emph{net displacement}. 
+Unfortunately, even obtaining an optimal schedule $\mathcal{S}^\ast \in \Phi(f,f',d)$ minimizing~\eqref{eq:upper_bound_move_cost}
+% $\mathcal{S}^\ast = \argmin_{\mathcal{S} \in \Phi(f,f',d)} \mathrm{\widetilde{cost}}(\mathcal{S})$
+does not appear tractable due to its similarity with the $k$-layer crossing minimization problem, which is NP-hard for $k$ sets of permutations when $k \geq 4$~\cite{biedl2009complexity}. For additional discussion on the relationship between these two problems, see section~\ref{sec:cross_minimization} in the appendix.
+
+In light of the discussion above, we devise a \emph{proxy} objective function based on the Spearman distance~\cite{diaconis1977spearman} which we observed is both efficient to optimize and effective in practice. 
+The \emph{Spearman footrule distance} $F(p,q)$ between two $p,q \in S_m$ is an $\ell_1$-type distance for measuring permutation disarrangement; it is classically defined as:
 \begin{equation}\label{eq:spearman_dist}
-F(p, q) = \sum\limits_{i =1}^m \lvert p(i) - q(i) \rvert =  \sum\limits_{i =1}^m \lvert i - (q^{-1} \circ p)(i) \rvert
+F(p, q) = \sum\limits_{i =1}^m \lvert \, p(i) - q(i) \, \rvert =  \sum\limits_{i =1}^m \lvert \,i - (q^{-1} \circ p)(i) \, \rvert
 \end{equation}
-The Spearman distance shares any similarities with $K_\tau$; like $K_\tau$, it is also metric on $S_m$ that is invariant under consistent relabeling. 
-%and the distance between pairs of uniformly random permutations $p, q \sim S_m$ are asymptotically normal. 
-Indeed, Diaconis~\cite{diaconis1977spearman} showed the Spearman distance approximates $K_\tau$ within a factor of two: 
-\begin{equation}\label{eq:diaconis_inequality}
-K_\tau(p, q) \leq F(p, q) \leq 2 K_\tau(p, q)
-\end{equation}
-Moreover, in contrast to $K_\tau$, the Spearman distance can be computed in $O(m)$ time and is often used in the well-known \emph{rank aggregation problem}. Indeed, whereas obtaining a Kemeni optimal aggregation with respect to $K_\tau$ is NP-hard, the optimal such aggregation with respect to $F$ is obtainable in polynomial time~\cite{dinu2006efficient}. 
-% Indeed, it is used...
-%, and 
-%For example, one of the tasks of the \emph{rank aggregation} problem is to obtain an  aggregation~\cite{} $\sigma \in S_m$ from a set of $k$ rankings $T = \{\tau_1, \tau_2, \dots, \tau_k\}$ that obeys some optimality criteria. A Kemeny optimal ranking is a permutation $\sigma^\ast$ that minimizes the sum of Kendall distances to the gievn set of rankings: 
-%$$ \argmin_{\sigma \in S_m} = \sum\limits_{i = 1}^k K_\tau(\sigma, \tau_i)$$ 
-%Computationally, obtaining a Kemeny optimal ranking is NP-hard\cite{}. In contrast, a 2-approximation may be obtained by replacing the Kendall distance with the Spearman distance, as in this case the problem reduces to finding a perfect matching in a bipartite graph, which can be accomplished in polynomial time. 
-To adapt $F(\cdot, \cdot)$ to sortings, we decompose the Spearman distance additively via the bound:
+Like $K_\tau$, $F$ forms a metric on $S_m$ and is invariant under relabeling.
+Our motivation for considering the footrule distance is motivated by the fact that $F$ recovers $\mathrm{\widetilde{cost}}(\mathcal{S})$ when $(p,q)$ differ by a cyclic permutation (i.e. $F(p, m_{ij} \circ p) = 2 \lvert i - j \rvert$) and by its usage on similar\footnote{
+$F$ is often used to approximate $K_\tau$ in \emph{rank aggregation} problems due to the fact that computing the [Kemini] optimal rank aggregation is NP-hard with respect to $K_\tau$, but only polynomial time with respect to $F$~\cite{dinu2006efficient}. Note $F$ bounds $K_\tau$ via the inequalities $K_\tau(p, q) \leq F(p, q) \leq 2 K_\tau(p, q)$~\cite{diaconis1977spearman}.
+} combinatorial optimization problems. 
+To adapt $F$ to sortings, we decompose $F$ additively via the bound:
 \begin{equation}\label{eq:sorting_additive}
 \hat{F}_{\mathcal{S}}(p, \iota) = \sum\limits_{i=1}^{d-1} F(\hat{s}_i \circ p, \hat{s}_{i+1} \circ p) \geq F(p, \iota)
 \end{equation}
 where $\hat{s}_i =  s_i \circ \cdots \circ s_2 \circ s_1$ denote the composition of the first $i$ permutations of a sorting  $S = (s_1, \dots, s_d)$ that maps $p \mapsto \iota$.
-The problem of minimizing the right hand side of~\eqref{eq:sorting_additive} can be interpreted as a crossing minimization problem for a set of $k$-layered bipartite graphs. To see this, consider two permutations: $p$ and $m_{ij} \circ p$, where $m_{ij}$ is a move permutation. Drawing $(p, m_{ij} \circ p)$ as a bipartite graph,  observe that $F(p, m_{ij} \circ p)$ is twice the number of edge crossings in the graph, and that equality in~\eqref{eq:sorting_additive} is achieved when the displacement of each $\sigma \in p$ between its initial position in $p$ to its value is non-increasing with every application of $s_i$, which in general not guaranteed using the schedule construction method derived in section~\ref{sec:move_schedules}. Unfortunately, the $k$-layer crossing minimization problem is NP-hard for $k$ sets of permutations, when $k \geq 4$~\cite{biedl2009complexity}. 
+As a heuristic to minimize~\eqref{eq:sorting_additive}, we greedily select the optimal $k \in \mathcal{L}$ at each step which minimizes the Spearman distance to the identity permutation: 
+\begin{equation}\label{eq:greedy_step}
+	k_{\text{greedy}} = \argmin_{k \in \mathcal{D}} F(m_{ij} \circ p, \iota), \quad i = p^{-1}(k)
+\end{equation}  
+Note that equality between $F$ and $\hat{F}_{\mathcal{S}}$~\eqref{eq:sorting_additive} is achieved when the displacement of each $\sigma \in p$ between its initial position in $p$ to its value is non-increasing with every application of $s_i$, which in general not guaranteed using the schedule construction method in section~\ref{sec:move_schedules}. 
+To build intuition for how this heuristic interacts with Algorithm~\ref{alg:sorting}, we show a purely combinatorial example below.
 \\
-\\
-\noindent \textbf{Example:} 
-Let  $p= (1\;2\;3\;4\;5\;6\;7\;8\;9)$ and $q = (9\;4\;2\;7\;1\;8\;6\;3\;5)$.
-An example of three possible schedules, $S_1$, $S_2$, and $S_3$ sorting $p$ into $q$ is given in the figure below. 
-%Each schedule, from left to right, has $21$, $31$, and $35$ crossings, respectively. 
-\begin{figure}[!htb]
-    \centering
-%    \includegraphics[width=0.60\textwidth]{crossings.png} % arxiv only 
-    \includegraphics[width=0.75\textwidth]{crossings.png} % springer only
-    %\caption{Three sortings, $S_1$, $S_2$, and $S_3$, with $21$, $31$, and $35$ crossings, resp.}
-    %. Each schedule, from left to right, . The greedy heuristic proposed to minimize~\ref{eq:schedule_opt_succ} was used to produce $S_1$, which has the minimal number of crossings, since $K_\tau(p,q) = 21$ in this example.
-    \label{fig:crossings}
+\\  
+\noindent \textbf{Example:} The permutation $p \in S_m$ to sort to the identity $p \mapsto \iota$ is given as a sequence $(4, 2, 7, 1, 8, 6, 3, 5,0)$ and a precomputed LIS $\mathcal{L} = (1, 3, 5)$, which is highlighted in red. 
+\begin{figure}[htb!]\label{fig:schedule_construct}
+	\center
+	\includegraphics[width=0.90\textwidth]{greedy_schedule_construct}
+%	\caption{Greedy schedule construction example.  }
 \end{figure}
-Each column represents the successive application of a move $m_{ij}$ in the schedule, 
-and the edges track the movement of each element of the permutation. 
-Black/red vertices correspond to elements in and outside of $\mathrm{LCS}$, respectively. 
-All three schedules were generated from the same $\mathrm{LCS}(p,q) = (4\,7\,8)$ and each schedule transforms $p \mapsto q$ in $d = 6$ moves. 
-In this example, $S_1$ matches the minimal number of crossings amongst all possible schedules,  since $K_\tau(p,q) = 21$. 
-\\
-\\
-%The greedy heuristic proposed to minimize equation~\ref{eq:schedule_opt_succ} was used to produce $S_1$, which has 21 edge crossings. 
-%As a result, we do not expect there to be a polynomial time algorithm for optimally achieving this proxy objective.  
-% Since $\mathcal{D}$ is fixed, the complexity of a greedy strategy depends entirely on the complexity of minimizing $F(\hat{s}_i, \hat{s}_{i+1})$ at each greedy step.  
-%For any sorting $S$ such that $s_{i}$ that increases the size of longest common subsequence between $s_{i-1} \circ \dots \circ s_1 \circ p$ and $q$. 
-% and it satisfies a certain monotonicity property under LCS edit operations. 
-%Specifically, given two permutations $p,q \in S_m$ with $\nu = \mathrm{LCS}(p,q)$ between them, the analysis in section~\ref{sec:move_schedules} shows we must move each symbol $x \in \mathcal{D}$ where $\mathcal{D} = p \smallsetminus \nu $ in a way that extends $\nu$ after each move. Each symbol $x \in \mathcal{D}$ induces a permutation $s_x$ such that $F(p, q) \geq F(s_x \circ p, q)$. That is, unlike the Kendall distance, the Spearman distance satisfies: 
-%$$ F(p, q) \geq F(s_1 \circ p, q) \geq F( s_2 \circ s_1 \circ p, q) \geq F( s_d \circ \dots \circ s_1 \circ p, q)  = F(q,q) = 0 $$
-%Since the complexity of the move operations discussed in section~\ref{sec:moves} depend on the size of the movement, it is advantageous to construct a schedule which minimizes this movement. 
-%Since $\lvert \mathcal{D} \rvert$ is fixed, we would like to choose $x \in \mathcal{D}$ such that the corresponding permutation $s_x$ reduces the total displacement of every symbol $x \in \mathcal{D}$ relative to  $q$. 
-%Substituting objective~\ref{eq:kendall_inequality} for $\mathrm{cost}(\cdot)$ in equation~\ref{eq:schedule_opt2} yields the following global optimization problem over $S_d$: 
-%\begin{equation}\label{eq:schedule_opt_succ}
-%S_{\sigma}^\ast = \argmin_{\sigma \in S_d} \frac{1}{2} \sum\limits_{i = 1}^{d - 1} F(\hat{s}_i, \hat{s}_{i+1})
-%\end{equation}
-%The minimizer of this optimization can be interpreted as a sorting which minimizes the net displacement amongst all possible $d$-sized sortings $p \mapsto q$, again in the $\ell_1$ sense. 
-%A greedy strategy requires $O((d+(d-1)+(d-2)+\dots+1)m) \approx O(d^2 m)$ time to complete, since there are $O(d)$ symbols to choose from and minimizing $F(\hat{s}_i, \hat{s}_{i+1})$ at each step takes $O(md)$. 
-%\\
-%\\
-%\noindent
-%\textbf{Example:} We reconsider the greedy optimization example from section~\ref{sec:greedy}. 
-%Table~\ref{table:greedy_costs} lists the \emph{successive} Kendall-$\tau$ and Spearman distances, respectively, between adjacent LCS edit (move) operations. Observe that, in this example, both greedy approaches lead to the schedule with minimal cost ($S_1$) (though this is not guaranteed in the general case).  
-%\begin{table}[h]
-%\caption{Move schedule costs (kendall and spearman)}
-%\centering
-%\begin{tabular}{ |P{0.4cm}|P{0.8cm}|P{0.8cm}|P{0.8cm}|P{0.8cm}|  }
-% \hline
-% \multicolumn{5}{|c|}{ Successive $K_\tau$ cost} \\
-% \hline
-% & 1st & 2nd & 3rd & Total\\
-% \hline
-% $S_1$ & 3 & 5 & 7 & 15 \\
-% \hline 
-% $S_2$ & 3 & 6 & 6 & 15 \\
-%  \hline 
-% $S_3$ & 4 & 4 & 7 & 15 \\
-%  \hline 
-% $S_4$ & 4 & 6 & 5 & 15 \\
-%  \hline 
-% $S_5$ & 5 & 6 & 6 & 17 \\
-%  \hline 
-% $S_6$ & 5 & 5 & 5 & 15 \\
-% \hline
-%\end{tabular}
-%\quad 
-%\begin{tabular}{ |P{0.4cm}|P{0.8cm}|P{0.8cm}|P{0.8cm}|P{0.8cm}|  }
-% \hline
-% \multicolumn{5}{|c|}{ Successive $F$ cost} \\
-% \hline
-% & 1st & 2nd & 3rd & Total\\
-% \hline
-% $S_1$ & 3 & 3 & 3 & 9 \\
-% \hline 
-% $S_2$ & 3 & 4 & 4 & 11 \\
-%  \hline 
-% $S_3$ & 4 & 4 & 3 & 11 \\
-%  \hline 
-% $S_4$ & 4 & 4 & 5 & 13 \\
-%  \hline 
-% $S_5$ & 5 & 4 & 4 & 13 \\
-%  \hline 
-% $S_6$ & 5 & 5 & 5 & 15 \\
-% \hline
-%\end{tabular}
-%\label{table:greedy_costs}
-%\end{table}  
-%\\
+On the left, a table records permuted sequences $\{ \hat{s}_i \circ p \}_{i=0}^d$, given on rows $i \in \{0, 1, \dots, 6\}$, for the moved elements $(7, 0, 8, 4, 6, 2)$ (highlighted in yellow). 
+ In the middle, we show the Spearman distance cost~\eqref{eq:greedy_step} associated with both each permuted sequence (left column) and with each candidate permutation $m_{ij} \circ p$ (rows). Note that elements $\sigma \in \mathcal{L}$ (red) induce identity permutations that do not modify the cost, and thus the minimization is restricted to elements $\sigma \in p \setminus \mathcal{L}$ (black). 
+ The right plot shows the connection to the bipartite crossing minimization problem discussed in section~\ref{sec:greedy}.
 
+\subsubsection{Heuristic Computation}
+%The Kendall-$\tau$ distance yields an upper bound on the number of column reductions needed to perform any schedule.
+We now introduce an efficient $O(d^2 \log m)$ algorithm for constructing a move schedule that greedily minimizes~\eqref{eq:sorting_additive}. The algorithm is purely combinatorial, and is motivated by the simplicity of updating the Spearman distance between sequences which differ by a cyclic permutation. 
+
+%%% TODO: elaborate on monotonicity, describe segment tree
+%Consider the schedule construction procedure outlined in Algorithm~\ref{alg:sorting}. At every step of the sorting, there are only two degrees of freedom: the choice of $k \in \mathcal{D}$ which yields a source position $i = \bar{p}^{-1}(k)$ to move, and the choice of target position $j$ to move to. The LIS $\mathcal{L}(p)$ of $p$ determines the valid target positions to move $k$ to---any target position $j$ satisfying~\eqref{eq:valid_move_ineq} is sufficient. If we fix a heuristic for the latter (for instance, choosing $j$ such that $\lvert i - j \lvert$ is minimal), then each $k \in \mathcal{D}$ yields a corresponding cyclic permutation $m_{ij} \in S_m$~\eqref{eq:move_permutation} that is valid in the sense of~\eqref{eq:valid_move}. Thus, the problem of constructing a schedule reduces to choosing  the order elements in $\mathcal{D} = [m] \setminus \mathcal{L}(p)$ to move. 
+%
 %% TODO: elaborate on monotonicity, describe segment tree
-In light of the discussion above, we propose a heuristic strategy to minimize~\eqref{eq:sorting_additive} which we observed is both efficient to compute and effective in practice.
-The heuristic is inspired by the simplicity of computing the Spearman distance between cyclic permutations at the schedule construction phase. Suppose we begin with an array $\mathcal{A}$ of size $m$ which provides $O(1)$ access and modification, initialized with the (signed) \emph{displacement} of every element in $p$ to its corresponding position in $q$. Since the Spearman distance is simply the sum of the absolute value of these displacements, at any point during during the execution of Algorithm~\ref{alg:sorting} we may obtain $F(\cdot, q)$ simply by having access to the sum of every entry in $\mathcal{A}$. At every step, there are only two degrees of freedom in Algorithm~\ref{alg:sorting}: the choice of index $k \in \mathcal{D}$ to move, and the choice of the target index $j$ to move $k$ to. If we fix a heuristic for the latter (for instance, $j$ chosen arbitrarily from an appropriate set, as in Algorithm~\ref{alg:sorting}), then each $k \in \mathcal{D}$ yields a corresponding cyclic permutation $m_{kj} \in S_m$~\eqref{eq:move_permutation} satisfying~\eqref{eq:valid_move}. Moreover, such a permutation changes the displacement of every index in at most three different ways: 
+% --- I guess this is unneeded --- 
+%Consider the schedule construction procedure outlined in Algorithm~\ref{alg:sorting}. At every step of the sorting, there are only two degrees of freedom: the choice of $k \in \mathcal{D}$ which yields a source position $i = \bar{p}^{-1}(k)$ to move, and the choice of target position $j$ to move to, which depends on a fixed LIS $\mathcal{L}(p)$ of $p$---any $j$ satisfying~\eqref{eq:valid_move_ineq} will suffice. If we fix a heuristic for the latter (for instance, choosing $j$ such that $\lvert i - j \lvert$ is minimal), then each $k \in \mathcal{D}$ yields a corresponding cyclic permutation $m_{ij} \in S_m$~\eqref{eq:move_permutation} that is valid in the sense of~\eqref{eq:valid_move}. Thus, the problem of constructing a schedule reduces to choosing  an order of elements in $\mathcal{D} = [m] \setminus \mathcal{L}(p)$ to move. 
+First, consider an array $\mathcal{A}$ of size $m$ which provides $O(1)$ access and modification, initialized with the \emph{signed displacement} of every element in $p$ to its corresponding position in $q$. 
+In the case where $q = \iota$, note $\mathcal{A}(i) = i - p(i)$, thus $F(p, \iota)$ is given by the sum of the absolute values of the elements in $\mathcal{A}$.
+%$\lVert \mathcal{A} \rVert_1$. 
+%Akin to how cyclic move permutations may be interpreted as a paired insertion-deletion operations,
+In other words, computing $F(m_{ij} \circ p, \iota)$ in $O(\log m)$ time corresponds to updating an arrays \emph{prefix sum} under element insertions and deletions, which is easily solved by many data structures (e.g. segment trees).
+
+Because the values of $\mathcal{A}$ are signed, the reduction to prefix sums is not exact: it is not immediately clear how to modify $\lvert i - j \rvert$ elements in $O(\log m)$ time. 
+To address this, observe that at any point during the execution of Algorithm~\ref{alg:sorting}, a cyclic permutation changes each value of $\mathcal{A}$ in at most three different ways: 
 \[
-\mathcal{A}(m_{kj} \circ p) = 
+\mathcal{A}(m_{ij} \circ p) = 
 \begin{cases} 
 	 \mathcal{A}(k) \pm \lvert i - j \rvert & p^{-1}(k) = i \\
 	 \mathcal{A}(k) \pm 1 & i < p^{-1}(k) \leq j \\
@@ -1520,17 +1424,23 @@ The heuristic is inspired by the simplicity of computing the Spearman distance b
 \]
 %That is, if $s_\sigma$ represents a move permutation moving $\sigma$ from position $i$ to position $j$, then relative to the previous permutation $p$, the displacement of $\sigma$ in $s_\sigma \circ p$ changes by $\lvert i - j \rvert$ and the displacement of any symbol between $i$ and $j$ changes by $\pm 1$. 
 %All other symbols are unchanged. 
-Thus, if we replace $\mathcal{A}$ with a data structure  supporting $O(\log m)$ access time to aggregate information and $O(\log m)$ modification time over $\lvert i - j \vert$ entries simultaneously, we could greedily choose the next index $k$ to minimize:
-\begin{equation}\label{eq:greedy_step}
-	k_{\text{greedy}} = \argmin_{k \in \mathcal{D}} F(m_{kj} \circ p, \iota)
-\end{equation}  
-in $O(d\log m)$ time. 
-The former problem of accessing aggregate information reduces to the problem of efficiently calculating \emph{prefix sums}, which is easily solved. 
-It is not immediately clear how to achieve the latter modification complexity in $O(\log m)$ time, since $\lvert i - j \rvert \leq m$ is potentially larger than $O(\log m)$---however, because we are working with displacements, note the additive modification to each entry in $\lvert i - j \rvert$ is a constant. It is known that one can apply constant-factor updates to multiple values in a \emph{implicit treap} data structure in $O(\log m)$ time via \emph{range updates}~\cite{blelloch1998fast}. 
+%Thus, if we replace $\mathcal{A}$ with a data structure  supporting $O(\log m)$ access time to aggregate information and $O(\log m)$ modification time over $\lvert i - j \vert$ entries simultaneously, we could greedily choose the next index $k$ to minimize~\eqref{eq:greedy_step} in $O(\log m)$ time. 
+Thus, $\mathcal{A}$ may be partitioned into at most four contiguous intervals each upon which the update is constant and we need only apply a constant number of \emph{range updates} to  $\mathcal{A}$. Such updates are known to require $O(\log m)$ time using e.g. an \emph{implicit treap} data structure~\cite{blelloch1998fast}. 
  % Can actually only achieve O(d^2 log m) it seems
-Since single element modifications, removals, and insertions can all be achieved in $O(\log m)$ expected time with such a data structure, we conclude that equation~\eqref{eq:greedy_step} may be solved in just $O(d^2 \log m)$ time. 
+Since single element modifications, deletions, insertions, and constant range updates can all be achieved in $O(\log m)$ expected time with such a data structure, we conclude that equation~\eqref{eq:greedy_step} may be solved in just $O(d^2 \log m)$ time. 
 %Since single element prefix sum modifications can also be achieved $O(\log m)$ time with these data structures, the time to compute $F(\hat{s}_i, \hat{s}_{i+1})$ is bounded above by $O(\log m)$, 
 %thus the greedy solution to equation~\ref{eq:schedule_opt_succ} can be computed in $O(d^2 \log m)$ time. 
+\\
+\\
+\noindent \textbf{Example:} 
+%valid moves in a corresponding $RV$ decomposition (not shown).    into new positions (given by the following row) 
+We re-use the previous example of sorting the sequence $p = (4, 2, 7, 1, 8, 6, 3, 5,0)$ to the identity $\iota = [m]$ using a precomputed LIS $\mathcal{L} = (1, 3, 5)$. The left table we show the same sorting as before, with elements chosen to move highlighted in yellow; on the right, a table showing the entries of $\mathcal{A}$ are recorded. 
+\begin{figure}[htb!]\label{fig:schedule_construct}
+	\center
+	\includegraphics[width=0.80\textwidth]{displacement_proof}
+%	\caption{Greedy schedule construction example.  }
+\end{figure}
+The colors of each entry in the right table indicate its partition: green values are unchanged between permutations, blue values are modified by $\pm 1$, and orange values are modified arbitrarily. As before, the $i$th entry of the column on the left-side shows $F(\hat{s}_i \circ p, \iota)$. Small black lines are used to show the movement of the entries in $\mathcal{A}$ which change by $\pm 1$. 
 
 %  e.g. a Fenwick tree, or a Segment Tree that supports lazy propagation~\cite{de1997computational}
 
@@ -1560,12 +1470,15 @@ Since single element modifications, removals, and insertions can all be achieved
 \section{Applications and Experiments}\label{sec:results}
 \subsection{Video data}
 A common application of persistence is characterizing topological structure in image data. Since a  set of ``snapshot'' frames of a video can be equivalently thought of as discrete 1-parameter family, our framework provides a natural extension of the typical image analysis to video data. 
-To demonstrate the benefit of using minimal size schedules and the scalability of the greedy approach proposed in section~\ref{sec:proxy_objective}, we re-use the video data from~\ref{sec:motivation} as a baseline benchmark. We perform two performance tests: one to test the impact of shrinking the number of permutations a given reindexing operation needs and one to test the asymptotic behavior of the greedy approach. 
+To demonstrate the benefit of scheduling and the scalability of the greedy heuristic, we perform two performance tests on the video data from section~\ref{sec:motivation}: one to test the impact of repairing the decomposition less and one to measure the asymptotic behavior of the greedy approach.
+%we re-as a baseline benchmark.  
 
  In the first test, we fix a grid size of $9 \times 9$ and record the cumulative number of column operations needed to compute persistence dynamically across 25 evenly-spaced time points using a variety of scheduling strategies.
- The primary three strategies we test are the greedy approach from section~\ref{sec:proxy_objective}, the ``simple'' approach which uses upwards of $O(m)$ move permutations via selection sort, and a third strategy which interpolates between the two. 
-To perform this interpolation, we use a parameter $\alpha \in [0,1]$ to choose $m - \alpha \cdot d$ random simplices to move using the same construction method outlined in section~\ref{sec:schedule_construction}. When $\alpha = 0$, the strategy reduces to using selection sort to reindex $f \mapsto f'$ using a random ordering of simplices; otherwise, $\alpha = 1$ reduces to using a minimal sized schedule (with a random ordering of simplices). The results are summarized in the left graph on Figure~\ref{fig:movie_perf}, wherein the mean schedule cost of the random strategies are depicted by solid lines. To capture the variation in performance, we run 10 independent iterations and shade the upper and lower bounds of the schedule costs. 
- As one can see from the figure, while using less move operations (lower $\alpha$) does progressively reduce column operations, constructing random schedules of minimal size is no more competitive than the simple selection sort strategy. This suggests that efficient schedule construction needs to account for the structure of performing several permutations in sequence, like the greedy heuristic we introduced, to yield an adequate performance boost. 
+ The three strategies we test are the greedy approach from section~\ref{sec:proxy_objective}, the ``simple'' approach which uses upwards of $O(m)$ move permutations via selection sort, and a third strategy which interpolates between the two. 
+To perform this interpolation, we use a parameter $\alpha \in [0,1]$ to choose $m - \alpha \cdot d$ random simplices to move using the same construction method outlined in section~\ref{sec:schedule_construction}. 
+%When $\alpha = 0$, the strategy reduces to using selection sort to reindex $f \mapsto f'$ using a random ordering of simplices; otherwise, $\alpha = 1$ reduces to using a minimal sized schedule (with a random ordering of simplices). 
+The results are summarized in the left graph on Figure~\ref{fig:movie_perf}, wherein the mean schedule cost of the random strategies are depicted by solid lines. To capture the variation in performance, we run 10 independent iterations and shade the upper and lower bounds of the schedule costs. 
+ As seen in Figure~\ref{fig:movie_perf}, while using less move operations (lower $\alpha$) tends to reduce column operations, constructing \emph{random} schedules of minimal size is no more competitive than the selection sort strategy. This suggests that efficient schedule construction needs to account for the structure of performing several permutations in sequence, like the greedy heuristic we introduced, to yield an adequate performance boost. 
 
 \begin{figure}
 	\centering
@@ -1602,7 +1515,7 @@ Xian et al.~\cite{xian2020capturing} showed that crocker plots may be \emph{smoo
 
 %To describe this formally, let $K_\tau^\epsilon$ denote a simplicial filtration with simplices $\sigma \in K_\tau^\epsilon$ whose function value $f_\tau(\sigma) \leq \epsilon$. The $\alpha$
 
-We test the efficiency of computing the necessary information to generate these crocker stacks using a spatiotemporal data set to illustrate the applicability of our method. Specifically, we ran a \emph{flocking} simulation similar to the one run in~\cite{topaz2015topological} with $m = 20$ vertices moving around on the unit square equipped with periodic boundary conditions (i.e. $S^1 \times S^1$). We simulated movement by equipping the vertices with a simple set of rules which control how the individual vertices position change over time. Such simulations are also called \emph{boid} simulations, and they have been extensively used as models to describe how the evolution of collective behavior over time can be described by simple sets of rules.
+To illustrate the applicability of our method, we test the efficiency of computing these crocker stacks using a spatiotemporal data set. Specifically, we ran a \emph{flocking} simulation similar to the one run in~\cite{topaz2015topological} with $m = 20$ vertices moving around on the unit square equipped with periodic boundary conditions (i.e. $S^1 \times S^1$). We simulated movement by equipping the vertices with a simple set of rules which control how the individual vertices position change over time. Such simulations are also called \emph{boid} simulations, and they have been extensively used as models to describe how the evolution of collective behavior over time can be described by simple sets of rules.
 The simulation is initialized with every vertex positioned randomly in the space; the positions of vertices over time is updated according to a set of rules related to the vertices acceleration, distance to other vertices, etc. To get a sense of the time domain, we ran the simulation until a vertex made at least 5 rotations around the torus. 
 
 Given this time-evolving data set, we computed the persistence diagram of the Rips filtration up to $\epsilon = 0.30$ at 60 evenly spaced time points using three approaches: the standard algorithm \texttt{pHcol} applied naïvely at each of the 60 time steps, the \emph{vineyards} algorithm applied to (linear) homotopy connecting filtrations adjacent in time, and our approach using \emph{moves}.   
@@ -1619,7 +1532,7 @@ The cumulative number of $O(m)$ column operations executed by three different ap
 \subsection{Multiparameter persistence}
 Given a procedure to filter a space in multiple dimensions simultaneously, a \emph{multifiltration}, the goal of multi-parameter persistence is to identify persistent features by examining the entire multifiltration. 
 Such a generalization has appeared naturally in many application contexts, showing potential as a tool for exploratory data analysis~\cite{lesnick2012multidimensional}. Indeed, one of the drawbacks of persistence is its instability with respect to strong outliers, which can obscure the detection of significant topological structures~\cite{buchet2015topological}.
-One exemplary use case of multi-parameter persistence is to detect these strong outliers by filtering the data with respect to both density and the associated metric.
+One exemplary use case of multi-parameter persistence is to detect these strong outliers by filtering the data with respect to both the original filter function \emph{and} density.
 In this section, we show the utility of scheduling with a real-world use case: detecting the presence of a low-dimensional topological space which well-approximates the distribution of natural images. 
 As a quick outline, in what follows we briefly recall the fibered barcode invariant~\ref{sec:fibered_barcode}, summarize its potential application to a particular data set with known topological structure~\ref{sec:natural_images}, and conclude with experiments of demonstrating how scheduling enables such applications~\ref{sec:empirical_klein}.   
 
@@ -1789,7 +1702,7 @@ Indeed, we see our approach as potentially useful to any situation where the str
 The simple and combinatorial nature of our approach does pose some limitations to its applicability. For example, better bounds or algorithms may be obtainable if stronger assumptions can be made on how the filtration is changing with time. Moreover, if the filtration $(K, f)$ shares little similarity to the ``target'' filtration $(L,f')$, then the overhead of reducing the simplices from $L \setminus K$ appended to the decomposition derived from $K$ may be large enough to motivate simply computing the decomposition at $L$ independently, especially if parallel processors are available. 
 Our approach is primarily useful if the filtrations in the parameterized family are ``nearby'' in the combinatorial sense. 
 
-From an implementation perspective, one non-trivial complication of our approach is its heavy dependence on a particular sparse matrix data structure which permits permuting both the row and columns of a given matrix in at most $O(m)$ time. As shown with the natural images example in section~\ref{sec:results}, there are often more permutation operations being applied than there are column reductions. In the more standard \emph{compressed} sparse matrix representations\footnote{
+From an implementation perspective, one non-trivial complication of our approach is its heavy dependence on a particular sparse matrix data structure which permits permuting both the row and columns of a given matrix in at most $O(m)$ time~\cite{cohen2006vines}. As shown with the natural images example in section~\ref{sec:results}, there are often more permutation operations being applied than there are column reductions. In the more standard \emph{compressed} sparse matrix representations\footnote{
 By ``standard,'' we mean any of the common sparse representations used in scientific computing packages, like SciPy's sparse module (\url{https://docs.scipy.org/doc/scipy/reference/sparse.html})
 }, permuting both the rows and columns generally takes at most $O(Z)$ time, where $Z$ is the number of non-zero entries, which can be quite expensive if the particular filtration has many cycles. As a result, the more complex sparse matrix representation from~\cite{cohen2006vines} is necessary to be efficient in practice. 
 
@@ -1811,8 +1724,8 @@ The authors declare that they have no competing interests that could influence t
 \textbf{Authors' contributions:}
 The contributions of each author to this article were as follows:
 \begin{enumerate}
-	\item Matt Piekenbrock: conceptualization, methodology design, algorithm development, experimental design \& analysis, software development, drafting of the article. 
-	\item Jose Perea: Literature review, critical revision of the manuscript, final approval of the version to be published.
+	\item Matt Piekenbrock: conceptualization, methodology design, algorithm development, experimental design \& analysis, software development. 
+	\item Jose Perea: Conceptualization, methodology design, literature review, critical revision of the manuscript, final approval of the version to be published.
 \end{enumerate}
 All authors have reviewed and approved the final version of the manuscript and have agreed to be accountable for all aspects of the work.
 \\
@@ -1872,9 +1785,10 @@ Since these operations always occur in a left-to-right fashion, its not immediat
 %\noindent The effect of the movement on intermediate simplices depends on the direction of the movement. If $i < j$ (respectively, $j < i$), all simplices at positions $k \in [i+1\;:\;j] $ are shifted down (respectively, up) by $1$. 
 
 \subsubsection{LCS-Sort}
-Here we record explicitly the simple schedule construction algorithm outlined in section~\ref{sec:schedule_construction}. The algorithm is simple enough to derive using the rules discussed in section~\ref{sec:schedule_construction} (namely, equation~\eqref{eq:valid_move}, but nonetheless for posterity sake we record it here for the curious reader; it is given in Algorithm~\ref{alg:sorting}.
+Here we record explicitly the schedule construction algorithm outlined in section~\ref{sec:schedule_construction}. The algorithm is simple enough to derive using the rules discussed in section~\ref{sec:schedule_construction} (namely, equation~\eqref{eq:valid_move}, but nonetheless for posterity sake we record it here for the curious reader; the pseudocode is given in Algorithm~\ref{alg:sorting}.
+
 The high level idea of the algorithm is to first construct the LCS between two permutations $p,q \in S_m$. To do this efficiently, one re-labels $q \mapsto \iota$ to the identity permutation $\iota = [m]$ and applies a consistent re-labeling $p \mapsto \bar{p}$. This relabeling preserves the LCS distance and has the additional advantage that $\bar{q} = \iota = [m]$ is a strictly increasing subsequence, and thus computing the LCS between $p,q \in S_m$ reduces to computing the LIS $\mathcal{L}$ of $\bar{p}$. 
-By sorting $\bar{p} \mapsto p$ via operations which (strictly) increase the size of $\mathcal{L}$, we ensure that the size of the set of corresponding permutations is exactly $m - \lvert \mathcal{L} \rvert$. 
+By sorting $\bar{p} \mapsto \iota$ via operations which (strictly) increase the size of $\mathcal{L}$, we ensure that the size of the set of corresponding schedule is exactly $m - \lvert \mathcal{L} \rvert$. 
 
   \begin{algorithm}[h!]
 	\caption{Schedule construction algorithm}\label{alg:sorting}
@@ -1890,8 +1804,8 @@ By sorting $\bar{p} \mapsto p$ via operations which (strictly) increase the size
     		\While{$\mathcal{D}$\text{ is not empty }}
     		    \State Select an element $k \in \mathcal{D}$ using heuristic $h$ \Comment{e.g. equation~\eqref{eq:greedy_step}}   		        	
 %    		    \State $\mathcal{T}_{\mathrm{pred}}(k) \gets \max \{ \ell \in \mathcal{L} \mid \ell \leq k \}$ 
-				\State $\mathrm{k}_{\text{pred}} \gets \max \{ \ell \in \mathcal{L} \mid \ell \leq k \}$\Comment{$O(\log \log m)$ using $\mathcal{T}$}
-				\State $\mathrm{k}_{\text{succ}} \gets \min \{ \ell \in \mathcal{L} \mid \ell \geq k \}$  \Comment{$O(\log \log m)$ using $\mathcal{T}$}
+				\State $\mathrm{k}_{\text{pred}} \gets \max \{ \ell \in \mathcal{L} \mid \ell \leq k \}$\Comment{$O(\log \log m)$ using $\mathcal{U}$}
+				\State $\mathrm{k}_{\text{succ}} \gets \min \{ \ell \in \mathcal{L} \mid \ell \geq k \}$  \Comment{$O(\log \log m)$ using $\mathcal{U}$}
     		    %\text{arbitrary element in }
     		    %\State $\tau, \rho \gets \mathcal{T}_p(\sigma), \mathcal{T}_n(\sigma)$
     		    %\State $i, i_p, i_n \gets \mathcal{I}_p(\sigma), \, \mathcal{I}_p(T_{\mathrm{pred}}(\sigma)), \, \mathcal{I}_p(T_{\mathrm{succ}}(\sigma))$
@@ -1917,10 +1831,78 @@ By sorting $\bar{p} \mapsto p$ via operations which (strictly) increase the size
     	\EndFunction
 	\end{algorithmic}
 \end{algorithm}
-Suppose $\mathcal{L}$ has been computed from $\bar{p}$. Since $\mathcal{L}$ is strictly increasing, the only elements left to permute are in $\mathcal{L} \setminus \bar{p}$, which we denote with $\mathcal{D}$.
-After choosing any $\sigma \in \mathcal{D}$, one then applies a cyclic permutation to $\bar{p}$ that moves $\sigma$ into any position that increases the size of $\mathcal{L}$. To do this efficiently, we maintain a data structure $\mathcal{T}$ which enables us to query the successor and predecessor of any given $s \in \bar{p}$ \emph{in} $\mathcal{L}$. 
-We also require a data structure to query the position of a given element $\sigma \in \bar{p}$, which for now we simply use the inverse permutation $\bar{p}$ (though a more efficient representation can be used based off of \emph{displacements}, see section~\ref{sec:proxy_objective}.
-After $\sigma$ is inserted into $\mathcal{L}$, we update $\bar{p}$, its inverse permutations $\bar{p}^{-1}$, $\mathcal{D}$ and $\mathcal{T}$ prior to the next move. The final set of permutations which sort $p \mapsto q$ (or equivalently, $\bar{p} \to \iota$ are stored in an array $\mathcal{S}$, which is then returned for further use. 
+The algorithmic steps are as follows: given a LIS $\mathcal{L}$ has been computed from $\bar{p}$, since $\mathcal{L}$ is strictly increasing, the only elements left to permute are in $\mathcal{L} \setminus \bar{p}$, which we denote with $\mathcal{D}$.
+After choosing any $\sigma \in \mathcal{D}$, one then applies a cyclic permutation to $\bar{p}$ that moves $\sigma$ into any position that increases the size of $\mathcal{L}$. To do this efficiently, we use a set-like data structure $\mathcal{U}$ that supports efficient querying the successor and predecessor of any given $s \in \bar{p}$ with respect to $\mathcal{L}$ (such as a vEB tree). 
+The simplified pseudocode also uses the inverse permutation $\bar{p}$ to query the position of a given element $\sigma \in \bar{p}$, though a more efficient representation can be used based off of an implicit treap of the \emph{displacements} array could also be used, see section~\ref{sec:proxy_objective}.
+After $\sigma$ is inserted into $\mathcal{L}$, we update $\bar{p}$, its inverse permutations $\bar{p}^{-1}$, $\mathcal{D}$ and $\mathcal{T}$ prior to the next move. The final set of permutations which sort $\bar{p} \to \iota$ (or equivalently, $p \mapsto q$) are stored in an array $\mathcal{S}$, which is then returned for further use. 
+
+\subsection{Greedy Counter Example}\label{sec:greedy_counter_ex}
+In this section we give a simple counter-example showing that the strategy that greedily chooses valid move permutations $\{ m_{ij} \}$ minimizing the quantity
+\begin{equation*}
+%\lvert \mathbb{I}\rvert  + \lvert \mathbb{J} \rvert
+\mathrm{cost}_{RV}(m_{ij}) = \sum\limits_{l=i+1}^j \mathds{1}\left(\, v_l(i) \neq 0 \, \right) + \sum\limits_{l=1}^m \mathds{1}\left(\, \mathrm{low}_R(l) \in [i,j] \text{ and } r_l(i) \neq 0 \, \right)
+\end{equation*}
+can lead to arbitrarily bad behavior. A pair of filtrations is given below, each comprising the $1$-skeleton of a $3$-simplex. Relabeling $(K, f)$ to the index set $f : K \to [m]$ and modifying $(K, f')$ accordingly yields the permutations: 
+%$$ K_0 = \{ {\color{red} (1) (2) (3) (4) (1,4) (2,4) (3,4) } (1,2) (2,3) (1,3) \} $$ 
+%$$ K_1 = \{ {\color{red} (1) (2) (3) (4) } (1,2) (2,3) (1,3) {\color{red} (1,4) (2,4) (3,4) }\} $$ 
+$$ (K, f) = \{ {\color{red} a \; b \; c \; d \; u \; v \; w} \; x \; y \; z  \} = { {\color{red} 1 \; 2 \; 3 \; 4 \; 5 \; 6 \; 7 } \; 8 \; 9 \; 10 } $$
+$$ (K, f') = \{ {\color{red} a \; b \; c \; d } \; x \; y \; z \; {\color{red} u \; v \; w } \}  = { {\color{red} 1 \; 2 \; 3 \; 4 } \;8 \; 9 \; 10 \; {\color{red} 5 \; 6 \; 7 } }$$
+The values colored in red corresponds to $\mathrm{LCS}(f, f')$. For this example, the edit distance is 
+$d = m - \lvert \mathrm{LCS}(f, f') \rvert$ implies exactly $3$ moves are needed to map $f \mapsto f'$. There are six possible valid schedules of moves: 
+\begin{alignat*}{3}
+	S_1 = m_{x u}, m_{y u}, m_{z u} \quad & S_3 = m_{y u}, m_{x y}, m_{z u} \quad  & S_5 = m_{z u}, m_{x z}, m_{y z} \\
+	S_2 = m_{x u}, m_{z u}, m_{y z} \quad  & S_4 = m_{y u}, m_{z u}, m_{x y} \quad  & S_6 = m_{z u}, m_{y z}, m_{x z} 
+\end{alignat*}
+where the notation $m_{x y}$ represents the move permutation that moves $x$ to the position of $y$. The cost of each  move operation and each schedule is recorded in Table~\ref{table:move_costs}.
+\begin{table}[h]
+\caption{Move schedule costs}
+\centering
+\begin{tabular}{ m{0.4cm} m{0.8cm} m{0.8cm} m{0.8cm} m{0.8cm}  }
+ \hline
+ \multicolumn{5}{c}{Cost of each permutation} \\
+ \hline
+ & 1st & 2nd & 3rd & Total\\
+ \hline
+ $S_1$ & 2 & 3 & 1 & 6 \\
+ \hline 
+ $S_2$ & 2 & 2 & 4 & 8 \\
+  \hline 
+ $S_3$ & 4 & 2 & 2 & 8 \\
+  \hline 
+ $S_4$ & 4 & 3 & 3 & 10 \\
+  \hline 
+ $S_5$ & 2 & 2 & 4 & 8  \\
+  \hline 
+ $S_6$ & 2 & 5 & 3 & 10\\
+ \hline
+\end{tabular}
+\label{table:move_costs}
+\end{table}
+Note the greedy strategy which always selects the cheapest move in succession would begin by moving $x$ or $z$ first, since these are the cheapest moves available, which implies one of $S_1, S_2, S_5, S_6$ would be picked on the first iteration. While the cheapest schedule $S_1$ is in this candidate set, an iterative greedy procedure would pick either $S_2$ or $S_5$, depending on the tie-breaker---thus, a greedy approach picking the lowest-cost move may not yield an optimal schedule. 
+	Indeed, as the most expensive schedule $S_6$ is in initial iterations candidate set, we see that a greedy-procedure with an arbitrary tie-breaker could potentially yield a \emph{maximal-cost} schedule.  
+
+\subsection{Crossing minimization}\label{sec:cross_minimization}
+Conceptually, one way to view~\eqref{eq:upper_bound_move_cost} is as a crossing minimization problem over a set of $k-1$ bipartite graphs. To see this, consider two permutations: $p$ and $m_{ij} \circ p$, where $m_{ij}$ is a move permutation. 
+Drawing $(p, m_{ij} \circ p)$ as a bipartite graph $(U, V, E)$, observe that there are $\lvert i - j \rvert$ edge crossings in the graph, and thus minimizing ~\eqref{eq:upper_bound_move_cost} is akin to a  structured variation of the $k$-layered crossing minimization problem.
+We give an example visually relating the problem of minimizing \emph{net displacement} to the problem of minimizing crossing in a $k$-layered bipartite graph. 
+Let  $p= (1\;2\;3\;4\;5\;6\;7\;8\;9)$ and $q = (9\;4\;2\;7\;1\;8\;6\;3\;5)$.
+An example of three possible schedules, $S_1$, $S_2$, and $S_3$ sorting $p$ into $q$ is given in the figure below. 
+%Each schedule, from left to right, has $21$, $31$, and $35$ crossings, respectively. 
+\begin{figure}[!htb]
+    \centering
+%    \includegraphics[width=0.60\textwidth]{crossings.png} % arxiv only 
+    \includegraphics[width=0.75\textwidth]{crossings.png} % springer only
+    %\caption{Three sortings, $S_1$, $S_2$, and $S_3$, with $21$, $31$, and $35$ crossings, resp.}
+    %. Each schedule, from left to right, . The greedy heuristic proposed to minimize~\ref{eq:schedule_opt_succ} was used to produce $S_1$, which has the minimal number of crossings, since $K_\tau(p,q) = 21$ in this example.
+    \label{fig:crossings}
+\end{figure}
+Each column represents the successive application of a move $m_{ij}$ in the schedule, 
+and the edges track the movement of each element of the permutation. 
+Black/red vertices correspond to elements inside and outside the $\mathrm{LCS}$, respectively. 
+All three schedules were generated from the same $\mathrm{LCS}(p,q) = (4\,7\,8)$ and each schedule transforms $p \mapsto q$ in $d = 6$ moves. 
+In this example, $S_1$ matches the minimal number of crossings amongst all possible schedules,  since $K_\tau(p,q) = 21$. 
+
+
 
 \subsection{2-parameter persistence}\label{app:2d_pers}\label{sec:fibered_barcode_reparam}
 We now describe the reparameterization between the bigraded Betti numbers and the set of ``critical lines'' Lesnick and Wright~\cite{lesnick2012multidimensional} used to create their interactive 2d persistence algorithm, beginning with point-line duality.

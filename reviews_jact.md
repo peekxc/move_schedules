@@ -2,30 +2,27 @@
 
 **10/06/2023:** This document records the reviews we obtained from a prior submission of the manuscript to the *Journal of Applied and Computational Topology* (JACT) for the submission _Move Schedules: Fast persistence computations in coarse dynamic settings_. 
 
-## Overall changes: 
+## Overall changes 
 
-In this iteration, we've revised the paper to improve readability, streamline the presentation further, and address the concerns of the reviewers. *Overall*, the paper has not been altered dramatically in content or formatting---sections 1, 2, 4, and 5 have only had minor edits to incorporate reviewer feedback. In particular, the main changes we have made include: 
+In this iteration, we've revised the paper to improve readability, streamline the presentation further, and address the concerns of the reviewers. Overall, the paper has not been altered dramatically in either content or structure---sections 1, 2, 4, and 5 have only had minor edits based on reviewer feedback. The main changes in this revision include: 
 
-- Pseudocode for moves has been re-included into the paper from the appendix 
-- Scheduling algorithm pseudocode simplified into "online" form & its notation has also been simplified
-- 
-- Part of proposition 3 has been split into an additional result (corollary 2) for clarity.
+- Various pseudocode has been re-included into the main paper from the appendix, per reviewer feedback
+- Section 3 introduction has been partially re-written to better present the main ideas 
+- Section 3.4 has been partially re-written with added figures, per reviewer feedback
 - All known grammatical errors have been fixed.
 
-We hope that. 
-
-
+The corresponding point-by-point feedback is given below. We thank the reviewers for the constructive feedback given. 
 
 ## Reviewer 1
 
 > As a reader with a TDA background, I find the notation and terminology used to describe permutations in the paper quite challenging to comprehend. For example, at page 15, the concept of the LCS of two filtrations is introduced... but later, the
 > LCS of two permutations is extensively discussed in section 3.3.
 
-- We have re-written the first outline section in Section 3 to make it clear that we are indeed working with a representation of the symmetric group induced from the subgroup of permutations of simplexwise filtrations.
+- We have re-written the first outline section in Section 3 to make it clear that we are indeed just working with permutations of the set {1, ..., m} and how these translate to simplexwise filtrations.
 
 >  Additionally, I encountered confusion regarding the term "symbols in L" mentioned on page 22, as well as the discussion of array A on page 26.
 
-- The use of "symbols" terminology was motivated by its widespread use in the context of edit operations on strings (see, for example, the paper we cite on the complexity of the LCS problem (ref. 31); we agree that its use in this paper is superfluous, . and thus we've have removed its usage throughout, preferring pure set-theoretic terminology. 
+- The use of "symbols" terminology was motivated by its widespread use in the context of edit operations on strings (see, for example, the paper we cite on the complexity of the LCS problem (ref. 31)); we agree that its use in this paper is superfluous and thus we've have removed its usage throughout, preferring pure set-theoretic terminology. 
 
 >  Considering the authors' great examples for Vineyard algorithm 2.2 and 2.3, and that scheduling is the main contribution of this paper, I would love to see some examples. specifically:
 >
@@ -34,16 +31,34 @@ We hope that.
 >
 > By incorporating these practical examples, the paper's accessibility and value to a broader audience would be substantially enhanced.
 
-- Thank you for 
+- We've incorporated the reviewers feedback by including two additional figures demonstrating the greedy schedule construction. 
+
+  - The first new figure (in 3.4.2) shows two tables, one illustrating how a schedule is constructed from a given LIS, and another showing what the proxy objective values are for each candidate element to consider moving. We also show the sorting as a k-layered bipartite graph for additional clarity to help readers relate the proxy objective function to something very concrete (crossing minimization).
+  - The second new figure (in 3.4.3) builds off the previous example, but gives a more visual demonstration of how the displacement "array" structure $\mathcal{A}$ relates to the footrule distance, and also how it enables us to devise an efficient algorithm for schedule construction. 
+
+  We hope these changes make the paper more accessible to the broader audience
 
 > On page 14, about the querying of non-zeros in Vineyard, I believe Move algorithm also needs to search for non-zeros to get list J. In my mind, it can take O(m log m) with a sparse matrix structure. Then in section 3.4.1, the authors state that
 > "can be determined efficiently prior to any column operations- no more than O(m) time with row-oriented sparse matrices." Based on my experience, when computing the decomposition R = DV, the matrix structure used is often represented as lists of columns with sparse entries. This choice is typically made to reduce overheads during column operations. Therefore, if querying non-zeros is indeed as cheap as O(m) as stated by the authors, it would be highly beneficial to include a clear and detailed explanation about the specific matrix data structure employed.
 
-- We've removed the comment about "row-oriented" sparse 
+- We opted for the lowest bound in the original statement which uses a row-oriented representation; it's true that a column oriented increases the complexity of the scanning by a logarithmic factor. Upon reconsideration, we feel the main take-a-way of the paragraph is that greedily minimizing the number of non-zeros to reduce can lead to an arbitrarily bad schedule. We've refactored the paragraph and removed the the reference to row-oriented sparse matrices. (as an aside, we use the same matrix representation as vineyards; this is discussed in section 5)  
 
 >  Secondly, for the experiment section, all figures that compares the performance of different algorithms like pHcol, Vineyards and Schedule are in terms of time index and number of column operations... it would be highly beneficial to include the results of the total time spent by each algorithm. This would involve considering the time taken for all necessary operations, including the construction of permutations and schedule. By doing so, readers will obtain a more accurate understanding of the practical efficiency of each algorithm in real-world scenarios.
 
-Thank you again for this detailed comment about improving the comparison. We agree that, for both vineyards and moves there is a non-trivial cost associated with , however we feel that 
+- Thank you again for this detailed comment about improving the comparison. We agree that, for both vineyards and moves there is an overhead cost associated with their implementations---however, we feel a *legitimate* "wall clock"-based evaluation between the algorithms would only serve to increase the length of paper dramatically. We find that although runtime comparisons can useful, they typically have many variables that require careful tuning to ensure the comparison is meaningful. In the persistence setting, a few examples of such variables one need consider: 
+  - The runtime efficiency between various pHcol implementations can vary by 2-3 orders of magnitude (see JavaPlex vs GUDHI vs Dionysus vs Ripser++, etc.)
+  - Though pHcol does not have the schedule overhead, it does have to re-construct the matrices (R,V) in the decomposition at each time point from scratch (since they are not maintained). 
+  - The runtime efficiency depends highly on very specific implementation details;  pHcol now do not even represent the R or D matrices explicitly (see the ripser paper for example), however one must represent these matrices explicitly in the dynamic setting (this is mentioned in section 5). 
+  - The runtime efficiency can vary based on the representations of the columns (see the Persistent Homology Algorithm Toolbox [PHAT] for 8 (!) such representations for mod-2 arithmetic which all have different performances!)
+  - The runtime efficiency of all of the above algorithms is highly machine-dependent; large servers have more cache, more processing power, and slower cores, representing a dramatically different compute environment than traditional research-grade computers. 
+  - The runtime efficiency of all the above algorithms may be specific to characteristics of simplexwise filtration one considers (e.g. does one include the apparent pairs optimization, which only applies to flag filtrations? What about the cohomology optimization, which is particularly powerful other types of filtrations?)
+
+- Rather than comparing these algorithms in a way that both machine- and implementation-specific, we opted to include an extensive evaluation across many different applications that is independent of these variables. To recap our evaluation: 
+  - The second graph in the first figure in section 4 gives the reader a sense of the scalability of scheduling
+  - The figure showing the CROCKER plot generation gives the reader a sense of how efficient scheduling can be under a relatively coarse discretization of the time domain (as exhibited by the Kendall distance)
+  - The table from the bifiltration example compares all three algorithms across 5 different levels of coarsening. For transparency, this table also includes not just the (cumulative) number of column operations, but also the number of permutations!
+
+As a small aside, even though we implemented the scheduling algorithm in Python and the column operations in C++, we did not observe the overhead associated with scheduling to be the main bottleneck of the computations---it was indeed the column operations themselves. Nonetheless, as we mentioned above, we do not believe runtime to be an informative comparison here. 
 
 > As the paper is based on the Move algorithm from Busaryev et al, the authors are suggested to give a clearer explanation about the move framework. For example, the Move algorithm restores V first and then R, but in the middle of page 13, the authors describe it as a single one step restoration.
 
@@ -51,7 +66,7 @@ We've relocated the pseudocode for the move algorithms into the main content of 
 
 > In Section 3.2, using Spearman's Footrule Distance is clearer because Spearman Distance sometimes can be referred to 1 minus the Spearman rank correlation coefficient.
 
-Changed for readability. As an aside, the spearman correlation coefficient effectively uses the footrule distance as an intermediate computation when the computed ranks between the observations are distinct. 
+Changed for readability. As an aside, the spearman correlation coefficient effectively uses the footrule distance as an intermediate computation when the computed ranks between the observations are distinct (indeed, the former is  translated and normalized variant of the latter)
 
 ## Reviewer 2
 
@@ -63,11 +78,7 @@ Changed for readability. As an aside, the spearman correlation coefficient effec
 >  In general, I feel that the paper is a bit too verbose - it can be made shorter without losing virtually any content.
 > The most important issues that are listed below are: the comment about ‘MoveLeft’ and some missing (or hard to find) details about the algorithm (GreedySchedule in Alg. 1).
 
-
-
-Thank for you the constructive review. We believe we've addressed the main concerns of the reviewer in the current revision. We'd remark that verbosity is something we have tried to address, Please see the point-by-point responses for details. 
-
-
+Thank for you the constructive review. We believe we've addressed the main concerns of the reviewer in the current revision. We'd remark that verbosity is something we have tried to address in this revision, please see the point-by-point responses for details. 
 
 
 ----
@@ -76,11 +87,11 @@ Thank for you the constructive review. We believe we've addressed the main conce
 
 > Also, I would appreciate if the authors formulated  exactly what is the implementation they used in their experiments (e.g., did they really use treaps?). 
 
-- In practice, we did not use implicit treaps but rather we  just compute prefix sums (e.g. `np.cumsum`) independently at every step of the scheduling on an array-based implementation (this is the $\mathcal{A}$ data structure in outlined in section 3.4.2). The code that implements the greedy minimization is actually $O(d^2)$, making the complexity of our actual implementation higher that in the paper, but we observed in practice computing prefix sums is incredibly fast due to their implementations being vectorized. 
+- In practice, we did not use implicit treaps but rather we just compute prefix sums (e.g. `np.cumsum`) independently at every step of the scheduling on an array-based implementation (this is the $\mathcal{A}$ data structure in outlined in section 3.4.2). The code that implements the greedy minimization has a higher asymptotic complexity,	 but we observed in practice computing prefix sums is incredibly fast due to their implementations being vectorized. 
 
 > Page 1, abstract: I don’t understand the $O(m \log \log m)$ estimate here. According to Thm. 1, this is the time it takes just to find $d$, the length of the optimal schedule. Computing the schedule itself costs $O(dm \log m)$ or $O(m \log m)$ per update. Shouldn’t this be in the abstract?
 
-* Yes, the $O(m \log \log m)$ complexity refers to the complexity of finding the length of the schedule and the LIS (only). We left out the complexity of constructing the schedule itself in the abstract as we envision there are situations where the algorithm used to actually construct the schedule may vary---depending on the particular data structure of choice supporting the operations outlined in 3.3 (e.g. implicit treaps, segment tree, vEB tree), the deterministic and expected time complexity may change.
+* Yes, the $O(m \log \log m)$ complexity refers to the complexity of finding the length of the schedule and the LIS (only). We left out the complexity of constructing the schedule itself in the abstract as we envision there are situations where the algorithm used to actually construct the schedule may vary---depending on the particular data structure of choice supporting the operations outlined in 3.3 (e.g. implicit treaps, segment tree, vEB tree), the deterministic and expected time complexity may change. We've included the very general $O(dm \log m)$ complexity now in the abstract. 
 
 > Also, why ‘simulation of persistence’ (this expression will appear below, too)?
 
@@ -92,7 +103,7 @@ Thank for you the constructive review. We believe we've addressed the main conce
 
 > Page 7, ‘we summarize our main results (Theorem 1)’. The main claim in theorem 1 is that one can efficiently compute only the length of the optimal schedule. Will the authors consider reorganizing?
 
-- see above. 
+- The theorem has been reorganized. 
 
 >  Page 8: Although $d$ can be  $O(m)$, we provide evidence that $d ~ m - sqrt(m)$. Well, $m - \sqrt(m)  = O(m)$, why ‘although’? Should it be ‘Although d can be O(m) and we provide evidence that d ~ m - sqrt(m), d is much smaller in practice’?
 
@@ -101,11 +112,6 @@ Thank for you the constructive review. We believe we've addressed the main conce
 > Page 8: ‘an simplexwise’ -> a simplexwise
 
 - fixed. 
-
->  Page 9: I am more used to the ‘positive/negative simplex’ terminology than ‘creator/destroyer’.
-> This is a matter of personal preference, of course.
-
-- We prefer creator / destroyer. 
 
 >  Page 10: ‘Despite this high algorithmic complexity, the number of column operations has been observed to be super-linear in practice’ – this has to be rephrased, because there is no contradiction (order of m^2 column operations is super-linear, too).
 
@@ -174,7 +180,7 @@ Thank for you the constructive review. We believe we've addressed the main conce
 
 
   * > "What about the MoveLeft? Can it be analyzed theoretically?"
-  	
+
   	- We have a small discussion of MoveLeft in the appendix, which was moved to shorten the paper. 
 
 
@@ -230,10 +236,6 @@ Page 43 , A1.1.1 'After setting V is set' -> After setting V
 > kendall -> Kendall
 
 Fixed. 
-
-
-
-
 
 -----
 
