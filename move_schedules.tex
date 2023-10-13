@@ -101,7 +101,7 @@ Matrix reduction is the standard procedure for computing the persistent homology
 	Since there are $O(m^2)$ such transpositions, this maintenance procedure exhibits limited scalability and is often too fine for many applications. 
 We propose a coarser strategy for maintaining the decomposition over a 1-parameter family of filtrations. By reduction to a particular longest common subsequence problem, we show that the minimal number of decomposition updates $d$ can be found in $O(m \log \log m)$ time and $O(m)$ space, and that the corresponding sequence of permutations---which we call a \emph{schedule}---can be constructed in $O(d m \log m)$ time.  
 We also show that, in expectation, the storage needed to employ this strategy is actually sublinear in $m$. 
-Exploiting this connection, we show experimentally that the decrease in operations to compute diagrams across a family of filtrations, is proportional to the difference between the expected quadratic number of states and the proposed sublinear coarsening.
+Exploiting this connection, we show experimentally that the decrease in operations to compute diagrams across a family of filtrations is proportional to the difference between the expected quadratic number of states and the proposed sublinear coarsening.
 Applications to video data, dynamic metric space data, and multiparameter persistence are also presented.
 } % springer only
 %\end{abstract} % arxiv only 
@@ -143,7 +143,7 @@ By exploiting the ``donor'' concept introduced in~\cite{busaryev2010tracking}, w
 Both the source code containing the algorithm we propose and the experiments performed in Section~\ref{sec:results} are available open source online.\footnote{For all accompanying software and materials, see: \url{https://github.com/peekxc/move_schedules}}
   
 \subsection{Related Work}\label{sec:related_work} 
-To the author's knowledge, work focused on ways of updating a  decomposition $R = DV$, for all homological dimensions, is limited: there is the \emph{vineyards} algorithm~\cite{cohen2006vines} and the \emph{moves} algorithm~\cite{busaryev2010tracking}, both of which are discussed extensively in section~\ref{sec:background}. At the time of writing, we were made aware of very recent work~\cite{luo2021accelerating} that iteratively repairs a permuted decomposition via a column swapping and reduce strategy, which they call ``warm starts.'' Though their motivation is similar to our own, their approach relies on the reduction algorithm as a subprocedure, which is quite different from the strategy we employ here.
+To the author's knowledge, work focused on ways of updating a  decomposition $R = DV$, for all homological dimensions, is limited: there is the \emph{vineyards} algorithm~\cite{cohen2006vines} and the \emph{moves} algorithm~\cite{busaryev2010tracking}, both of which are discussed extensively in section~\ref{sec:background}. At the time of writing, we were made aware of very recent work~\cite{luo2021accelerating} that iteratively repairs a permuted decomposition via a column swapping strategy, which they call ``warm starts.'' Though their motivation is similar to our own, their approach relies on the reduction algorithm as a subprocedure, which is quite different from the strategy we employ here.
 
 Contrasting the dynamic setting, there is extensive work  on improving the efficiency of computing a single (static) $R = DV$ decomposition. Chen~\cite{chen2011persistent} proposed \emph{persistence with a twist}, also called the \emph{clearing optimization}, which exploits a boundary/cycle relationship to ``kill'' columns early in the reduction rather than reducing them. 
 Another popular optimization is to utilize the duality between homology and cohomology~\cite{de2011dualities}, which dramatically improves the effectiveness of the clearing optimization~\cite{bauer2021ripser}. 
@@ -176,7 +176,7 @@ Each image in the series consists of pixels whose intensities vary with time, up
 %\end{figure*}
 %Note that the size of the filtration is fixed---no simplices are added or removed over time. 
 Two events critically change the persistence diagrams: the first occurs when the central connected component splits to form a cycle, and the second  when the annulus  splits into four components. 
-From left to right, the Betti numbers of the five evenly spaced `snapshots' of the filtration shown above are: $(\beta_0,\beta_1)  = (1,0), \; (1,1),  \; (1,1), \; (1,1), \; (4,0)$.
+From left to right, the $\epsilon$-persistent Betti numbers\footnote{By ``$\epsilon$-persistent Betti number'', we mean the number of persistent pairs lying above the diagonal with persistence at least $\epsilon$, for some suitable choice of $\epsilon > 0$.} of the five evenly spaced `snapshots' of the filtration shown in Figure~\ref{fig:vidExample} are: $(\beta_0,\beta_1)  = (1,0), \; (1,1),  \; (1,1), \; (1,1), \; (4,0)$.
 Thus, in this example, only a few persistence diagrams are needed to capture the major changes to the topology. 
 
 We use this data set as a baseline for comparing \emph{vineyards} and the standard reduction algorithm $\texttt{pHcol}$ (Algorithm \ref{alg:reduce}). Suppose a practitioner wanted to know the major homological changes a time-varying filtration encounters over time.
@@ -187,7 +187,7 @@ The cumulative cost (in total column operations) of these various approaches are
 
 \begin{figure*}[!htb]
  	\centering
- 	\includegraphics[width=0.75\textwidth]{circle_vineyards_vector.pdf}
+ 	\includegraphics[width=0.75\textwidth]{circle_vineyards.png}
  	\caption{The cumulative column operations needed to compute persistence across the time-varying filtration of grayscale images. Observe 10 independent persistence computations evenly spaced in time (green line) captures the major topological changes and is the most computationally efficient approach shown.}
  	\label{fig:vineyards}
  \end{figure*}
@@ -230,7 +230,7 @@ We now summarize our main results (Theorem~\ref{prop:sparsity_result}): suppose 
 \begin{equation}
 	\quad \nu = \sum\limits_{k = 1}^d \, \lvert \mathbb{I}_{k}\rvert + \lvert \mathbb{J}_{k}\rvert 
 \end{equation}
-The quantities $\lvert \mathbb{I}_{k} \rvert$ and $\lvert \mathbb{J}_{k} \rvert$ depend on the sparsity of the matrices $V_k$ and $R_k$, respectively, and $d \sim O(m)$ is a constant that depends on how similar $f$ and $f'$ are. The advantage of this result is that it depends explicitly on the sparsity pattern of the decomposition itself and is thus output sensitive, which we leverage in Section~\ref{sec:schedule_cost}. 
+The quantities $\lvert \mathbb{I}_{k} \rvert$ and $\lvert \mathbb{J}_{k} \rvert$ depend on the sparsity of the matrices $V_k$ and $R_k$, respectively, and $d \sim O(m)$ is a constant that depends on how similar $f$ and $f'$ are. As this result depends explicitly on the sparsity pattern of the decomposition itself, it is an output sensitive bound. 
 %Surprisingly, due to a refined analysis of restore subprocedure from~\cite{busaryev2010tracking} we give in section~\ref{sec:continuous_setting}, we find that move operations are actually cheaper than vineyards, see Proposition~\ref{prop:factor2}.
 %if the vineyards algorithm requires $T$ column operations to obtain~\eqref{eq:rv_seq}, we show (Proposition~\ref{prop:factor2}) that obtains the same sequence using at most $M$ column operations, where: 
 %\begin{equation}
@@ -1027,7 +1027,7 @@ These sequence of steps is outlined in Algorithm~\ref{alg:schedule} below.
 %    		\State $\bar{p} \gets q^{-1} \circ p$
 %    		\State $\mathcal{L} \gets \mathrm{LCS}(p,q) = \mathrm{LIS}(\bar{p})$ \Comment{$O(m\log \log m)$}
 			\State $h \gets \texttt{greedy}$ \Comment{Heuristic for picking moves}
-    		\State $\mathcal{S} \gets \mathrm{Schedule}(q, \mathrm{lis}_{q}, h)$ \Comment{$O(d^2\log m)$}
+    		\State $\mathcal{S} \gets \mathrm{Schedule}(q, \mathrm{lis}_{q}, h)$ \Comment{$O(d^2\log m)$, see Section~\ref{sec:schedule_cost}}
 %	    	\State $(R, V) \gets$ \Call{Reduction}{$D = \partial (K,f_1)$}
 	    	\For{$(i,j)$\textbf{ in }$\mathcal{S}$} \Comment{$\lvert \mathcal{S} \rvert = d$}
 	    		\State $(R, V) \gets$ \textbf{if} $i < j$ \Call{MoveRight}{i, j} \textbf{else} \Call{MoveLeft}{i, j}
@@ -1093,7 +1093,7 @@ $\rho_i = (\ell_i \;\; \ell_i +1 )$ for $1 \leq \ell_i < m$. In other words, $\r
 %The ordered sequence of adjacent transpositions  $S_F = (\rho_1, \rho_2, \ldots, \rho_k)$ can thus be thought of as a \emph{schedule} of permutations to be applied to the initial decomposition $R = DV$ of $(K,f)$, in order to   interpolate from $f$ to $f'$ via $F$. 
 %Going beyond transpositions, the idea of a schedule can be generalized as follows:
 Observe the size of the ordered sequence of adjacent transpositions  $S_F = (\rho_1, \rho_2, \ldots, \rho_k)$ defined from the homotopy $F$ above is exactly $K_\tau(f,f')$.
-On the positive side, the reduction of schedule planning to crossing detection implies the former can be   solved optimally in output-sensitive $O(m \log m + k)$ time by several algorithms~\cite{boissonnat2000efficient}, where $k$ is the output-sensitive term and $m$ is the number of simplices in the filtration(s).
+On the positive side, the reduction of schedule planning to crossing detection implies the former can be solved optimally in output-sensitive $O(m \log m + k)$ time by several algorithms~\cite{boissonnat2000efficient}, where $k$ is the output-sensitive term and $m$ is the number of simplices in the filtration(s).
 On  the negative side, $k = K_\tau(f,f')$ scales in size to $\sim O(m^2)$ in the worst case, achieved when $f' = - f$. As mentioned in~\ref{sec:vineyards}, this quadratic scaling induces a number of issues in the practical implementations of the \emph{vineyards} algorithm
 
 %detecting all $k$ intersections of $m$ such curves is a well-studied problem in computational geometry
@@ -1376,7 +1376,7 @@ Unfortunately, even obtaining an optimal schedule $\mathcal{S}^\ast \in \Phi(f,f
 does not appear tractable due to its similarity with the $k$-layer crossing minimization problem, which is NP-hard for $k$ sets of permutations when $k \geq 4$~\cite{biedl2009complexity}. For additional discussion on the relationship between these two problems, see section~\ref{sec:cross_minimization} in the appendix.
 
 In light of the discussion above, we devise a \emph{proxy} objective function based on the Spearman distance~\cite{diaconis1977spearman} which we observed is both efficient to optimize and effective in practice. 
-The \emph{Spearman footrule distance} $F(p,q)$ between two $p,q \in S_m$ is an $\ell_1$-type distance for measuring permutation disarrangement; it is classically defined as:
+The \emph{Spearman footrule distance} $F(p,q)$ between two $p,q \in S_m$ is an $\ell_1$-type distance for measuring permutation disarrangement:
 \begin{equation}\label{eq:spearman_dist}
 F(p, q) = \sum\limits_{i =1}^m \lvert \, p(i) - q(i) \, \rvert =  \sum\limits_{i =1}^m \lvert \,i - (q^{-1} \circ p)(i) \, \rvert
 \end{equation}
@@ -1386,9 +1386,9 @@ $F$ is often used to approximate $K_\tau$ in \emph{rank aggregation} problems du
 } combinatorial optimization problems. 
 To adapt $F$ to sortings, we decompose $F$ additively via the bound:
 \begin{equation}\label{eq:sorting_additive}
-\hat{F}_{\mathcal{S}}(p, \iota) = \sum\limits_{i=1}^{d-1} F(\hat{s}_i \circ p, \hat{s}_{i+1} \circ p) \geq F(p, \iota)
+\hat{F}_{\mathcal{S}}(p, \iota) = \sum\limits_{i=0}^{d-1} F(\hat{s}_i \circ p, \hat{s}_{i+1} \circ p) \geq F(p, \iota)
 \end{equation}
-where $\hat{s}_i =  s_i \circ \cdots \circ s_2 \circ s_1$ denote the composition of the first $i$ permutations of a sorting  $S = (s_1, \dots, s_d)$ that maps $p \mapsto \iota$.
+where $\hat{s}_i =  s_{i} \circ \cdots \circ s_2 \circ s_1$ denotes the composition of the first $i$ permutations of a sorting  $S = (s_1, \dots, s_d)$ that maps $p \mapsto \iota$ and $s_0 = \iota$.
 As a heuristic to minimize~\eqref{eq:sorting_additive}, we greedily select the optimal $k \in \mathcal{L}$ at each step which minimizes the Spearman distance to the identity permutation: 
 \begin{equation}\label{eq:greedy_step}
 	k_{\text{greedy}} = \argmin_{k \in \mathcal{D}} F(m_{ij} \circ p, \iota), \quad i = p^{-1}(k)
@@ -1592,8 +1592,8 @@ A common hypothesis is that high dimensional data tend to lie in the vicinity of
 In particular,~\cite{lee2003nonlinear} were interested in exploring how high-contrast $3 \times 3$ image patches  were distributed, in pixel-space, with respect to predicted spaces and manifolds.
 Formally, they measured contrast using a discrete version of the scale-invariant Dirichlet semi-norm:
 $$ \lVert x \rVert_D = \sqrt{\sum_{i \sim j}(x_i - x_j)^2} = \sqrt{x^T D x}$$
-where $D$ is a fixed matrix which upon application $x^T D x$ to an image $x \in \mathbb{R}^9$ yields a value proportional to the sum of the differences between each pixels 4 connected neighbors (given above by the relation $i \sim j$).
-Their research was primarily motivated by discerning whether there existed clear qualitative differences in the distributions of patches extracted from images of different modalities, such optical and range images.
+where $D$ is a fixed matrix whose quadratic form $x^T D x$ applied to an image $x \in \mathbb{R}^9$ is proportional to the sum of the differences between each pixels 4 connected neighbors (given above by the relation $i \sim j$).
+Their research was primarily motivated by discerning whether there existed clear qualitative differences in the distributions of patches extracted from images of different modalities, such as optical and range images.
 By mean-centering, contrast normalizing, and``whitening'' the data via the Discrete Cosine Transform (DCT), they show a convenient basis for $D$ may be obtained via an expansion of 8 certain non-constant eigenvectors, shown below: 
 %\vspace{-0.2em}
 \begin{center}
@@ -1782,7 +1782,7 @@ We outline the reduction pseudocode in Algorithm~\ref{alg:reduce}.
 		\EndFunction
 	\end{algorithmic}	\label{alg:reduce}
 \end{algorithm}
-The algorithm begins by copying $D$ to a new matrix $R$, to be subsequently modified in-place. After setting $V$ is set to the identity, the algorithm proceeds with column operations on both $R$ and $V$, left to right, until the decomposition invariants are satisfied. Since each column operation takes $O(m)$ and there are potentially $O(k)$ columns in $D$ with identical low entries (line 4 in ~\ref{alg:reduce}, observe that the reduction algorithm below clearly takes $O(m^2 k)$ time. Since there exists complexes where $k \sim O(m)$, one concludes the bound of $O(m^3)$ is tight~\cite{morozov2005persistence}, though this seems to only be true on pathological inputs. Indeed, a more refined analysis by Edelsbrunner et al.~\cite{edelsbrunner2000topological} shows the reduction algorithm scales by the sum of squares of the cycle persistences, which is an output-sensitive bound. 
+The algorithm begins by copying $D$ to a new matrix $R$, to be subsequently modified in-place. After  $V$ is set to the identity, the algorithm proceeds with column operations on both $R$ and $V$, left to right, until the decomposition invariants are satisfied. Since each column operation takes $O(m)$ and there are potentially $O(k)$ columns in $D$ with identical low entries (line 4 in ~\ref{alg:reduce}, observe that the reduction algorithm below clearly takes $O(m^2 k)$ time. Since there exist complexes where $k \sim O(m)$, one concludes the bound of $O(m^3)$ is tight~\cite{morozov2005persistence}, though this seems to only be true on pathological inputs. Indeed, a more refined analysis by Edelsbrunner et al.~\cite{edelsbrunner2000topological} shows the reduction algorithm scales by the sum of squares of the cycle persistences, which is an output-sensitive bound. 
 
 \subsubsection*{Move Algorithms}
 As we have covered the \emph{moves} algorithm extensively in Section~\ref{sec:moves}, we now record the algorithmic components of both \emph{MoveRight} and \emph{MoveLeft}.
