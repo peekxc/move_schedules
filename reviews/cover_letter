@@ -1,0 +1,13 @@
+Dear editors of JACT, 
+
+
+We wish to submit an article entitled "Move Schedules: Fast persistence computations in coarse dynamic settings" for consideration by the Journal of Applied and Computational Topology. The work is original and has not been published elsewhere, nor is it under consideration for publication elsewhere.
+
+
+In this effort, we introduce a novel methodology for computing the persistent homology of time-varying filtered simplicial complexes, and demonstrate that it is much cheaper to evaluate when compared to the state of the art (vineyards) for generic filtrations. As the effort employs both theory from persistent homology and extensive algorithmic theory from computer science, it contains a strong applied component to serve both mathematicians and users of mathematical methods. As such, we believe this manuscript to be a good fit for the aims of this journal.
+
+We have no conflicts of interest to disclose. Thank you for your consideration of this manuscript. 
+
+Sincerely, 
+
+	Matthew Piekenbrock and Jose A. Perea

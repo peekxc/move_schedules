@@ -1,0 +1,699 @@
+%% BioMed_Central_Bib_Style_v1.01
+
+\begin{thebibliography}{48}
+% BibTex style file: bmc-mathphys.bst (version 2.1), 2014-07-24
+\ifx \bisbn   \undefined \def \bisbn  #1{ISBN #1}\fi
+\ifx \binits  \undefined \def \binits#1{#1}\fi
+\ifx \bauthor  \undefined \def \bauthor#1{#1}\fi
+\ifx \batitle  \undefined \def \batitle#1{#1}\fi
+\ifx \bjtitle  \undefined \def \bjtitle#1{#1}\fi
+\ifx \bvolume  \undefined \def \bvolume#1{\textbf{#1}}\fi
+\ifx \byear  \undefined \def \byear#1{#1}\fi
+\ifx \bissue  \undefined \def \bissue#1{#1}\fi
+\ifx \bfpage  \undefined \def \bfpage#1{#1}\fi
+\ifx \blpage  \undefined \def \blpage #1{#1}\fi
+\ifx \burl  \undefined \def \burl#1{\textsf{#1}}\fi
+\ifx \doiurl  \undefined \def \doiurl#1{\url{https://doi.org/#1}}\fi
+\ifx \betal  \undefined \def \betal{\textit{et al.}}\fi
+\ifx \binstitute  \undefined \def \binstitute#1{#1}\fi
+\ifx \binstitutionaled  \undefined \def \binstitutionaled#1{#1}\fi
+\ifx \bctitle  \undefined \def \bctitle#1{#1}\fi
+\ifx \beditor  \undefined \def \beditor#1{#1}\fi
+\ifx \bpublisher  \undefined \def \bpublisher#1{#1}\fi
+\ifx \bbtitle  \undefined \def \bbtitle#1{#1}\fi
+\ifx \bedition  \undefined \def \bedition#1{#1}\fi
+\ifx \bseriesno  \undefined \def \bseriesno#1{#1}\fi
+\ifx \blocation  \undefined \def \blocation#1{#1}\fi
+\ifx \bsertitle  \undefined \def \bsertitle#1{#1}\fi
+\ifx \bsnm \undefined \def \bsnm#1{#1}\fi
+\ifx \bsuffix \undefined \def \bsuffix#1{#1}\fi
+\ifx \bparticle \undefined \def \bparticle#1{#1}\fi
+\ifx \barticle \undefined \def \barticle#1{#1}\fi
+\bibcommenthead
+\ifx \bconfdate \undefined \def \bconfdate #1{#1}\fi
+\ifx \botherref \undefined \def \botherref #1{#1}\fi
+\ifx \url \undefined \def \url#1{\textsf{#1}}\fi
+\ifx \bchapter \undefined \def \bchapter#1{#1}\fi
+\ifx \bbook \undefined \def \bbook#1{#1}\fi
+\ifx \bcomment \undefined \def \bcomment#1{#1}\fi
+\ifx \oauthor \undefined \def \oauthor#1{#1}\fi
+\ifx \citeauthoryear \undefined \def \citeauthoryear#1{#1}\fi
+\ifx \endbibitem  \undefined \def \endbibitem {}\fi
+\ifx \bconflocation  \undefined \def \bconflocation#1{#1}\fi
+\ifx \arxivurl  \undefined \def \arxivurl#1{\textsf{#1}}\fi
+\csname PreBibitemsHook\endcsname
+
+%%% 1
+\bibitem{cohen2007stability}
+\begin{barticle}
+\bauthor{\bsnm{Cohen-Steiner}, \binits{D.}},
+\bauthor{\bsnm{Edelsbrunner}, \binits{H.}},
+\bauthor{\bsnm{Harer}, \binits{J.}}:
+\batitle{Stability of persistence diagrams}.
+\bjtitle{Discrete \& computational geometry}
+\bvolume{37}(\bissue{1}),
+\bfpage{103}--\blpage{120}
+(\byear{2007})
+\end{barticle}
+\endbibitem
+
+%%% 2
+\bibitem{cohen2006vines}
+\begin{bchapter}
+\bauthor{\bsnm{Cohen-Steiner}, \binits{D.}},
+\bauthor{\bsnm{Edelsbrunner}, \binits{H.}},
+\bauthor{\bsnm{Morozov}, \binits{D.}}:
+\bctitle{Vines and vineyards by updating persistence in linear time}.
+In: \bbtitle{Proceedings of the Twenty-second Annual Symposium on Computational
+  Geometry},
+pp. \bfpage{119}--\blpage{126}
+(\byear{2006})
+\end{bchapter}
+\endbibitem
+
+%%% 3
+\bibitem{kim2020spatiotemporal}
+\begin{botherref}
+\oauthor{\bsnm{Kim}, \binits{W.}},
+\oauthor{\bsnm{M{\'e}moli}, \binits{F.}}:
+Spatiotemporal persistent homology for dynamic metric spaces.
+Discrete \& Computational Geometry,
+1--45
+(2020)
+\end{botherref}
+\endbibitem
+
+%%% 4
+\bibitem{morozov2005persistence}
+\begin{botherref}
+\oauthor{\bsnm{Morozov}, \binits{D.}}:
+Persistence algorithm takes cubic time in worst case.
+BioGeometry News, Dept. Comput. Sci., Duke Univ
+\textbf{2}
+(2005)
+\end{botherref}
+\endbibitem
+
+%%% 5
+\bibitem{polanco2019adaptive}
+\begin{bchapter}
+\bauthor{\bsnm{Polanco}, \binits{L.}},
+\bauthor{\bsnm{Perea}, \binits{J.A.}}:
+\bctitle{Adaptive template systems: Data-driven feature selection for learning
+  with persistence diagrams}.
+In: \bbtitle{2019 18th IEEE International Conference On Machine Learning And
+  Applications (ICMLA)},
+pp. \bfpage{1115}--\blpage{1121}
+(\byear{2019}).
+\bcomment{IEEE}
+\end{bchapter}
+\endbibitem
+
+%%% 6
+\bibitem{adams2017persistence}
+\begin{botherref}
+\oauthor{\bsnm{Adams}, \binits{H.}},
+\oauthor{\bsnm{Emerson}, \binits{T.}},
+\oauthor{\bsnm{Kirby}, \binits{M.}},
+\oauthor{\bsnm{Neville}, \binits{R.}},
+\oauthor{\bsnm{Peterson}, \binits{C.}},
+\oauthor{\bsnm{Shipman}, \binits{P.}},
+\oauthor{\bsnm{Chepushtanova}, \binits{S.}},
+\oauthor{\bsnm{Hanson}, \binits{E.}},
+\oauthor{\bsnm{Motta}, \binits{F.}},
+\oauthor{\bsnm{Ziegelmeier}, \binits{L.}}:
+Persistence images: A stable vector representation of persistent homology.
+Journal of Machine Learning Research
+\textbf{18}
+(2017)
+\end{botherref}
+\endbibitem
+
+%%% 7
+\bibitem{ulmer2019topological}
+\begin{barticle}
+\bauthor{\bsnm{Ulmer}, \binits{M.}},
+\bauthor{\bsnm{Ziegelmeier}, \binits{L.}},
+\bauthor{\bsnm{Topaz}, \binits{C.M.}}:
+\batitle{A topological approach to selecting models of biological experiments}.
+\bjtitle{PloS one}
+\bvolume{14}(\bissue{3}),
+\bfpage{0213679}
+(\byear{2019})
+\end{barticle}
+\endbibitem
+
+%%% 8
+\bibitem{zomorodian2005computing}
+\begin{barticle}
+\bauthor{\bsnm{Zomorodian}, \binits{A.}},
+\bauthor{\bsnm{Carlsson}, \binits{G.}}:
+\batitle{Computing persistent homology}.
+\bjtitle{Discrete \& Computational Geometry}
+\bvolume{33}(\bissue{2}),
+\bfpage{249}--\blpage{274}
+(\byear{2005})
+\end{barticle}
+\endbibitem
+
+%%% 9
+\bibitem{otter2017roadmap}
+\begin{barticle}
+\bauthor{\bsnm{Otter}, \binits{N.}},
+\bauthor{\bsnm{Porter}, \binits{M.A.}},
+\bauthor{\bsnm{Tillmann}, \binits{U.}},
+\bauthor{\bsnm{Grindrod}, \binits{P.}},
+\bauthor{\bsnm{Harrington}, \binits{H.A.}}:
+\batitle{A roadmap for the computation of persistent homology}.
+\bjtitle{EPJ Data Science}
+\bvolume{6},
+\bfpage{1}--\blpage{38}
+(\byear{2017})
+\end{barticle}
+\endbibitem
+
+%%% 10
+\bibitem{lesnick2015interactive}
+\begin{botherref}
+\oauthor{\bsnm{Lesnick}, \binits{M.}},
+\oauthor{\bsnm{Wright}, \binits{M.}}:
+Interactive visualization of 2-d persistence modules.
+arXiv preprint arXiv:1512.00180
+(2015)
+\end{botherref}
+\endbibitem
+
+%%% 11
+\bibitem{rivet}
+\begin{botherref}
+\oauthor{\bsnm{{The RIVET Developers}}}:
+RIVET.
+\url{https://github.com/rivetTDA/rivet/}
+\end{botherref}
+\endbibitem
+
+%%% 12
+\bibitem{busaryev2010tracking}
+\begin{barticle}
+\bauthor{\bsnm{Busaryev}, \binits{O.}},
+\bauthor{\bsnm{Dey}, \binits{T.K.}},
+\bauthor{\bsnm{Wang}, \binits{Y.}}:
+\batitle{Tracking a generator by persistence}.
+\bjtitle{Discrete Mathematics, Algorithms and Applications}
+\bvolume{2}(\bissue{04}),
+\bfpage{539}--\blpage{552}
+(\byear{2010})
+\end{barticle}
+\endbibitem
+
+%%% 13
+\bibitem{luo2021accelerating}
+\begin{botherref}
+\oauthor{\bsnm{Luo}, \binits{Y.}},
+\oauthor{\bsnm{Nelson}, \binits{B.J.}}:
+Accelerating iterated persistent homology computations with warm starts.
+arXiv preprint arXiv:2108.05022
+(2021)
+\end{botherref}
+\endbibitem
+
+%%% 14
+\bibitem{chen2011persistent}
+\begin{bchapter}
+\bauthor{\bsnm{Chen}, \binits{C.}},
+\bauthor{\bsnm{Kerber}, \binits{M.}}:
+\bctitle{Persistent homology computation with a twist}.
+In: \bbtitle{Proceedings 27th European Workshop on Computational Geometry},
+vol. \bseriesno{11},
+pp. \bfpage{197}--\blpage{200}
+(\byear{2011})
+\end{bchapter}
+\endbibitem
+
+%%% 15
+\bibitem{de2011dualities}
+\begin{barticle}
+\bauthor{\bsnm{De~Silva}, \binits{V.}},
+\bauthor{\bsnm{Morozov}, \binits{D.}},
+\bauthor{\bsnm{Vejdemo-Johansson}, \binits{M.}}:
+\batitle{Dualities in persistent (co) homology}.
+\bjtitle{Inverse Problems}
+\bvolume{27}(\bissue{12}),
+\bfpage{124003}
+(\byear{2011})
+\end{barticle}
+\endbibitem
+
+%%% 16
+\bibitem{bauer2021ripser}
+\begin{botherref}
+\oauthor{\bsnm{Bauer}, \binits{U.}}:
+Ripser: efficient computation of vietoris--rips persistence barcodes.
+Journal of Applied and Computational Topology,
+1--33
+(2021)
+\end{botherref}
+\endbibitem
+
+%%% 17
+\bibitem{bauer2017phat}
+\begin{barticle}
+\bauthor{\bsnm{Bauer}, \binits{U.}},
+\bauthor{\bsnm{Kerber}, \binits{M.}},
+\bauthor{\bsnm{Reininghaus}, \binits{J.}},
+\bauthor{\bsnm{Wagner}, \binits{H.}}:
+\batitle{Phat--persistent homology algorithms toolbox}.
+\bjtitle{Journal of symbolic computation}
+\bvolume{78},
+\bfpage{76}--\blpage{90}
+(\byear{2017})
+\end{barticle}
+\endbibitem
+
+%%% 18
+\bibitem{attali2009persistence}
+\begin{bchapter}
+\bauthor{\bsnm{Attali}, \binits{D.}},
+\bauthor{\bsnm{Glisse}, \binits{M.}},
+\bauthor{\bsnm{Hornus}, \binits{S.}},
+\bauthor{\bsnm{Lazarus}, \binits{F.}},
+\bauthor{\bsnm{Morozov}, \binits{D.}}:
+\bctitle{Persistence-sensitive simplication of functions on surfaces in linear
+  time}.
+In: \bbtitle{TopoInVis' 09}
+(\byear{2009})
+\end{bchapter}
+\endbibitem
+
+%%% 19
+\bibitem{edelsbrunner2000topological}
+\begin{bchapter}
+\bauthor{\bsnm{Edelsbrunner}, \binits{H.}},
+\bauthor{\bsnm{Letscher}, \binits{D.}},
+\bauthor{\bsnm{Zomorodian}, \binits{A.}}:
+\bctitle{Topological persistence and simplification}.
+In: \bbtitle{Proceedings 41st Annual Symposium on Foundations of Computer
+  Science},
+pp. \bfpage{454}--\blpage{463}
+(\byear{2000}).
+\bcomment{IEEE}
+\end{bchapter}
+\endbibitem
+
+%%% 20
+\bibitem{delfinado1995incremental}
+\begin{barticle}
+\bauthor{\bsnm{Delfinado}, \binits{C.J.A.}},
+\bauthor{\bsnm{Edelsbrunner}, \binits{H.}}:
+\batitle{An incremental algorithm for betti numbers of simplicial complexes on
+  the 3-sphere}.
+\bjtitle{Computer Aided Geometric Design}
+\bvolume{12}(\bissue{7}),
+\bfpage{771}--\blpage{784}
+(\byear{1995})
+\end{barticle}
+\endbibitem
+
+%%% 21
+\bibitem{chen2013output}
+\begin{barticle}
+\bauthor{\bsnm{Chen}, \binits{C.}},
+\bauthor{\bsnm{Kerber}, \binits{M.}}:
+\batitle{An output-sensitive algorithm for persistent homology}.
+\bjtitle{Computational Geometry}
+\bvolume{46}(\bissue{4}),
+\bfpage{435}--\blpage{447}
+(\byear{2013})
+\end{barticle}
+\endbibitem
+
+%%% 22
+\bibitem{oesterling2015computing}
+\begin{bchapter}
+\bauthor{\bsnm{Oesterling}, \binits{P.}},
+\bauthor{\bsnm{Heine}, \binits{C.}},
+\bauthor{\bsnm{Weber}, \binits{G.H.}},
+\bauthor{\bsnm{Morozov}, \binits{D.}},
+\bauthor{\bsnm{Scheuermann}, \binits{G.}}:
+\bctitle{Computing and visualizing time-varying merge trees for
+  high-dimensional data}.
+In: \bbtitle{Topological Methods in Data Analysis and Visualization},
+pp. \bfpage{87}--\blpage{101}
+(\byear{2015}).
+\bcomment{Springer}
+\end{bchapter}
+\endbibitem
+
+%%% 23
+\bibitem{kapron2013dynamic}
+\begin{bchapter}
+\bauthor{\bsnm{Kapron}, \binits{B.M.}},
+\bauthor{\bsnm{King}, \binits{V.}},
+\bauthor{\bsnm{Mountjoy}, \binits{B.}}:
+\bctitle{Dynamic graph connectivity in polylogarithmic worst case time}.
+In: \bbtitle{Proceedings of the Twenty-fourth Annual ACM-SIAM Symposium on
+  Discrete Algorithms},
+pp. \bfpage{1131}--\blpage{1142}
+(\byear{2013}).
+\bcomment{SIAM}
+\end{bchapter}
+\endbibitem
+
+%%% 24
+\bibitem{topaz2015topological}
+\begin{barticle}
+\bauthor{\bsnm{Topaz}, \binits{C.M.}},
+\bauthor{\bsnm{Ziegelmeier}, \binits{L.}},
+\bauthor{\bsnm{Halverson}, \binits{T.}}:
+\batitle{Topological data analysis of biological aggregation models}.
+\bjtitle{PloS one}
+\bvolume{10}(\bissue{5}),
+\bfpage{0126383}
+(\byear{2015})
+\end{barticle}
+\endbibitem
+
+%%% 25
+\bibitem{xian2020capturing}
+\begin{botherref}
+\oauthor{\bsnm{Xian}, \binits{L.}},
+\oauthor{\bsnm{Adams}, \binits{H.}},
+\oauthor{\bsnm{Topaz}, \binits{C.M.}},
+\oauthor{\bsnm{Ziegelmeier}, \binits{L.}}:
+Capturing dynamics of time-varying data via topology.
+arXiv preprint arXiv:2010.05780
+(2020)
+\end{botherref}
+\endbibitem
+
+%%% 26
+\bibitem{boissonnat2000efficient}
+\begin{barticle}
+\bauthor{\bsnm{Boissonnat}, \binits{J.-D.}},
+\bauthor{\bsnm{Snoeyink}, \binits{J.}}:
+\batitle{Efficient algorithms for line and curve segment intersection using
+  restricted predicates}.
+\bjtitle{Computational Geometry}
+\bvolume{16}(\bissue{1}),
+\bfpage{35}--\blpage{52}
+(\byear{2000})
+\end{barticle}
+\endbibitem
+
+%%% 27
+\bibitem{diaconis1977spearman}
+\begin{barticle}
+\bauthor{\bsnm{Diaconis}, \binits{P.}},
+\bauthor{\bsnm{Graham}, \binits{R.L.}}:
+\batitle{Spearman's footrule as a measure of disarray}.
+\bjtitle{Journal of the Royal Statistical Society: Series B (Methodological)}
+\bvolume{39}(\bissue{2}),
+\bfpage{262}--\blpage{268}
+(\byear{1977})
+\end{barticle}
+\endbibitem
+
+%%% 28
+\bibitem{bergroth2000survey}
+\begin{bchapter}
+\bauthor{\bsnm{Bergroth}, \binits{L.}},
+\bauthor{\bsnm{Hakonen}, \binits{H.}},
+\bauthor{\bsnm{Raita}, \binits{T.}}:
+\bctitle{A survey of longest common subsequence algorithms}.
+In: \bbtitle{Proceedings Seventh International Symposium on String Processing
+  and Information Retrieval. SPIRE 2000},
+pp. \bfpage{39}--\blpage{48}
+(\byear{2000}).
+\bcomment{IEEE}
+\end{bchapter}
+\endbibitem
+
+%%% 29
+\bibitem{labarre2013lower}
+\begin{barticle}
+\bauthor{\bsnm{Labarre}, \binits{A.}}:
+\batitle{Lower bounding edit distances between permutations}.
+\bjtitle{SIAM Journal on Discrete Mathematics}
+\bvolume{27}(\bissue{3}),
+\bfpage{1410}--\blpage{1428}
+(\byear{2013})
+\end{barticle}
+\endbibitem
+
+%%% 30
+\bibitem{kumar1987linear}
+\begin{barticle}
+\bauthor{\bsnm{Kumar}, \binits{S.K.}},
+\bauthor{\bsnm{Rangan}, \binits{C.P.}}:
+\batitle{A linear space algorithm for the lcs problem}.
+\bjtitle{Acta Informatica}
+\bvolume{24}(\bissue{3}),
+\bfpage{353}--\blpage{362}
+(\byear{1987})
+\end{barticle}
+\endbibitem
+
+%%% 31
+\bibitem{abboud2015tight}
+\begin{bchapter}
+\bauthor{\bsnm{Abboud}, \binits{A.}},
+\bauthor{\bsnm{Backurs}, \binits{A.}},
+\bauthor{\bsnm{Williams}, \binits{V.V.}}:
+\bctitle{Tight hardness results for lcs and other sequence similarity
+  measures}.
+In: \bbtitle{2015 IEEE 56th Annual Symposium on Foundations of Computer
+  Science},
+pp. \bfpage{59}--\blpage{78}
+(\byear{2015}).
+\bcomment{IEEE}
+\end{bchapter}
+\endbibitem
+
+%%% 32
+\bibitem{bespamyatnikh2000enumerating}
+\begin{barticle}
+\bauthor{\bsnm{Bespamyatnikh}, \binits{S.}},
+\bauthor{\bsnm{Segal}, \binits{M.}}:
+\batitle{Enumerating longest increasing subsequences and patience sorting}.
+\bjtitle{Information Processing Letters}
+\bvolume{76}(\bissue{1-2}),
+\bfpage{7}--\blpage{11}
+(\byear{2000})
+\end{barticle}
+\endbibitem
+
+%%% 33
+\bibitem{baik1999distribution}
+\begin{barticle}
+\bauthor{\bsnm{Baik}, \binits{J.}},
+\bauthor{\bsnm{Deift}, \binits{P.}},
+\bauthor{\bsnm{Johansson}, \binits{K.}}:
+\batitle{On the distribution of the length of the longest increasing
+  subsequence of random permutations}.
+\bjtitle{Journal of the American Mathematical Society}
+\bvolume{12}(\bissue{4}),
+\bfpage{1119}--\blpage{1178}
+(\byear{1999})
+\end{barticle}
+\endbibitem
+
+%%% 34
+\bibitem{boissonnat2018efficient}
+\begin{barticle}
+\bauthor{\bsnm{Boissonnat}, \binits{J.-D.}},
+\bauthor{\bsnm{CS}, \binits{K.}}:
+\batitle{An efficient representation for filtrations of simplicial complexes}.
+\bjtitle{ACM Transactions on Algorithms (TALG)}
+\bvolume{14}(\bissue{4}),
+\bfpage{1}--\blpage{21}
+(\byear{2018})
+\end{barticle}
+\endbibitem
+
+%%% 35
+\bibitem{biedl2009complexity}
+\begin{barticle}
+\bauthor{\bsnm{Biedl}, \binits{T.}},
+\bauthor{\bsnm{Brandenburg}, \binits{F.J.}},
+\bauthor{\bsnm{Deng}, \binits{X.}}:
+\batitle{On the complexity of crossings in permutations}.
+\bjtitle{Discrete Mathematics}
+\bvolume{309}(\bissue{7}),
+\bfpage{1813}--\blpage{1823}
+(\byear{2009})
+\end{barticle}
+\endbibitem
+
+%%% 36
+\bibitem{dinu2006efficient}
+\begin{barticle}
+\bauthor{\bsnm{Dinu}, \binits{L.P.}},
+\bauthor{\bsnm{Manea}, \binits{F.}}:
+\batitle{An efficient approach for the rank aggregation problem}.
+\bjtitle{Theoretical Computer Science}
+\bvolume{359}(\bissue{1-3}),
+\bfpage{455}--\blpage{461}
+(\byear{2006})
+\end{barticle}
+\endbibitem
+
+%%% 37
+\bibitem{blelloch1998fast}
+\begin{bchapter}
+\bauthor{\bsnm{Blelloch}, \binits{G.E.}},
+\bauthor{\bsnm{Reid-Miller}, \binits{M.}}:
+\bctitle{Fast set operations using treaps}.
+In: \bbtitle{Proceedings of the Tenth Annual ACM Symposium on Parallel
+  Algorithms and Architectures},
+pp. \bfpage{16}--\blpage{26}
+(\byear{1998})
+\end{bchapter}
+\endbibitem
+
+%%% 38
+\bibitem{lesnick2012multidimensional}
+\begin{botherref}
+\oauthor{\bsnm{Lesnick}, \binits{M.P.}}:
+Multidimensional interleavings and applications to topological inference.
+PhD thesis,
+Stanford University
+(2012)
+\end{botherref}
+\endbibitem
+
+%%% 39
+\bibitem{buchet2015topological}
+\begin{bchapter}
+\bauthor{\bsnm{Buchet}, \binits{M.}},
+\bauthor{\bsnm{Chazal}, \binits{F.}},
+\bauthor{\bsnm{Dey}, \binits{T.K.}},
+\bauthor{\bsnm{Fan}, \binits{F.}},
+\bauthor{\bsnm{Oudot}, \binits{S.Y.}},
+\bauthor{\bsnm{Wang}, \binits{Y.}}:
+\bctitle{Topological analysis of scalar fields with outliers}.
+In: \bbtitle{31st International Symposium on Computational Geometry},
+pp. \bfpage{827}--\blpage{841}
+(\byear{2015}).
+\bcomment{Schloss Dagstuhl, Leibniz-Zentrum f{\"u} Informatik GmbH}
+\end{bchapter}
+\endbibitem
+
+%%% 40
+\bibitem{landi2014rank}
+\begin{botherref}
+\oauthor{\bsnm{Landi}, \binits{C.}}:
+The rank invariant stability via interleavings.
+arXiv preprint arXiv:1412.3374
+(2014)
+\end{botherref}
+\endbibitem
+
+%%% 41
+\bibitem{lee2003nonlinear}
+\begin{barticle}
+\bauthor{\bsnm{Lee}, \binits{A.B.}},
+\bauthor{\bsnm{Pedersen}, \binits{K.S.}},
+\bauthor{\bsnm{Mumford}, \binits{D.}}:
+\batitle{The nonlinear statistics of high-contrast patches in natural images}.
+\bjtitle{International Journal of Computer Vision}
+\bvolume{54}(\bissue{1}),
+\bfpage{83}--\blpage{103}
+(\byear{2003})
+\end{barticle}
+\endbibitem
+
+%%% 42
+\bibitem{hateren_schaaf_1998}
+\begin{barticle}
+\bauthor{\bsnm{Hateren}, \binits{J.H.v.}},
+\bauthor{\bsnm{Schaaf}, \binits{A.v.d.}}:
+\batitle{Independent component filters of natural images compared with simple
+  cells in primary visual cortex}.
+\bjtitle{Proceedings: Biological Sciences}
+\bvolume{265}(\bissue{1394}),
+\bfpage{359}--\blpage{366}
+(\byear{1998})
+\end{barticle}
+\endbibitem
+
+%%% 43
+\bibitem{carlsson2008local}
+\begin{barticle}
+\bauthor{\bsnm{Carlsson}, \binits{G.}},
+\bauthor{\bsnm{Ishkhanov}, \binits{T.}},
+\bauthor{\bsnm{De~Silva}, \binits{V.}},
+\bauthor{\bsnm{Zomorodian}, \binits{A.}}:
+\batitle{On the local behavior of spaces of natural images}.
+\bjtitle{International journal of computer vision}
+\bvolume{76}(\bissue{1}),
+\bfpage{1}--\blpage{12}
+(\byear{2008})
+\end{barticle}
+\endbibitem
+
+%%% 44
+\bibitem{perea2014klein}
+\begin{barticle}
+\bauthor{\bsnm{Perea}, \binits{J.A.}},
+\bauthor{\bsnm{Carlsson}, \binits{G.}}:
+\batitle{A klein-bottle-based dictionary for texture representation}.
+\bjtitle{International journal of computer vision}
+\bvolume{107}(\bissue{1}),
+\bfpage{75}--\blpage{97}
+(\byear{2014})
+\end{barticle}
+\endbibitem
+
+%%% 45
+\bibitem{carlsson2009theory}
+\begin{barticle}
+\bauthor{\bsnm{Carlsson}, \binits{G.}},
+\bauthor{\bsnm{Zomorodian}, \binits{A.}}:
+\batitle{The theory of multidimensional persistence}.
+\bjtitle{Discrete \& Computational Geometry}
+\bvolume{42}(\bissue{1}),
+\bfpage{71}--\blpage{93}
+(\byear{2009})
+\end{barticle}
+\endbibitem
+
+%%% 46
+\bibitem{lesnick2019computing}
+\begin{botherref}
+\oauthor{\bsnm{Lesnick}, \binits{M.}},
+\oauthor{\bsnm{Wright}, \binits{M.}}:
+Computing minimal presentations and bigraded betti numbers of 2-parameter
+  persistent homology.
+arXiv preprint arXiv:1902.05708
+(2019)
+\end{botherref}
+\endbibitem
+
+%%% 47
+\bibitem{boissonnat2000robust}
+\begin{barticle}
+\bauthor{\bsnm{Boissonnat}, \binits{J.-D.}},
+\bauthor{\bsnm{Preparata}, \binits{F.P.}}:
+\batitle{Robust plane sweep for intersecting segments}.
+\bjtitle{SIAM Journal on Computing}
+\bvolume{29}(\bissue{5}),
+\bfpage{1401}--\blpage{1421}
+(\byear{2000})
+\end{barticle}
+\endbibitem
+
+%%% 48
+\bibitem{christofides2022worst}
+\begin{bchapter}
+\bauthor{\bsnm{Christofides}, \binits{N.}}:
+\bctitle{Worst-case analysis of a new heuristic for the travelling salesman
+  problem}.
+In: \bbtitle{Operations Research Forum},
+vol. \bseriesno{3},
+pp. \bfpage{1}--\blpage{4}
+(\byear{2022}).
+\bcomment{Springer}
+\end{bchapter}
+\endbibitem
+
+\end{thebibliography}
