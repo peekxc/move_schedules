@@ -21,11 +21,11 @@
 \usepackage{dsfont}
 \usepackage{array}
 \usepackage{blkarray, bigstrut}
-\usepackage{epstopdf} % \DeclareGraphicsExtensions{.pdf,.png} % for pdf 
+%\usepackage{epstopdf} % \DeclareGraphicsExtensions{.pdf,.png} % for pdf 
 \usepackage{caption} 
 \usepackage{outlines}
 \usepackage{enumitem}
-\usepackage{hyperref} % load hyperref last
+%\usepackage{hyperref} % load hyperref last
 
 %\usepackage[noend]{algorithmic} % arxiv only 
 
@@ -34,7 +34,8 @@
 \usepackage{algorithm}% http://ctan.org/pkg/algorithms
 \PassOptionsToPackage{noend}{algpseudocode}
 \usepackage{algpseudocode}% http://ctan.org/pkg/algorithmicx
-
+\bibliographystyle{plain} % arxiv only; be sure to remove one before bibliography
+ 
 % --- Customizations --- 
 \newtheorem{theorem}{Theorem}
 \newtheorem{definition}{Definition}
@@ -1754,7 +1755,7 @@ The research presented in this work is partially supported by the National Scien
 % Looks like you have to just not specify the style with springer 
 % \bibliographystyle{siamplain} % springer only 
 %\bibliographystyle{unsrt}
- \bibliographystyle{plain} % arxiv only
+% \bibliographystyle{plain} % arxiv only
 \bibliography{move_schedules}
 
 \newpage 
