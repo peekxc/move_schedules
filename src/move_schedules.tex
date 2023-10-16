@@ -133,7 +133,7 @@ Moreover, the vineyards algorithm is efficient asymptotically: if there are $d$ 
 
 Despite its theoretical efficiency, \emph{vineyards} is often not the method of choice in practical settings. 
 While there is an increasingly rich ecosystem of software packages offering variations of the standard reduction algorithm (e.g. Ripser, PHAT, Dionysus, etc. see~\cite{otter2017roadmap} for an overview), implementations of the vineyards algorithm are relatively uncommon.\footnote{Dionysus 1 does have an implementation of \emph{vineyards}, however the algorithm was never ported to version 2. Other major packages, such as GUDHI and PHAT, do not have \emph{vineyards} implementations.} 
-The reason for this disparity is perhaps explained by Lesnick and Wright~\cite{lesnick2015interactive}: ``While an update to an $RU$ decomposition involving few transpositions is very fast in practice... many transpositions can be quite slow... it is sometimes much faster to simply recompute the $RU$-decomposition from scratch using the standard persistence algorithm.'' Indeed, they observe that maintaining the decomposition along a certain parameterized family is the most computationally demanding aspect of RIVET~\cite{rivet}, a software for computing and visualizing	 two-parameter persistent homology.
+The reason for this disparity is perhaps explained by Lesnick and Wright~\cite{lesnick2015interactive}: ``While an update to an $RU$ decomposition involving few transpositions is very fast in practice... many transpositions can be quite slow... it is sometimes much faster to simply recompute the $RU$-decomposition from scratch using the standard persistence algorithm.'' Indeed, they observe that maintaining the decomposition along a certain parameterized family is the most computationally demanding aspect of RIVET~\cite{rivet}, a software for computing two-parameter persistent homology.
 
 The work presented here seeks to further understand and remedy this discrepancy: building on the work presented in~\cite{busaryev2010tracking}, we introduce a coarser approach to the vineyards algorithm.
 Though the vineyards algorithm is efficient at constructing a \emph{continuous} 1-parameter family of diagrams, it is not necessarily efficient when the parameter is coarsely discretized.
@@ -165,7 +165,7 @@ Consider a series of grayscale images (i.e. a video) depicting a fixed-width ann
 \begin{figure}[!htb]
     \centering
     \includegraphics[height=1.25in]{circle_complex.png}
-    \caption{Top: A video of an expanding annulus. Bottom: Sublevel-set filtrations, via (negative) pixel intensity, of a Freudenthal triangulation of the plane.}
+    \caption{Top: A video of an expanding annulus. Bottom: Sublevel-set filtrations, via negative pixel intensity, of a Freudenthal triangulation of the plane.}
     \label{fig:vidExample}
 \end{figure}
 
@@ -268,9 +268,9 @@ We also show that the information needed to construct any $\mathcal{S}$ with opt
 \noindent 
 % Goal: Interesting+ hard + solved + novel.
 \textbf{Outline:} The paper is organized as follows: we review and establish the notations we will use to describe simplicial complexes, persistent homology, and dynamic persistence in Section~\ref{sec:background}. 
-We also cover the reduction algorithm (designated here as \texttt{pHcol}), the vineyards algorithm, and the set of \emph{move}-related algorithms introduced in~\cite{busaryev2010tracking}, which serves as the starting point of this work. 
-In Section \ref{sec:move_schedules} we introduce move schedules and provide efficient algorithms to construct them. 
-In Section \ref{sec:results} we present applications of the proposed method, including the computation of Crocker stacks from flock simulations and of a 2-dimensional persistence invariant on a data set of image patches derived from natural images. 
+We also cover the reduction algorithm (designated here as \texttt{pHcol}), the \emph{vineyards} algorithm, and the set of \emph{move}-related algorithms introduced in~\cite{busaryev2010tracking}, which serves as the starting point of this work. 
+In Section \ref{sec:move_schedules} we introduce \emph{move schedules}, and provide efficient algorithms to construct them. 
+In Section \ref{sec:results} we present applications of the proposed method, including applications related to dynamic metric spaces and 2-parameter persistence. 
 In Section \ref{sec:conclusion} we conclude the paper by discussing other possible applications and future work. 
  
 
@@ -311,7 +311,7 @@ The collection of birth/death  pairs
 $(i,j)$ is denoted $\mathrm{dgm}_p(K ,f )$, 
 and referred to as the $p$-th \emph{persistence diagram} of $(K,f)$.
 If a homology class is born at   $K_i$ and dies entering   $K_j$, the difference $\lvert i - j \rvert$ is called the \emph{persistence} of that class.
-In practice, filtrations often arise from triangulations parameterized by geometric scaling parameters, and the ``persistence'' of a homology class actually refers to its lifetime with respect to the scaling parameter. 
+In practice, filtrations often arise from triangulations parameterized by geometric scaling parameters, and the ``persistence'' of a homology class refers to its lifetime with respect to the scaling parameter. 
 %For this reason, we'll refer to the difference $\lvert i - j \rvert$ of a homology class $[c]$ as its \emph{index persistence}.
 %\\
 %\\
@@ -348,14 +348,14 @@ The pseudocode is outlined in Algorithm~\ref{alg:reduce} in the appendix. Withou
 \\
 \\
 \textbf{ Decomposition Invariants:}
- \begin{enumerate}[labelsep=3pt, topsep=2pt,itemsep=-0.25ex,parsep=1.0ex]\label{inv:decomposition}
+ \begin{enumerate}[labelsep=3pt, topsep=1pt,itemsep=-0.25ex,parsep=1.0ex]\label{inv:decomposition}
  	\item[I1.] $R = D V$ where $D$ is the boundary matrix of the filtration $(K,f)$
  	\item[I2.] $V$ is full-rank upper-triangular
  	\item[l3.] $R$ is \emph{reduced}: if $\mathrm{col}_i(R) \neq 0$ and $\mathrm{col}_j(R) \neq 0$, then $\mathrm{low}_R(i) \neq \mathrm{low}_R(j)$ 
  	\end{enumerate} 
- \vspace*{1em}
+% \vspace*{1em} % springer only
  where $\mathrm{low}_R(i)$ denotes the largest row index of a non-zero entry in column $i$ of $R$. 
-We call the decomposition satisfying these three invariants \emph{valid}. The persistence diagrams of the corresponding filtration  can be determined from the lowest entries in $R$, once it has been reduced. Note that though the matrices $R$ and $V$ are not unique, the collection of persistent pairings are~\cite{zomorodian2005computing}.
+We call the decomposition satisfying these three invariants \emph{valid}. The persistence diagrams of the corresponding filtration  can be determined from the lowest entries in $R$. Note that though $R$ and $V$ are not unique, the collection of persistent pairings are~\cite{zomorodian2005computing}.
  
  It is at times more succinct to restrict to specific sub-matrices of $D$ based on the homology dimension $p$, and so we write $D_p$ to represent the $d_{p-1} \times d_p$ matrix representing $\partial_p$ (the same notation is extended to $R$ and $V$).
 We illustrate the reduction algorithm with an example   below. 
@@ -430,9 +430,9 @@ $$
 \\
 \\
 \noindent
-Inspection of the reduction algorithm from~\cite{edelsbrunner2000topological} suggests that a loose upper bound for the reduction is $O(m^3)$, where $m$ is the number of simplices of the filtration---this bound is in fact tight~\cite{morozov2005persistence}. 
+Inspection of the algorithm from~\cite{edelsbrunner2000topological} suggests an upper bound for the reduction is $O(m^3)$, where $m$ is the number of simplices of the filtration---this bound is in fact tight~\cite{morozov2005persistence}. 
 % the number of column operations has been observed to scale linearly in the size of the filtration in practice~\cite{bauer2021ripser}, due in part to the high sparsity and structure of $D$. 
-Despite this high algorithmic complexity, many variations and optimizations to Algorithm~\ref{alg:reduce} have been proposed over the past decade, see~\cite{bauer2021ripser, bauer2017phat, chen2011persistent} for an overview. 
+Despite its high algorithmic complexity, many variations and optimizations to Algorithm~\ref{alg:reduce} have been proposed over the past decade, see~\cite{bauer2021ripser, bauer2017phat, chen2011persistent} for an overview. 
 % Important corollaries of the persistence pairing lemma is that the 
 % The pairing given by the lowest non-zero entries of $R$ is uniqueness, even thought the decomposition itself not.  
 % \section*{Computational Perspective} To convey a meaningful computational perspective, the continuous notion of \emph{dynamic persistence} needs to be translated to a discrete, combinatorial definition. Such a description requires a few prerequisite definitions, accompanied by some simplifying assumptions. 
@@ -664,8 +664,8 @@ Of course, we could then reduce $R'$ with additional column operations, but the 
 %Notice that these operations may yield an unreduced $R' = P R(\ast) P^T$, breaking invariant I3.
 %We could reduce $R'$ with an additional column operations, but the number of such operation scales $O(\lvert i - j\rvert^2)$, which no more efficient than simply performing the permutation and re-reducing the columns $[i,j]$ in $R$. 
 
-To bypass this difficulty, Busaryev et al. observed that since $R$ is reduced, if it contains $s$ pivot entries in the columns $[i,j]$ of $R$, then $R'$ must also have $s$ pivots. 
-Thus, if column operations render some pivot-column $r_k$ of $R$ unreduced, then its pivot entry $\mathrm{low}_R(k)$ becomes \emph{free}\footnote{The process of donating pivot columns using $O(1)$ auxiliary storage is similar in spirit to the in-place sorting algorithm \emph{cycle sort}, which is often used to sort permutations in $O(n)$ time.}---if $r_{k}$ is copied prior to its modification, we may re-use or \emph{donate} its pivot entry to a later column $r_{k+1}, \dots, r_j$. 
+To bypass this difficulty, Busaryev et al. observed that if $R$ contains $s$ pivot entries in the columns $[i,j]$, then since it is reduced, $R'$ must \emph{also} have $s$ pivots. 
+Thus, if column operations render some pivot-column $r_k$ of $R$ unreduced, then its pivot entry $\mathrm{low}_R(k)$ becomes \emph{free}\footnote{The process of donating pivot columns using $O(1)$ auxiliary storage is similar in spirit to the in-place sorting algorithm \emph{cycle sort}, which is often used to sort permutations in $O(n)$ time.}---if $r_{k}$ is copied prior to modification, we may re-use or \emph{donate} its pivot entry to a later column $r_{k+1}, \dots, r_j$. 
 %possibly appearing as a pivot entry in some later column $r_{k+1}$.
 %one adds column $v_i$ to $v_{k}$ and $r_i$ to $r_{k}$, for some $i < k$, and $r_{k}$ becomes unreduced
 %during the cancellation of $v_{i, i+1} = v_{i, i+2} = 0$ the column $r_{i+2} \mapsto r_{i+2}'$ becomes unreduced, then the pivot $\mathrm{low}_R(i+2)$ becomes \emph{free}, possibly becoming a pivot later in $r_{i+3}', \dots, r_j'$.  
@@ -944,13 +944,12 @@ Regarding the complexity of move operations, which clearly depend on the sparsit
 	Moreover, the quantity $\lvert \mathbb{I} \rvert + \lvert \mathbb{J} \rvert$ satisfies $\lvert \mathbb{I} \rvert + \lvert \mathbb{J} \rvert \leq 2(j - i)$. 
 \end{proposition}
 \noindent Though similar to \emph{vineyards}, move operations confer additional advantages:
-\\	
- \begin{enumerate}[labelsep=5pt, topsep=0pt,itemsep=-0.25ex,parsep=1.2ex]
+ \begin{enumerate}[labelsep=5pt, topsep=1pt,itemsep=-0.25ex,parsep=1.2ex]
  	\item[M1:] Querying the non-zero status of entries in $R$ or $V$ occurs once per move.
  	\item[M2:] $R = D V$ is \underline{not} guaranteed to be valid during the movement of $\sigma_i $ to $ \sigma_j$.
  	\item[M3:] At most $O(m)$ moves are needed to reindex $f \mapsto f'$ 
  \end{enumerate} 
- \vspace*{1em}
+% \vspace*{1em} % springer only
 First, consider property M1. Prior to applying any permutation $P$ to the decomposition, it is necessary to remove non-zero entries in $V$ which render $P^TVP$ non-upper triangular, to maintain invariant I2. 
 Using \emph{vineyards}, one must consistently perform $\lvert i - j \rvert - 1$ non-zero status queries interleaved between repairing column operations. A move operation groups these status queries into a single pass prior to performing any modifying operations. 
 
@@ -1399,7 +1398,8 @@ To build intuition for how this heuristic interacts with Algorithm~\ref{alg:sort
 \noindent \textbf{Example:} The permutation $p \in S_m$ to sort to the identity $p \mapsto \iota$ is given as a sequence $(4, 2, 7, 1, 8, 6, 3, 5,0)$ and a precomputed LIS $\mathcal{L} = (1, 3, 5)$, which is highlighted in red. 
 \begin{figure}[htb!]\label{fig:schedule_construct}
 	\center
-	\includegraphics[width=0.90\textwidth]{greedy_schedule_construct}
+%	\includegraphics[width=0.90\textwidth]{greedy_schedule_construct} % springer only 
+	\includegraphics[width=0.80\textwidth]{greedy_schedule_construct} % arxiv only 
 %	\caption{Greedy schedule construction example.  }
 \end{figure}
 On the left, a table records permuted sequences $\{ \hat{s}_i \circ p \}_{i=0}^d$, given on rows $i \in \{0, 1, \dots, 6\}$, for the moved elements $(7, 0, 8, 4, 6, 2)$ (highlighted in yellow). 
@@ -1450,7 +1450,7 @@ We give an example of this partitioning in Figure~\ref{fig:displacement_proof}.
 	\center
 	\caption{We re-use the previous example of sorting the sequence $p = (4, 2, 7, 1, 8, 6, 3, 5,0)$ to the identity $\iota = [m]$ using a precomputed LIS $\mathcal{L} = (1, 3, 5)$. In the left table shown below, we display the same sorting as before, with elements chosen to move highlighted in yellow; on the right, a table showing the entries of $\mathcal{A}$ are recorded. }
 	\includegraphics[width=0.70\textwidth]{displacement_proof}
-	\caption*{The colors in the right table group the range updates: green values are unchanged between rows, blue values are modified (and shifted) by $\pm 1$, and orange values are modified arbitrarily. As before, the $i$th entry of the column on the left-side shows $F(\hat{s}_i \circ p, \iota)$. Small black lines are used to show how the entries in $\mathcal{A}$ which change by $\pm 1$ move. }\label{fig:displacement_proof}
+	\caption*{The colors in the right table group the range updates: green values are unchanged between rows, blue values are modified (and shifted) by $\pm 1$, and orange values are modified arbitrarily. As before, the $i$th entry of the column on the left-side shows $F(\hat{s}_i \circ p, \iota)$. Small black lines are used to show how the entries in $\mathcal{A}$ which change by $\pm 1$ each move. }\label{fig:displacement_proof}
 %	\caption{Greedy schedule construction example.  }
 \end{figure}
 
@@ -1715,9 +1715,9 @@ Indeed, we see our approach as potentially useful to any situation where the str
 The simple and combinatorial nature of our approach does pose some limitations to its applicability. For example, better bounds or algorithms may be obtainable if stronger assumptions can be made on how the filtration is changing with time. Moreover, if the filtration $(K, f)$ shares little similarity to the ``target'' filtration $(L,f')$, then the overhead of reducing the simplices from $L \setminus K$ appended to the decomposition derived from $K$ may be large enough to motivate simply computing the decomposition at $L$ independently. 
 Our approach is primarily useful if the filtrations in the parameterized family are ``nearby'' in the combinatorial sense. 
 
-From an implementation perspective, one non-trivial complication of our approach is its heavy dependence on a particular sparse matrix data structure, which permits permuting both the row and columns of a given matrix in at most $O(m)$ time~\cite{cohen2006vines}. As shown with the natural images example in section~\ref{sec:results}, there are often more permutation operations being applied than there are column reductions. In the more standard \emph{compressed} sparse matrix representations\footnote{
-By ``standard,'' we mean any of the common sparse representations used in scientific computing packages, like SciPy's sparse module (\url{https://docs.scipy.org/doc/scipy/reference/sparse.html})
-}, permuting both the rows and columns generally takes at most $O(Z)$ time, where $Z$ is the number of non-zero entries, which can be quite expensive if the particular filtration has many cycles. As a result, the more complex sparse matrix representation from~\cite{cohen2006vines} is necessary to be efficient in practice. 
+From an implementation perspective, one non-trivial complication of our approach is its heavy dependence on a particular sparse matrix data structure, which permits permuting both the row and columns of a given matrix in at most $O(m)$ time~\cite{cohen2006vines}. As shown with the natural images example in section~\ref{sec:results}, there are often more permutation operations being applied than there are column reductions. In the more standard \emph{compressed} sparse matrix representations,
+%\footnote{By ``standard,'' we mean any of the common sparse representations used in scientific computing packages, like SciPy's sparse module (\url{https://docs.scipy.org/doc/scipy/reference/sparse.html})}, 
+permuting both the rows and columns generally takes at most $O(Z)$ time, where $Z$ is the number of non-zero entries, which can be quite expensive if the particular filtration has many cycles. As a result, the more complex sparse matrix representation from~\cite{cohen2006vines} is necessary to be efficient in practice. 
 
 Moving forward, our results suggest there are many aspects of computing persistence in dynamic settings yet to be explored. 
 For example, it's not immediately clear whether one could adopt, for example, the twist optimization~\cite{chen2011persistent} used in the reduction algorithm to the dynamic setting. Another direction to explore would be the analysis of our approach under the cohomology computation~\cite{de2011dualities}, or the specialization of the move operations to specific types of filtrations such as Rips filtrations. Such adaptations may result in even greater reductions in the number of column operations, as have been observed in practice for the standard reduction algorithm~\cite{bauer2021ripser}. 
@@ -1763,9 +1763,7 @@ The research presented in this work is partially supported by the National Scien
 
 \subsection{Algorithms}
 
-\subsubsection{Reduction Algorithm}
-The reduction algorithm, also called the ``standard algorithm,'' is the most widely used modality for computing persistence. While there exists other algorithms for computing persistence, they are typically not competitive with the reduction algorithm in practice. 
-We outline the reduction pseudocode in Algorithm~\ref{alg:reduce}.
+\textbf{Reduction Algorithm: } The reduction algorithm, outlined in pseudocode in Algorithm~\ref{alg:reduce}, is the most widely used modality for computing persistence. While there exists other algorithms for computing persistence, they are typically not competitive with the reduction algorithm in practice. 
 \begin{algorithm}[h!]
 	\setstretch{1.15}
 	\caption{Reduction Algorithm (\texttt{pHcol}) }
@@ -1785,25 +1783,28 @@ We outline the reduction pseudocode in Algorithm~\ref{alg:reduce}.
 	\end{algorithmic}	\label{alg:reduce}
 \end{algorithm}
 The algorithm begins by copying $D$ to a new matrix $R$, to be subsequently modified in-place. After  $V$ is set to the identity, the algorithm proceeds with column operations on both $R$ and $V$, left to right, until the decomposition invariants are satisfied. Since each column operation takes $O(m)$ and there are potentially $O(k)$ columns in $D$ with identical low entries (line 4 in ~\ref{alg:reduce}, observe that the reduction algorithm below clearly takes $O(m^2 k)$ time. Since there exist complexes where $k \sim O(m)$, one concludes the bound of $O(m^3)$ is tight~\cite{morozov2005persistence}, though this seems to only be true on pathological inputs. A more refined analysis by Edelsbrunner et al.~\cite{edelsbrunner2000topological} shows the reduction algorithm scales by the sum of squares of the cycle persistences. 
-
-\subsubsection*{Move Algorithms}
-As we have covered the \emph{moves} algorithm extensively in Section~\ref{sec:moves}, we now record the algorithmic components of both \emph{MoveRight} and \emph{MoveLeft}.
+\\
+\\
+\noindent \textbf{Move Left:}
 Though conceptually similar, note that there is an asymmetry between \emph{MoveRight} and \emph{MoveLeft}: moving a simplex upwards in the filtration requires removing non-zero entries along several columns of a particular row in $V$ so that the corresponding permutation does not render $V$ non-upper triangular. The key insight of the algorithm presented in~\cite{busaryev2010tracking} is that $R$ can actually be maintained in all but one column during this procedure (by employing the \emph{donor} column). In contrast, moving a simplex to an earlier time in the filtration requires removing non-zero entries along several rows of a particular column of $V$. As before, though $R$ stays reduced during this cancellation procedure in all but one column, the subsequent permutation to $R$ requires reducing a pair of columns which may cascade into a larger chain of column operations to keep $R$ reduced. 
 This is due to the fact that higher entries in columns in $R$ (above the pivot entry) may very well introduce additional non-reduced columns after $R$ is permuted. 
 Since these operations always occur in a left-to-right fashion, it is not immediately clear how to apply a donor column kind of concept. Fortunately, like move right, we can still separate the algorithm into a reduction and restoration phase---see Algorithm~\ref{alg:ml}. Moreover, since $R$ is reduced in all but one column by line 6 in~Algorithm~\ref{alg:ml}, we can still guarantee the number of low entries to reduce in $R$ will be at most $\lvert i - j \rvert$. For a supplementary description of the move algorithm, see~\cite{busaryev2010tracking}.
-
 %We recall an important claim given in~\cite{busaryev2010tracking} on the effect that move operations have on the status of simplices in the pairing. Recall from section~\ref{sec:background} that simplices which create new homology classes are called \emph{creators} and simplices that destroy homology classes are called \emph{destroyers}.
 %%\begin{proposition}[Locality of moves~\cite{busaryev2010tracking}]
 %%	Other than the simplex $\sigma_i$ being moved, $\mathrm{MoveRight}(i,j)$ cannot change a destroyer to a creator, $\mathrm{MoveLeft}(i,j)$ cannot change a creator to destroyer, and neither move operation changes the status of any simplex in $K$ outside of the interval $[i,j]$.  
 %%\end{proposition}
 %\noindent The effect of the movement on intermediate simplices depends on the direction of the movement. If $i < j$ (respectively, $j < i$), all simplices at positions $k \in [i+1\;:\;j] $ are shifted down (respectively, up) by $1$. 
+%\subsubsection{LCS-Sort}
+\\
+\\
+\noindent \textbf{LCS-Sort:}
+The algorithm to construct a schedule from a given LIS is simple enough to derive using the rules discussed in section~\ref{sec:schedule_construction} (namely, equation~\eqref{eq:valid_move}, but nonetheless for posterity’s sake we record it here for the curious reader; the pseudocode is given in Algorithm~\ref{alg:sorting}.
 
-\subsubsection{LCS-Sort}
-Here we record explicitly the schedule construction algorithm outlined in Section~\ref{sec:schedule_construction}. The algorithm is simple enough to derive using the rules discussed in section~\ref{sec:schedule_construction} (namely, equation~\eqref{eq:valid_move}, but nonetheless for posterity’s sake, we record it here for the curious reader; the pseudocode is given in Algorithm~\ref{alg:sorting}.
-
-The high level idea of the algorithm is to first construct the LCS between two permutations $p,q \in S_m$. To do this efficiently, one re-labels $q \mapsto \iota$ to the identity permutation $\iota = [m]$ and applies a consistent re-labeling $p \mapsto \bar{p}$. This relabeling preserves the LCS distance and has the additional advantage that $\bar{q} = \iota = [m]$ is a strictly increasing subsequence, and thus computing the LCS between $p,q \in S_m$ reduces to computing the LIS $\mathcal{L}$ of $\bar{p}$. 
+The high level idea of the algorithm is to first construct the LCS between two permutations $p,q \in S_m$ and then apply cyclic permutations successively to $p$, each step adding a new element extending the LCS. 
+The algorithmic steps are as follows: first, one re-labels $q \mapsto \iota$ to the identity permutation $\iota = [m]$ and applies a consistent re-labeling $p \mapsto \bar{p}$. This relabeling preserves the LCS distance and has the additional advantage that $\bar{q} = \iota = [m]$ is a strictly increasing subsequence, and thus computing the LCS between $p,q \in S_m$ reduces to computing the LIS $\mathcal{L}$ of $\bar{p}$. 
+Given $\mathcal{L}$ computed from $\bar{p}$, since $\mathcal{L}$ is strictly increasing, the only elements left to permute are in $\mathcal{L} \setminus \bar{p}$, which we denote with $\mathcal{D}$.
+After choosing any $\sigma \in \mathcal{D}$, one applies a cyclic permutation to $\bar{p}$ that moves $\sigma$ to any position that increases the size of $\mathcal{L}$, continuing this way until the identity sequence $\iota$ is recovered.  
 By sorting $\bar{p} \mapsto \iota$ by operations that (strictly) increase the size of $\mathcal{L}$, we ensure that the size of the corresponding schedule is exactly $m - \lvert \mathcal{L} \rvert$. 
-
   \begin{algorithm}[h!]
 	\caption{Schedule construction algorithm}\label{alg:sorting}
 	\setstretch{1.05}
@@ -1845,8 +1846,8 @@ By sorting $\bar{p} \mapsto \iota$ by operations that (strictly) increase the si
     	\EndFunction
 	\end{algorithmic}
 \end{algorithm}
-The algorithmic steps are as follows: given a LIS $\mathcal{L}$ has been computed from $\bar{p}$, since $\mathcal{L}$ is strictly increasing, the only elements left to permute are in $\mathcal{L} \setminus \bar{p}$, which we denote with $\mathcal{D}$.
-After choosing any $\sigma \in \mathcal{D}$, one then applies a cyclic permutation to $\bar{p}$ that moves $\sigma$ to any position that increases the size of $\mathcal{L}$. To do this efficiently, we use a set-like data structure $\mathcal{U}$ that supports efficient querying the successor and predecessor of any given $s \in \bar{p}$ with respect to $\mathcal{L}$ (such as a vEB tree). 
+
+To build the schedule of permutations efficiently, we use a set-like data structure $\mathcal{U}$ that supports efficient querying the successor and predecessor of any given $s \in \bar{p}$ with respect to $\mathcal{L}$ (such as a vEB tree). 
 The simplified pseudocode also uses the inverse permutation $\bar{p}$ to query the position of a given element $\sigma \in \bar{p}$, although a more efficient representation can be used via an implicit treap of the \emph{displacements} array; see Section~\ref{sec:proxy_objective}.
 After $\sigma$ is inserted into $\mathcal{L}$, we update $\bar{p}$, its inverse permutations $\bar{p}^{-1}$, $\mathcal{D}$ and $\mathcal{U}$ prior to the next move. The final set of permutations to sort $\bar{p} \to \iota$ (or equivalently, $p \mapsto q$) are stored in an array $\mathcal{S}$, which is then returned for further use. 
 
@@ -1981,9 +1982,9 @@ The main mathematical result from~\cite{lesnick2015interactive} is a characteriz
 \end{equation}
 Minor additional conditions are needed for handling completely horizontal and vertical lines. 
 The importance of this theorem lies in the fact that the fibered barcodes are completely defined from the precomputed barcode templates $\mathcal{T}$---once every barcode template $\mathcal{T}^e$ has been computed and augmented onto $\mathcal{A}(M)$, $\mathcal{B}(M)$ is completely characterized, and the barcodes $\mathcal{B}_L(M)$ associated to a 1-D filtration induced by \emph{any} choice of $L$ can be efficiently computed via a point-location query on $\mathcal{A}(M)$ and a $O(\lvert \mathcal{B}_L(M) \rvert)$ application of the push map.
-
-\subsubsection{Invariant computation}
-Computationally, the algorithm from~\cite{lesnick2019computing} can be summarized into three steps: 
+\\
+\\
+\noindent \textbf{Invariant computation: } Computationally, the algorithm from~\cite{lesnick2019computing} can be summarized into three steps: 
 \begin{enumerate}
 	\item Compute the bigraded Betti numbers $\beta(M)$ of $M$
 	\item Construct a line arrangement $\mathcal{A}(M)$ induced by critical lines from (1) 
